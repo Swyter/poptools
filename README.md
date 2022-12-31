@@ -1,7 +1,6 @@
 # poptools
 Reverse enginering and notes for the PC version of Prince of Persia: Sands of Time and Warrior Within.
 
-
 # Launch without the _`PrinceOfPersia.exe`_ launcher
 
 The launcher creates two global named mutexes; `POP5Launcher` and `POP_Watchdog`, and then launches _`POP2.EXE -007`_, which is the actual game binary. _`PrinceOfPersia.exe`_ stays in the background and seems to monitor `POP_Watchdog`, for handling crashes and showing a window.
@@ -15,3 +14,7 @@ $mtx = New-Object System.Threading.Mutex($false, "POP_Watchdog")
 ```
 
 You can also avoid all this PowerShell stuff by replacing the `POP5Launcher` string with some other short-enough mutex name that is guaranteed to always exist on running Windows sessions, like `DBWinMutex`.
+
+
+# Unlocking the level-selector menu
+The easiest way is to replace the `P_StartNewGame` string in `POP2.EXE` with `P_SpecialLoad`. Make sure to keep the zero-padding and add a `NULL` terminator at the end. _i.e._ Don't mess with the alignment.
