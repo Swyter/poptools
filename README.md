@@ -25,7 +25,7 @@ New-Object System.Threading.Mutex($false, "POP_Launcher")
 ./POP.EXE
 ```
 
-For _The Two Thrones_ the mutex is called `POP3Launcher`, back from the `5` of Warrior Within, funny:
+For _The Two Thrones_ the mutex is called `POP3Launcher`, back from the `5` of _Warrior Within_, funny:
 ```ps
 # PrinceOfPersia.EXE -uplay_steam_mode -> POP3.EXE -007
 New-Object System.Threading.Mutex($false, "POP3Launcher")
