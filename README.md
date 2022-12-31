@@ -11,14 +11,16 @@ You can easily fake this by creating your own named mutexes via PowerShell and l
 ```ps
 New-Object System.Threading.Mutex($false, "POP5Launcher")
 New-Object System.Threading.Mutex($false, "POP_Watchdog")
+./POP2.EXE
 ```
 
 You can also avoid all this PowerShell stuff by replacing the `POP5Launcher` string with some other short-enough mutex name that is guaranteed to always exist on running Windows sessions, like `DBWinMutex`.
 
 
-For the original _Sands of Time_ the Mutex name is `POP_Launcher`:
+For the original _Sands of Time_ the mutex name is `POP_Launcher`:
 ```ps
 New-Object System.Threading.Mutex($false, "POP_Launcher")
+./POP.EXE
 ```
 
 # Unlocking the level-selector menu
