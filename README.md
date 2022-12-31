@@ -9,6 +9,7 @@ If the `POP5Launcher` mutex is not found it will error out with a «_You must st
 
 You can easily fake this by creating your own named mutexes via PowerShell and leaving it open. The game will start normally:
 ```ps
+# PrinceOfPersia.EXE -> POP2.EXE -007
 New-Object System.Threading.Mutex($false, "POP5Launcher")
 New-Object System.Threading.Mutex($false, "POP_Watchdog")
 ./POP2.EXE
@@ -17,8 +18,9 @@ New-Object System.Threading.Mutex($false, "POP_Watchdog")
 You can also avoid all this PowerShell stuff by replacing the `POP5Launcher` string with some other short-enough mutex name that is guaranteed to always exist on running Windows sessions, like `DBWinMutex`.
 
 
-For the original _Sands of Time_ the mutex name is `POP_Launcher`:
+For the original _Sands of Time_ the launcher is called with the `-uplay_steam_mode` parameter, and the mutex name is `POP_Launcher`:
 ```ps
+# PrinceOfPersia.EXE -uplay_steam_mode -> POP.EXE -007
 New-Object System.Threading.Mutex($false, "POP_Launcher")
 ./POP.EXE
 ```
