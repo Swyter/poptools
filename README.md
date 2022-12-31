@@ -25,5 +25,12 @@ New-Object System.Threading.Mutex($false, "POP_Launcher")
 ./POP.EXE
 ```
 
+For _The Two Thrones_ the mutex is called `POP3Launcher`, back from the `5` of Warrior Within, funny:
+```ps
+# PrinceOfPersia.EXE -uplay_steam_mode -> POP3.EXE -007
+New-Object System.Threading.Mutex($false, "POP3Launcher")
+./POP3.EXE
+```
+
 # Unlocking the level-selector menu
 The easiest way is to replace the `P_StartNewGame` string in `POP2.EXE` with `P_SpecialLoad`. Make sure to keep the zero-padding and add a `NULL` terminator at the end. _i.e._ Don't mess with the alignment.
