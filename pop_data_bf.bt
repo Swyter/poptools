@@ -13,8 +13,8 @@ uint head_byte_size;
 
 typedef struct bf_entry_t
 {
-    uint entry_offset_in_head <format=hex>;
-    uint offset <format=hex>, size <format=hex>, unk_zero;
+    uint entry_offset_in_head <format=hex>; /* swy: basically equal to the current global offset minus the size of the preceding «head_byte_size» field (4 bytes), probably for some reverse fast look-up table */
+    uint offset <format=hex>, len <format=hex>, unk_zero;
     uint str_len; char filename[str_len];
 
     /* swy: save the current point so that we can rewind after including the actual data chunk as part of the struct */
@@ -22,23 +22,23 @@ typedef struct bf_entry_t
 
     /* swy: the offset uses the end of the header as base */
     FSeek(sizeof(head_byte_size) + head_byte_size + offset);
-    byte file[size];
+    byte file[len];
 
     /* swy: rewind back to the the header and read the next entry, if any */
     FSeek(saved_offset);
-} bf_entry <read=Str("%s - %#x, %#x", filename, offset, size), optimize=false>;
+} bf_entry <read=Str("%s          <-- offset: %#x, len: %#x", filename, offset, len), optimize=false>;
 
 
 /* swy: because each entry has filenames of different lengths each entry is dynamically sized
         and we can't precompute the element count directly by dividing the total size of the
         section by entry, so just keep trying to read entries until we run out of bytes */
-local int remaining_sz = head_byte_size;
+local int remaining_sz = head_byte_size, elem_count;
 
 while (remaining_sz > 0)
 {
     bf_entry elem <optimize=false>;
 
-    remaining_sz -= sizeof(elem);
+    remaining_sz -= sizeof(elem); elem_count++;
 }
 
 // swy: two thrones POPData.bf seems simpler

@@ -1,0 +1,50 @@
+//------------------------------------------------
+//--- 010 Editor v12.0.1 Script File
+//
+//      File: Prince of Persia: Warrior Within - POPData.BF file format (extractor script)
+//   Authors: Swyter
+//   Version: 2023.01.01
+//   Purpose: Unpack files from the virtual filesystem in EngineX games of Filelist version 7.
+//  Category: Game
+//------------------------------------------------
+
+/* swy: run the original template to fill out the data structures in
+        the template results; we depend on this to work */
+RunTemplate("pop_data_bf.bt");
+
+char target_folder[] = InputDirectory("Choose a folder where to extract the Jade-packed files");
+char filelist_path[] = GetFileName();
+
+if (target_folder[0] == 0)
+    Exit(-1);
+
+Printf("\n\n--\n[+] began extraction of filelist: %s\n" + 
+               "                       at folder: %s\n\n", filelist_path, target_folder);
+
+int i = 0, idx_act_file, idx_big_file, len, offset <format=hex>, hashcode <format=hex>;
+char big_file[], opened_big_file[], target_file[];
+
+idx_act_file = GetFileNum();
+
+/* swy: run for every entry as displayed by our ran template */
+for (i = 0; i < elem_count; i++)
+{
+            len = elem[i].len,
+         offset = elem[i].offset;
+    target_file = elem[i].filename;
+
+    /* swy: for some reason, some entries that end up having an asterisk in the XUtil output .txt don't get filenames */
+    if (target_file[0] == 0)
+        target_file = "__unk_name_hc_" + Str("%#08x_idx_%u", hashcode, i);
+
+    Printf("[i] %3u, [%#010x] %s (%#x bytes)\n", i, hashcode, target_file, len);
+
+
+    target_file = target_folder + "/" + target_file;
+
+    /* swy: dump it like there's no tomorrow ¯\_(ツ)_/¯ */
+    MakeDir(FileNameGetPath(target_file));
+    FileSaveRange(target_file, offset, len);
+}
+
+Printf("\n[+] Done\n");
