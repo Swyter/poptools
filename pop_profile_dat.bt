@@ -4,9 +4,9 @@
 //      File: Prince of Persia: Warrior Within - Profile.DAT file format
 //   Authors: Swyter
 //   Version: 2023.01.01
-//   Purpose: 
+//   Purpose: Profile.DA1 seems to have been generated on safe mode and have priority over the .DAT
 //  Category: Game
-// File Mask: *.DAT
+// File Mask: *.DAT, *.DA1
 //  ID Bytes: 50 4F 50 34
 //------------------------------------------------
 
@@ -19,7 +19,9 @@ wchar_t profile_name[11]; /* swy: in UTF-16, wide chars */
 typedef struct section_t
 {
     uint section_type, byte_len, checksum_maybe <format=hex>;
-    byte data[byte_len];
+    ushort i; uint a[byte_len/4]; 
+    //byte data[byte_len];
+
 } section <read=Str("%#x len: %#x, crc: %#x", section_type, byte_len, checksum_maybe), optimize=false>;;
 
 while (!FEof())
