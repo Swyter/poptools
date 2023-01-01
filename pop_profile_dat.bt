@@ -12,5 +12,5 @@
 
 LittleEndian();
 char magic[4];
-char profile_name[19]; char a[3];
-uint a,b,c,d,e,f,g,h,i,j,k;
+char profile_name[19]; char a[5];
+uint a,b,c,width, height, windowed ,g,h,i,j,k;
