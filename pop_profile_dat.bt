@@ -19,8 +19,8 @@ wchar_t profile_name[11]; /* swy: in UTF-16, wide chars */
 typedef struct section_t
 {
     uint section_type, byte_len, checksum_maybe <format=hex>;
-    ushort i; uint a[byte_len/4]; 
-    //byte data[byte_len];
+    //ushort i; uint a[byte_len/4]; 
+    byte data[byte_len];
 
 } section <read=Str("%#x len: %#x, crc: %#x", section_type, byte_len, checksum_maybe), optimize=false>;;
 
@@ -34,3 +34,21 @@ while (!FEof())
 //uint a[4]; ushort b_pad; uint c,width, height, windowed, g,h,i,j, k[25];
 
 //uint thing <format=hex>; short e; float a, b, c; uint a,b,c;
+
+
+/*
+
+[lololololo]# delsum reverse -m 'crc width=32' --checksums 1F42FBF1,6C83CA3A,4388CD52 checksum_1F42FBF1h.bin checksum_6C83CA3Ah.bin
+Could not process model 'crc width=32': Missing parameter 'not enough files for checksums given'
+[lololololo]# delsum reverse -m 'crc width=32' --checksums 1F42FBF1,6C83CA3A,4388CD52 checksum_1F42FBF1h.bin checksum_6C83CA3Ah.bin checksum_4388CD52h.bin
+crc width=32 poly=0xb5197217 init=0xd0213cd5 xorout=0xf18fbf0a refin=false refout=false wordsize=16 out_endian=big
+crc width=32 poly=0xf8627eb1 init=0xfdef3b69 xorout=0x332e44c7 refin=false refout=false wordsize=16 out_endian=big
+crc width=32 poly=0x87dd389d init=0x27707ec3 xorout=0x8cade733 refin=false refout=false wordsize=16 out_endian=big
+crc width=32 poly=0xefa1cb45 init=0xd7e3f3cc xorout=0x52a22162 refin=false refout=false wordsize=16 out_endian=big
+crc width=32 poly=0xb848c577 init=0x334d38fc xorout=0xc19dd45b refin=false refout=false wordsize=16 out_endian=big
+crc width=32 poly=0xf2143549 init=0x1e07a8bf xorout=0xd8299bd2 refin=false refout=false wordsize=16 out_endian=big
+crc width=32 poly=0x4c11db7 init=0xffffffff xorout=0x0 refin=true refout=true out_endian=big
+[lololololo]# delsum reverse -m 'crc width=32' --checksums 1F42FBF1,6C83CA3A,4388CD52,39DBC095 checksum_1F42FBF1h.bin checksum_6C83CA3Ah.bin checksum_4388CD52h.bin checksum_39DBC095h.bin
+crc width=32 poly=0x4c11db7 init=0xffffffff xorout=0x0 refin=true refout=true out_endian=big
+[lololololo]#
+*/
