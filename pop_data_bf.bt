@@ -10,8 +10,8 @@
 //------------------------------------------------
 
 LittleEndian();
-uint count,a, offset, size_a, d, str_sz; char filename[str_sz];
-uint f, offset, size_b, i, str_sz_b; char filenameb[str_sz_b];
+uint head_byte_size, a, offset, size_a, d, str_sz;   char filename[str_sz];
+uint                 f, offset, size_b, i, str_sz_b; char filenameb[str_sz_b];
 
 byte file[size_a];
 
