@@ -44,7 +44,7 @@ for (i = 0; i < elem_count; i++)
 
     /* swy: dump it like there's no tomorrow ¯\_(ツ)_/¯ */
     MakeDir(FileNameGetPath(target_file));
-    FileSaveRange(target_file, offset, len);
+    FileSaveRange(target_file, sizeof(head_byte_size) + head_byte_size + offset, len);
 }
 
 Printf("\n[+] Done\n");
