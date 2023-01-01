@@ -16,11 +16,11 @@ char magic[4]; /* swy: tagged as POP4 */
 wchar_t profile_name[11]; /* swy: in UTF-16, wide chars */
 
 
-struct section
+typedef struct section_t
 {
     uint section_type, byte_len, checksum_maybe <format=hex>;
     byte data[byte_len];
-};
+} section <read=Str("%#x len: %#x, crc: %#x", section_type, byte_len, checksum_maybe), optimize=false>;;
 
 while (!FEof())
 {
