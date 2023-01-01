@@ -10,7 +10,11 @@
 //------------------------------------------------
 
 LittleEndian();
-uint count,a,b, size, d,e; char filename[e];
-uint f,g, size, i, j; char filenameb[j];
+uint count,a, offset, size_a, d, str_sz; char filename[str_sz];
+uint f, offset, size_b, i, str_sz_b; char filenameb[str_sz_b];
+
+byte file[size_a];
+
+byte fileb[size_b];
 
 // swy: two thrones PRPData.bf seems simpler
