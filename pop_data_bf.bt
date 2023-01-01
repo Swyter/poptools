@@ -10,11 +10,23 @@
 //------------------------------------------------
 
 LittleEndian();
-uint head_byte_size, a, offset, size_a, d, str_sz;   char filename[str_sz];
-uint                 f, offset, size_b, i, str_sz_b; char filenameb[str_sz_b];
+uint head_byte_size;
 
-byte file[size_a];
+struct bf_entry
+{
+    uint a, offset, size, d;
+    uint str_len; char filename[str_len];
 
-byte fileb[size_b];
+    //byte file[size];
+};
 
-// swy: two thrones PRPData.bf seems simpler
+
+local int remaining_sz = head_byte_size;
+
+while (remaining_sz > 0)
+{
+    bf_entry elem <optimize=false>;
+
+    remaining_sz -= sizeof(elem);
+}
+// swy: two thrones POPData.bf seems simpler
