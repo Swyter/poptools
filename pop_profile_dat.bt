@@ -13,6 +13,6 @@
 LittleEndian();
 char magic[4];
 wchar_t profile_name[22 / 2];
-uint a,b,c,width, height, windowed, g,h,i,j, k[26];
+uint a[4]; ushort b_pad; uint c,width, height, windowed, g,h,i,j, k[25];
 
 uint thing <format=hex>; short e; float a, b, c; uint a,b,c;
