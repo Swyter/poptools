@@ -34,3 +34,8 @@ New-Object System.Threading.Mutex($false, "POP3Launcher")
 
 # Unlocking the level-selector menu
 The easiest way is to replace the `P_StartNewGame` string in `POP2.EXE` with `P_SpecialLoad`. Make sure to keep the zero-padding and add a `NULL` terminator at the end. _i.e._ Don't mess with the alignment.
+
+# Unlocking the hidden game options
+Swapping the names of the `P_Options` and `P_GameOptions` pages in `POP5Common.MGM` makes the game skip the blacklist that hides the secret `Setup menu ON/OFF`, `Cheats ON/OFF`, `Interface ON/OFF`, `Show motion camera ON/OFF`, `Interface ON/OFF` and `Work in progress ON/OFF` entries under _Options > Game_.
+
+One of the (still unidentified) options causes the _Tab_ and _C_ keys to pause the game. These debug options seem to be stored as part of the profile data.
