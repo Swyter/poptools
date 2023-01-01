@@ -1,0 +1,16 @@
+//------------------------------------------------
+//--- 010 Editor v13.0 Binary Template
+//
+//      File: Prince of Persia: Warrior Within - POPData.bf file format
+//   Authors: Swyter
+//   Version: 2023.01.01
+//   Purpose: 
+//  Category: Game
+// File Mask: POPData.bf
+//------------------------------------------------
+
+LittleEndian();
+uint count,a,b,c,d,e; char filename[e];
+uint f,g,h, i, j; char filenameb[j];
+
+// swy: two thrones PRPData.bf seems simpler
