@@ -1,17 +1,16 @@
 //------------------------------------------------
 //--- 010 Editor v13.0 Binary Template
 //
-//      File: 
-//   Authors: 
-//   Version: 
+//      File: Prince of Persia: Warrior Within - Profile.DAT file format
+//   Authors: Swyter
+//   Version: 2023.01.01
 //   Purpose: 
-//  Category: 
-// File Mask: 
-//  ID Bytes: 
-//   History: 
+//  Category: Game
+// File Mask: *.DAT
+//  ID Bytes: 50 4F 50 34
 //------------------------------------------------
 
 LittleEndian();
 char magic[4];
 char profile_name[19]; char a[3];
-uint a,b,c,d,e,f;
+uint a,b,c,d,e,f,g,h,i,j,k;
