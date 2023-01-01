@@ -15,7 +15,7 @@ New-Object System.Threading.Mutex($false, "POP_Watchdog")
 ./POP2.EXE
 ```
 
-You can also avoid all this PowerShell stuff by replacing the `POP5Launcher` string with some other short-enough mutex name that is guaranteed to always exist on running Windows sessions, like `DBWinMutex`.
+You can also avoid all this PowerShell stuff by replacing the `POP5Launcher` string with some other short-enough mutex name that is guaranteed to always exist, like the `POP_Game` one the game creates just before to check that only a single instance is running at a time.
 
 
 For the original _Sands of Time_ the launcher is called with the `-uplay_steam_mode` parameter, and the mutex name is `POP_Launcher`:
