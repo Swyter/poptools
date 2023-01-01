@@ -1,7 +1,7 @@
 //------------------------------------------------
 //--- 010 Editor v13.0 Binary Template
 //
-//      File: Prince of Persia: Warrior Within - POPData.bf file format
+//      File: Prince of Persia: Warrior Within - POPData.BF file format
 //   Authors: Swyter
 //   Version: 2023.01.01
 //   Purpose: 
@@ -12,13 +12,13 @@
 LittleEndian();
 uint head_byte_size;
 
-struct bf_entry
+typedef struct bf_entry_t
 {
-    uint a, offset, size, d;
+    uint entry_offset_in_head, offset, size, unk_zero;
     uint str_len; char filename[str_len];
 
     //byte file[size];
-};
+} bf_entry <read=Str("%s - %#x, %#x", filename, offset, size)>;
 
 
 local int remaining_sz = head_byte_size;
