@@ -20,14 +20,16 @@ wchar_t profile_name[11]; /* swy: in UTF-16, wide chars */
 
 typedef struct section_t
 {
-    enum<uint> { section_1 = 1, section_video = 2, section_audio = 4, section_8 = 8, section_10 = 16} section_type;
+    enum<uint> { section_controls_maybe = 1, section_video = 2, section_audio = 4, section_8 = 8, section_10 = 16} section_type;
     uint byte_len; uint checksum <format=hex>; /* swy: everything every byte in the section is checksummed 'crc width=32 poly=0x4c11db7 init=0xffffffff xorout=0x0 refin=true refout=true out_endian=big' */
 
     if (section_type == section_video)
     {
         ushort video_ver_maybe;
         uint width, height; uint fullscreen;
-        uint a[(byte_len/4) - 3]; 
+
+        uint gamma, contrast, brightness; /* swy: stored as fixed point x10. i.e. 165 is 1.65 in-game */
+        uint a[(byte_len/4) - 6]; // [12] water effects [13] fog
     }
     else if (section_type == section_audio)
     {
