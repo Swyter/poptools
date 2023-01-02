@@ -27,8 +27,8 @@ typedef struct section_t
     if (section_type == section_controls)
     {
         ushort controls_ver_maybe;
-        uint count_c;
-        struct { uint a,b; } thing[count_c];
+        uint key_count;
+        struct { uint index; uint target; } keymap[key_count];
         float mouse_speed, gamepad_sensitivity; /* swy: normalized. i.e. 0.135 means 13% in-game */
     }
     else if (section_type == section_video)
