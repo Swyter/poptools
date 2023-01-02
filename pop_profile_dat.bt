@@ -29,7 +29,7 @@ typedef struct section_t
         uint width, height; uint fullscreen;
 
         uint gamma, contrast, brightness; /* swy: stored as fixed point x10. i.e. 165 is 1.65 in-game */
-        uint a[(byte_len/4) - 6]; // [12] water effects [13] fog
+        uint a, special_effects, c, shadow_effects, e,f,g,h,i,j,k,l, water_effects, fog, o,p,q,r,s,t,u,v,w,x,y; // [12] water effects [13] fog
     }
     else if (section_type == section_audio)
     {
