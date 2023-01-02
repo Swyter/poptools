@@ -27,8 +27,8 @@ typedef struct section_t
     if (section_type == section_controls)
     {
         ushort controls_ver_maybe;
-        uint key_count;
-        struct { uint index; uint target; } keymap[key_count];
+        uint action_count;
+        struct { ubyte action, type, index, c; ubyte pad[3], target; } mapped_action[action_count]; /* swy: see the unpacked pop4pclocal.dat from POP_Data.BF for the action and key names */
         float mouse_speed, gamepad_sensitivity; /* swy: normalized. i.e. 0.135 means 13% in-game */
     }
     else if (section_type == section_video)
