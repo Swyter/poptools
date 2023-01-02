@@ -20,11 +20,22 @@ wchar_t profile_name[11]; /* swy: in UTF-16, wide chars */
 
 typedef struct section_t
 {
-    enum<uint> { section_video = 2, section_audio = 4} section_type, byte_len, checksum_maybe <format=hex>;
-    ushort i; uint a[byte_len/4]; 
+    enum<uint> { section_1 = 1, section_video = 2, section_audio = 4, section_8 = 8, section_10 = 16} section_type;
+    uint byte_len; uint checksum <format=hex>; /* swy: everything every byte in the section is checksummed 'crc width=32 poly=0x4c11db7 init=0xffffffff xorout=0x0 refin=true refout=true out_endian=big' */
+
+    if (section_type == section_video)
+    {
+        ushort video_ver_maybe;
+        uint width, height; uint fullscreen;
+        uint a[(byte_len/4) - 3]; 
+    }
+    else
+    {
+        ushort i; uint a[byte_len/4]; 
+    }
     //byte data[byte_len];
 
-} section <read=Str("%#x len: %#x, crc: %#x", section_type, byte_len, checksum_maybe), optimize=false>;;
+} section <read=Str("%s (%#x) len: %#x, crc: %#x", EnumToString(section_type), section_type, byte_len, checksum), optimize=false>;;
 
 while (!FEof())
 {
