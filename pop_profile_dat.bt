@@ -20,14 +20,15 @@ wchar_t profile_name[11]; /* swy: in UTF-16, wide chars */
 
 typedef struct section_t
 {
-    enum<uint> { section_controls = 1, section_video = 2, section_audio = 4, section_8 = 8, section_10 = 16} section_type;
+    enum<uint> { section_controls = 1, section_video = 2, section_audio = 4, section_game = 8, section_debug_maybe = 16} section_type;
     uint byte_len; uint checksum <format=hex>; /* swy: everything every byte in the section is checksummed 'crc width=32 poly=0x4c11db7 init=0xffffffff xorout=0x0 refin=true refout=true out_endian=big' */
 
 
     if (section_type == section_controls)
     {
-        ushort audio_ver_maybe;
-        uint a[59 - 2];
+        ushort controls_ver_maybe;
+        uint count_c;
+        struct { uint a,b; } thing[count_c];
         float mouse_speed, gamepad_sensitivity; /* swy: normalized. i.e. 0.135 means 13% in-game */
     }
     else if (section_type == section_video)
@@ -40,11 +41,11 @@ typedef struct section_t
     }
     else if (section_type == section_audio)
     {
-        ushort audio_ver_maybe;
+        ushort game_ver_maybe;
         float music_vol, voices_vol, effects_vol; /* swy: normalized. i.e. 0.455 means 45% in-game */
         uint three_dee_hardware_accel, eax_maybe /* swy: disabled for me */, audio_virtualization;
     }
-    else if (section_type == section_8)
+    else if (section_type == section_game)
     {
         ushort ver_maybe;
 
