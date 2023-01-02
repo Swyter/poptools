@@ -18,6 +18,8 @@ wchar_t profile_name[11]; /* swy: in UTF-16, wide chars */
 
 typedef struct section_t
 {
+    enum { section_video = 2};
+
     uint section_type, byte_len, checksum_maybe <format=hex>;
     //ushort i; uint a[byte_len/4]; 
     byte data[byte_len];
@@ -64,5 +66,18 @@ crc width=32 poly=0x4c11db7 init=0xffffffff xorout=0x0 refin=true refout=true ou
 [lololololo]# delsum check -m 'crc width=32 poly=0x4c11db7 init=0xffffffff xorout=0x0 refin=true refout=true out_endian=big' checksum_39DBC095h.bin
 39dbc095
 
-[lololololo]#
+
+checksum_1F42FBF1h.bin - FF1360EC
+checksum_6C83CA3Ah.bin - F82AF197
+checksum_4388CD52h.bin - FD9E5802
+checksum_39DBC095h.bin - F9A9E52A
+
+delsum reverse -m 'crc width=32' --checksums FF1360EC,F82AF197,FD9E5802,F9A9E52A checksum_1F42FBF1h.bin checksum_6C83CA3Ah.bin checksum_4388CD52h.bin checksum_39DBC095h.bin
+
+delsum check -m 'crc width=32 poly=0x4c11db7 init=0xffffffff xorout=0x0 refin=true refout=true out_endian=big' checksum_B3173EF2h.bin
+b3173ef2
+delsum check -m 'crc width=32 poly=0x4c11db7 init=0xffffffff xorout=0x0 refin=true refout=true out_endian=big' Profile.DAT -S 0x120 -E 0x19d # swy: from 0x120 to ((0x120 + 0x7e) - 1) = (0x19e - 1) = 0x19d
+b3173ef2
+delsum check -m 'crc width=32 poly=0x4c11db7 init=0xffffffff xorout=0x0 refin=true refout=true out_endian=big' Profile.DAT -S 0x120 -E 0x19d
+dee27168
 */
