@@ -29,6 +29,10 @@ typedef struct section_t
         uint width, height; uint fullscreen;
         uint a[(byte_len/4) - 3]; 
     }
+    else if (section_type == section_audio)
+    {
+        ushort audio_ver_maybe; float a, b, c; uint d, e, f;
+    }
     else
     {
         ushort i; uint a[byte_len/4]; 
