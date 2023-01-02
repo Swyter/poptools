@@ -27,8 +27,13 @@ typedef struct section_t
     if (section_type == section_controls)
     {
         ushort controls_ver_maybe;
+
         uint action_count;
-        struct { ubyte action, type, index, c; ubyte pad[3], target; } mapped_action[action_count]; /* swy: see the unpacked pop4pclocal.dat from POP_Data.BF for the action and key names */
+        /* swy: see the unpacked pop4pclocal.dat from POP_Data.BF for the action and key names. NOTE: One can unmap actions with Backspace in the press-any-key input box */
+        typedef struct mapped_t { ubyte action, type, index, c; ubyte pad[3] <hidden=true>, target; } mapped <read=Str("Action_%u - %u - %u", action, type, target)>;
+
+        mapped mapped_action[action_count];
+
         float mouse_speed, gamepad_sensitivity; /* swy: normalized. i.e. 0.135 means 13% in-game */
     }
     else if (section_type == section_video)
@@ -58,7 +63,7 @@ typedef struct section_t
     }
     //byte data[byte_len];
 
-} section <read=Str("%s (%#x) len: %#x, crc: %#x", EnumToString(section_type), section_type, byte_len, checksum), optimize=false>;;
+} section <read=Str("%s (%#x) len: %#x, crc: %#x", EnumToString(section_type), section_type, byte_len, checksum), optimize=false>;
 
 while (!FEof())
 {
