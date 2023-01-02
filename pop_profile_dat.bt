@@ -29,11 +29,13 @@ typedef struct section_t
         uint width, height; uint fullscreen;
 
         uint gamma, contrast, brightness; /* swy: stored as fixed point x10. i.e. 165 is 1.65 in-game */
-        uint a, special_effects, c, shadow_effects, e,f,g,h,i,j,k,l, water_effects, fog, o,p,q,r,s,t,u,v,w,x,y; // [12] water effects [13] fog
+        uint filtering, special_effects, c, shadow_effects, e,f,g,h,i,j,k,l, water_effects, fog, vsync, p,q,r,s,t,u,v,w,x,y; // [12] water effects [13] fog
     }
     else if (section_type == section_audio)
     {
-        ushort audio_ver_maybe; float a, b, c; uint d, e, f;
+        ushort audio_ver_maybe;
+        float music_vol, voices_vol, effects_vol; /* swy: normalized. i.e. 0.455 means 45% in-game */
+        uint three_dee_hardware_accel, eax_maybe /* swy: disabled for me */, audio_virtualization;
     }
     else
     {
