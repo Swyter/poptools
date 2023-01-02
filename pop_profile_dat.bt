@@ -27,7 +27,8 @@ typedef struct section_t
     if (section_type == section_controls)
     {
         ushort audio_ver_maybe;
-        uint a[59 - 2]; float aa, bb;
+        uint a[59 - 2];
+        float mouse_speed, gamepad_sensitivity; /* swy: normalized. i.e. 0.135 means 13% in-game */
     }
     else if (section_type == section_video)
     {
@@ -42,6 +43,13 @@ typedef struct section_t
         ushort audio_ver_maybe;
         float music_vol, voices_vol, effects_vol; /* swy: normalized. i.e. 0.455 means 45% in-game */
         uint three_dee_hardware_accel, eax_maybe /* swy: disabled for me */, audio_virtualization;
+    }
+    else if (section_type == section_8)
+    {
+        ushort ver_maybe;
+
+        uint free_lock_inversion, navigation_inversion; /* swy: shown as part of the Controls section */
+        uint slider_cant_see_tag, tutorials, subtitles, blood; /* swy: shown as part of the Game section */
     }
     else
     {
