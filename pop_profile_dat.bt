@@ -38,20 +38,23 @@ typedef struct section_t
     {
         ushort video_ver_maybe;
 
+        enum<uint> full_screen_t {fs_windowed, fs_full_screen};
+        enum<uint> tex_filtering_t {fi_none, fi_bilinear, fi_trilinear};
+
         switch(video_ver_maybe)
         {
         case 256: /* swy: SoT */
-            uint width, height, bitdepth; enum<uint> {fsi_windowed, fsi_full_screen} fullscreen;
-            uint unk_zero; enum<uint> {fis_none, fis_bilinear, fis_trilinear} filtering; uint special_effects, h, shadow_effects, j,k,l,m,n,o,p, water_effects, fog, vsync, texture_quality; 
+            uint width, height, bitdepth; enum full_screen_t fullscreen;
+            uint unk_zero; enum tex_filtering_t filtering; uint special_effects, h, shadow_effects, j,k,l,m,n,o,p, water_effects, fog, vsync, texture_quality; 
             break;
 
         case 261: /* swy: WW */
-            uint width, height; enum<uint> {fs_windowed, fs_full_screen} fullscreen;
+            uint width, height; enum full_screen_t fullscreen;
             uint gamma, contrast, brightness; /* swy: stored as fixed point x10. i.e. 165 is 1.65 in-game */
     
             /* swy: there's a disabled advanced video menu for pinch, smartblur, color diffusion, motion blur,
                     lightmaps, halo occlusion and bitdepth, probably some of the unknown fields here; see pop4pclocal.dat */
-            enum<uint> {fi_none, fi_bilinear, fi_trilinear} filtering; uint special_effects, c, shadow_effects, e,f,g,h,i,j,k,l, water_effects, fog, vsync, p,q,r,s,t,u,v,w,x,y; // [12] water effects [13] fog
+            enum tex_filtering_t filtering; uint special_effects, c, shadow_effects, e,f,g,h,i,j,k,l, water_effects, fog, vsync, texture_quality_maybe, q,r,s,t,u,v,w,x,y; // [12] water effects [13] fog
             break;
 
         case 262: /* swy: TT */
@@ -73,17 +76,18 @@ typedef struct section_t
     }
     else if (section_type == section_game)
     {
-        ushort ver_maybe;
+        ushort ver_maybe; enum<uint> freq_t {freq_none, freq_few, freq_normal, freq_many};
 
         switch(ver_maybe)
         {
         case 256: /* swy: SoT */
-            uint a, b; enum<uint> {_none, _few_, _normal, _many} insert_frequency; uint tutorials;
+            uint camera_freelook, camera_navigation; /* swy: shown as part of the Controls section */
+            enum freq_t insert_frequency; uint tutorials; /* swy: shown as part of the Game section */
             break;
 
         case 258: /* swy: WW, TT */
             uint free_lock_inversion, navigation_inversion; /* swy: shown as part of the Controls section */
-            uint slider_cant_see_tag, tutorials, subtitles, blood; /* swy: shown as part of the Game section */
+            enum freq_t insert_frequency; uint tutorials, subtitles, blood; /* swy: shown as part of the Game section */
             break;
 
         default:
