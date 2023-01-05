@@ -32,21 +32,33 @@ typedef struct section_t
         typedef struct mapped_t { ubyte action, type, index, c; ubyte pad[3] <hidden=true>, target; } mapped <read=Str("Action_%u - %u - %u", action, type, target)>;
         uint action_count; mapped mapped_action[action_count];
 
-        float mouse_speed, gamepad_sensitivity; /* swy: normalized. i.e. 0.135 means 13% in-game */
+        float mouse_speed; if (controls_ver_maybe >= 257) float gamepad_sensitivity; /* swy: normalized. i.e. 0.135 means 13% in-game */
     }
     else if (section_type == section_video)
     {
         ushort video_ver_maybe;
-        uint width, height; enum<uint> {windowed, full_screen} fullscreen;
-        uint gamma, contrast, brightness; /* swy: stored as fixed point x10. i.e. 165 is 1.65 in-game */
 
-        /* swy: there's a disabled advanced video menu for pinch, smartblur, color diffusion, motion blur,
-                lightmaps, halo occlusion and bitdepth, probably some of the unknown fields here; see pop4pclocal.dat */
-        enum<uint> {fi_none, fi_bilinear, fi_trilinear} filtering; uint special_effects, c, shadow_effects, e,f,g,h,i,j,k,l, water_effects, fog, vsync, p,q,r,s,t,u,v,w,x,y; // [12] water effects [13] fog
+        switch(video_ver_maybe)
+        {
+        default:
+        case 256: /* swy: SoT */
+            uint a[byte_len/4]; 
+            break;
+
+        case 261: /* swy: WW */
+            uint width, height; enum<uint> {fs_windowed, fs_full_screen} fullscreen;
+            uint gamma, contrast, brightness; /* swy: stored as fixed point x10. i.e. 165 is 1.65 in-game */
+    
+            /* swy: there's a disabled advanced video menu for pinch, smartblur, color diffusion, motion blur,
+                    lightmaps, halo occlusion and bitdepth, probably some of the unknown fields here; see pop4pclocal.dat */
+            enum<uint> {fi_none, fi_bilinear, fi_trilinear} filtering; uint special_effects, c, shadow_effects, e,f,g,h,i,j,k,l, water_effects, fog, vsync, p,q,r,s,t,u,v,w,x,y; // [12] water effects [13] fog
+            break;
+        }
     }
     else if (section_type == section_audio)
     {
-        ushort game_ver_maybe;
+        ushort game_ver_maybe; /* swy: always 256 in SoT and WW */
+
         float music_vol, voices_vol, effects_vol; /* swy: normalized. i.e. 0.455 means 45% in-game */
         uint three_dee_hardware_accel, eax_maybe /* swy: disabled for me */; enum<uint> {none, light, full} audio_virtualization;
     }
@@ -54,8 +66,18 @@ typedef struct section_t
     {
         ushort ver_maybe;
 
-        uint free_lock_inversion, navigation_inversion; /* swy: shown as part of the Controls section */
-        uint slider_cant_see_tag, tutorials, subtitles, blood; /* swy: shown as part of the Game section */
+        switch(ver_maybe)
+        {
+        default:
+        case 256: /* swy: SoT */
+            uint a[byte_len/4];
+            break;
+
+        case 258: /* swy: WW */
+            uint free_lock_inversion, navigation_inversion; /* swy: shown as part of the Controls section */
+            uint slider_cant_see_tag, tutorials, subtitles, blood; /* swy: shown as part of the Game section */
+            break;
+        }
     }
     else
     {
