@@ -28,27 +28,27 @@ typedef struct section_t
     {
         ushort controls_ver_maybe;
 
-        uint action_count;
         /* swy: see the unpacked pop4pclocal.dat from POP_Data.BF for the action and key names. NOTE: One can unmap actions with Backspace in the press-any-key input box */
         typedef struct mapped_t { ubyte action, type, index, c; ubyte pad[3] <hidden=true>, target; } mapped <read=Str("Action_%u - %u - %u", action, type, target)>;
-
-        mapped mapped_action[action_count];
+        uint action_count; mapped mapped_action[action_count];
 
         float mouse_speed, gamepad_sensitivity; /* swy: normalized. i.e. 0.135 means 13% in-game */
     }
     else if (section_type == section_video)
     {
         ushort video_ver_maybe;
-        uint width, height; uint fullscreen;
-
+        uint width, height; enum<uint> {windowed, full_screen} fullscreen;
         uint gamma, contrast, brightness; /* swy: stored as fixed point x10. i.e. 165 is 1.65 in-game */
-        uint filtering, special_effects, c, shadow_effects, e,f,g,h,i,j,k,l, water_effects, fog, vsync, p,q,r,s,t,u,v,w,x,y; // [12] water effects [13] fog
+
+        /* swy: there's a disabled advanced video menu for pinch, smartblur, color diffusion, motion blur,
+                lightmaps, halo occlusion and bitdepth, probably some of the unknown fields here; see pop4pclocal.dat */
+        enum<uint> {fi_none, fi_bilinear, fi_trilinear} filtering; uint special_effects, c, shadow_effects, e,f,g,h,i,j,k,l, water_effects, fog, vsync, p,q,r,s,t,u,v,w,x,y; // [12] water effects [13] fog
     }
     else if (section_type == section_audio)
     {
         ushort game_ver_maybe;
         float music_vol, voices_vol, effects_vol; /* swy: normalized. i.e. 0.455 means 45% in-game */
-        uint three_dee_hardware_accel, eax_maybe /* swy: disabled for me */, audio_virtualization;
+        uint three_dee_hardware_accel, eax_maybe /* swy: disabled for me */; enum<uint> {none, light, full} audio_virtualization;
     }
     else if (section_type == section_game)
     {
@@ -61,6 +61,7 @@ typedef struct section_t
     {
         ushort i; uint a[byte_len/4]; 
     }
+
     //byte data[byte_len];
 
 } section <read=Str("%s (%#x) len: %#x, crc: %#x", EnumToString(section_type), section_type, byte_len, checksum), optimize=false>;
