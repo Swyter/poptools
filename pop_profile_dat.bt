@@ -17,6 +17,7 @@ char magic[4]; /* swy: tagged as POP4 */
 
 wchar_t profile_name[11]; /* swy: in UTF-16, wide chars */
 
+enum bool { off, enabled };
 
 typedef struct section_t
 {
@@ -40,12 +41,17 @@ typedef struct section_t
 
         enum<uint> full_screen_t {fs_windowed, fs_full_screen};
         enum<uint> tex_filtering_t {fi_none, fi_bilinear, fi_trilinear};
+        enum<uint> tex_quality_t {tq_low, tq_high};
+        enum<uint> special_fx_t {sp_low, sp_medium, sp_high };
+        enum<uint> shadow_fx_t {sh_none, sh_medium, sh_high };
 
         switch(video_ver_maybe)
         {
         case 256: /* swy: SoT */
             uint width, height, bitdepth; enum full_screen_t fullscreen;
-            uint unk_zero; enum tex_filtering_t filtering; uint special_effects, h, shadow_effects, j,k,l,m,n,o,p, water_effects, fog, vsync, texture_quality; 
+            uint gamma; /* swy: stored as fixed point x10. i.e. 77 is 0.77 in-game */
+
+            enum tex_filtering_t filtering; special_fx_t special_effects; bool unk; shadow_fx_t shadow_effects; bool j,k,l,m,n,o,p,   water_effects, fog, vsync; tex_quality_t texture_quality; 
             break;
 
         case 261: /* swy: WW */
@@ -54,7 +60,7 @@ typedef struct section_t
     
             /* swy: there's a disabled advanced video menu for pinch, smartblur, color diffusion, motion blur,
                     lightmaps, halo occlusion and bitdepth, probably some of the unknown fields here; see pop4pclocal.dat */
-            enum tex_filtering_t filtering; uint special_effects, c, shadow_effects, e,f,g,h,i,j,k,l, water_effects, fog, vsync, texture_quality_maybe, q,r,s,t,u,v,w,x,y; // [12] water effects [13] fog
+            enum tex_filtering_t filtering; special_fx_t special_effects; bool unk; shadow_fx_t shadow_effects; bool e,f,g,h,i,j,k,l, water_effects, fog, vsync; tex_quality_t texture_quality_maybe; bool q,r,s,t,u,v,w,x,y; // [12] water effects [13] fog
             break;
 
         case 262: /* swy: TT */
@@ -72,22 +78,22 @@ typedef struct section_t
         ushort game_ver_maybe; /* swy: always 256 in SoT and WW */
 
         float music_vol, voices_vol, effects_vol; /* swy: normalized. i.e. 0.455 means 45% in-game */
-        uint three_dee_hardware_accel, eax_maybe /* swy: disabled for me */; enum<uint> {none, light, full} audio_virtualization;
+        bool three_dee_hardware_accel, eax_maybe /* swy: disabled for me */; enum<uint> {none, light, full} audio_virtualization;
     }
     else if (section_type == section_game)
     {
-        ushort ver_maybe; enum<uint> freq_t {freq_none, freq_few, freq_normal, freq_many};
+        ushort game_ver_maybe; enum<uint> freq_t {freq_none, freq_few, freq_normal, freq_many}; enum<uint> cam_inversion_t {ci_inverted, ci_normal};
 
-        switch(ver_maybe)
+        switch(game_ver_maybe)
         {
         case 256: /* swy: SoT */
-            uint camera_freelook, camera_navigation; /* swy: shown as part of the Controls section */
-            enum freq_t insert_frequency; uint tutorials; /* swy: shown as part of the Game section */
+            enum cam_inversion_t camera_freelook, camera_navigation; /* swy: shown as part of the Controls section */
+            enum freq_t insert_frequency; bool tutorials; /* swy: shown as part of the Game section */
             break;
 
         case 258: /* swy: WW, TT */
-            uint free_lock_inversion, navigation_inversion; /* swy: shown as part of the Controls section */
-            enum freq_t insert_frequency; uint tutorials, subtitles, blood; /* swy: shown as part of the Game section */
+            enum cam_inversion_t free_look, navigation; /* swy: shown as part of the Controls section */
+            enum freq_t slow_motion_camera; bool tutorials, subtitles, blood; /* swy: shown as part of the Game section */
             break;
 
         default:
