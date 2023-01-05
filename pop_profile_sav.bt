@@ -8,12 +8,12 @@
 //  Category: 
 // File Mask: 
 //  ID Bytes: 
-//   History: 
 //------------------------------------------------
 
 LittleEndian();
 char magic[4];
-uint a,b,c,d,e,f;
-uint a,b,full_size;
+uint a,b;
+ushort a,b, a,b, a, b, a,b, a, b; uint32 checksum_maybe;
 
+uint full_size;
 byte data[full_size];
