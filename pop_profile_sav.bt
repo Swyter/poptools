@@ -13,5 +13,7 @@
 
 LittleEndian();
 char magic[4];
-char profile_name[19]; char a[3];
 uint a,b,c,d,e,f;
+uint a,b,full_size;
+
+byte data[full_size];
