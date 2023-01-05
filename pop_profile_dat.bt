@@ -21,7 +21,7 @@ wchar_t profile_name[11]; /* swy: in UTF-16, wide chars */
 typedef struct section_t
 {
     enum<uint> { section_controls = 1, section_video = 2, section_audio = 4, section_game = 8, section_debug_maybe = 16} section_type;
-    uint byte_len; uint checksum <format=hex>; /* swy: everything every byte in the section is checksummed 'crc width=32 poly=0x4c11db7 init=0xffffffff xorout=0x0 refin=true refout=true out_endian=big' */
+    uint byte_len; uint checksum <format=hex>; /* swy: every byte in the data section is checksummed with CRC-32/JAMCRC i.e. 'crc width=32 poly=0x4c11db7 init=0xffffffff xorout=0x0 refin=true refout=true out_endian=big' */
 
 
     if (section_type == section_controls) /* swy: 256 for SoT; 257 for WW and TT */
@@ -41,7 +41,7 @@ typedef struct section_t
         switch(video_ver_maybe)
         {
         case 256: /* swy: SoT */
-            uint width, height, bitdepth_maybe, fullscreen_maybe, e,f,g,h,y,j,k,l,m,n,o,p,q,r,s,t; 
+            uint width, height, bitdepth_maybe, fullscreen_maybe, e, filtering, g,h, shadow_effects, j,k,l,m,n,o,p, water_effects, fog, vsync, texture_quality; 
             break;
 
         case 261: /* swy: WW */
