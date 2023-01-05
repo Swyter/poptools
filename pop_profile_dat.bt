@@ -24,7 +24,7 @@ typedef struct section_t
     uint byte_len; uint checksum <format=hex>; /* swy: everything every byte in the section is checksummed 'crc width=32 poly=0x4c11db7 init=0xffffffff xorout=0x0 refin=true refout=true out_endian=big' */
 
 
-    if (section_type == section_controls)
+    if (section_type == section_controls) /* swy: 256 for SoT; 257 for WW and TT */
     {
         ushort controls_ver_maybe;
 
@@ -40,9 +40,8 @@ typedef struct section_t
 
         switch(video_ver_maybe)
         {
-        default:
         case 256: /* swy: SoT */
-            uint a[byte_len/4]; 
+            uint width, height, bitdepth_maybe, fullscreen_maybe, e,f,g,h,y,j,k,l,m,n,o,p,q,r,s,t; 
             break;
 
         case 261: /* swy: WW */
@@ -53,6 +52,15 @@ typedef struct section_t
                     lightmaps, halo occlusion and bitdepth, probably some of the unknown fields here; see pop4pclocal.dat */
             enum<uint> {fi_none, fi_bilinear, fi_trilinear} filtering; uint special_effects, c, shadow_effects, e,f,g,h,i,j,k,l, water_effects, fog, vsync, p,q,r,s,t,u,v,w,x,y; // [12] water effects [13] fog
             break;
+
+        case 262: /* swy: TT */
+            uint width, height, fullscreen_maybe, e,f,g,h,y,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,e,f,g,h,y,j,k,l;
+            break;
+
+        default:
+            uint a[byte_len/4];
+            break;
+
         }
     }
     else if (section_type == section_audio)
@@ -68,14 +76,17 @@ typedef struct section_t
 
         switch(ver_maybe)
         {
-        default:
         case 256: /* swy: SoT */
-            uint a[byte_len/4];
+            uint a, b, c, d;
             break;
 
-        case 258: /* swy: WW */
+        case 258: /* swy: WW, TT */
             uint free_lock_inversion, navigation_inversion; /* swy: shown as part of the Controls section */
             uint slider_cant_see_tag, tutorials, subtitles, blood; /* swy: shown as part of the Game section */
+            break;
+
+        default:
+            uint a[byte_len/4];
             break;
         }
     }
