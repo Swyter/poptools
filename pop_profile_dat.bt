@@ -41,7 +41,8 @@ typedef struct section_t
         switch(video_ver_maybe)
         {
         case 256: /* swy: SoT */
-            uint width, height, bitdepth_maybe, fullscreen_maybe, e, filtering, g,h, shadow_effects, j,k,l,m,n,o,p, water_effects, fog, vsync, texture_quality; 
+            uint width, height, bitdepth; enum<uint> {fsi_windowed, fsi_full_screen} fullscreen;
+            uint unk_zero; enum<uint> {fis_none, fis_bilinear, fis_trilinear} filtering; uint special_effects, h, shadow_effects, j,k,l,m,n,o,p, water_effects, fog, vsync, texture_quality; 
             break;
 
         case 261: /* swy: WW */
@@ -77,7 +78,7 @@ typedef struct section_t
         switch(ver_maybe)
         {
         case 256: /* swy: SoT */
-            uint a, b, c, d;
+            uint a, b; enum<uint> {_none, _few_, _normal, _many} insert_frequency; uint tutorials;
             break;
 
         case 258: /* swy: WW, TT */
