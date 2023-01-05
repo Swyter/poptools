@@ -51,7 +51,8 @@ typedef struct section_t
             uint width, height, bitdepth; enum full_screen_t fullscreen;
             uint gamma; /* swy: stored as fixed point x10. i.e. 77 is 0.77 in-game */
 
-            enum tex_filtering_t filtering; special_fx_t special_effects; bool unk; shadow_fx_t shadow_effects; bool j,k,l,m,n,o,p,   water_effects, fog, vsync; tex_quality_t texture_quality; 
+            enum tex_filtering_t filtering; special_fx_t special_effects; bool unk; shadow_fx_t shadow_effects; bool j,k,l,m,n,o,p;
+            bool water_effects, fog, vsync; tex_quality_t texture_quality; 
             break;
 
         case 261: /* swy: WW */
@@ -60,11 +61,13 @@ typedef struct section_t
     
             /* swy: there's a disabled advanced video menu for pinch, smartblur, color diffusion, motion blur,
                     lightmaps, halo occlusion and bitdepth, probably some of the unknown fields here; see pop4pclocal.dat */
-            enum tex_filtering_t filtering; special_fx_t special_effects; bool unk; shadow_fx_t shadow_effects; bool e,f,g,h,i,j,k,l, water_effects, fog, vsync; tex_quality_t texture_quality_maybe; bool q,r,s,t,u,v,w,x,y; // [12] water effects [13] fog
+            enum tex_filtering_t filtering; special_fx_t special_effects; bool unk; shadow_fx_t shadow_effects; bool e,f,g,h,i,j,k,l;
+            bool water_effects, fog, vsync; tex_quality_t texture_quality_maybe; bool q,r,s,t,u,v,w,x,y; // [12] water effects [13] fog
             break;
 
         case 262: /* swy: TT */
-            uint width, height, fullscreen_maybe, e,f,g,h,y,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,e,f,g,h,y,j,k,l;
+            uint width, height; enum full_screen_t fullscreen;
+            bool e,f,g,h,y,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,e,f,g,h,y,j,k,l;
             break;
 
         default:
@@ -75,7 +78,7 @@ typedef struct section_t
     }
     else if (section_type == section_audio)
     {
-        ushort game_ver_maybe; /* swy: always 256 in SoT and WW */
+        ushort game_ver_maybe; /* swy: always 256 in SoT, WW and TT */
 
         float music_vol, voices_vol, effects_vol; /* swy: normalized. i.e. 0.455 means 45% in-game */
         bool three_dee_hardware_accel, eax_maybe /* swy: disabled for me */; enum<uint> {none, light, full} audio_virtualization;
@@ -103,7 +106,7 @@ typedef struct section_t
     }
     else
     {
-        ushort i; uint a[byte_len/4]; 
+        ushort i; uint a[byte_len/4]; /* swy: the last unknown section (type 16) is only present in WW (ver 256) and TT (ver 257) stores extras/unlocks? */
     }
 
     //byte data[byte_len];
