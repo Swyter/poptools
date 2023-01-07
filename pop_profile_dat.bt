@@ -195,7 +195,7 @@ typedef struct section_t
     }
     else if (section_type == section_unlocks)
     {
-        ushort i; uint a[byte_len/4];
+        ushort i; uint a <format=binary>, b <format=binary>, weapons <format=binary>, weapons_b <format=binary>;
     }
     else
     {

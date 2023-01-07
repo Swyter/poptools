@@ -73,13 +73,13 @@ uint cur_block = 0, overwritten_blocks = 0; uint32 crc;
 
 for (cur_block = 0; cur_block < block_count; cur_block++)
 {
-    crc = compute_crc_for_block(startof(block[cur_block].checksum) + 4, block[cur_block].byte_len);
+    crc = compute_crc_for_block(startof(block[cur_block].checksum) + sizeof(uint) /* swy: from the field after the CRC */, block[cur_block].byte_len);
 
     Assert(crc != 0, "CRC computation failed");
 
     Printf(
         "\n[i] %16s: offset: %#x, len: %#5x, checksum: %#010x/%08x (%s)",
-        EnumToString(block[cur_block].section_type), block[cur_block].byte_len, startof(block[cur_block].checksum) + 4,
+        EnumToString(block[cur_block].section_type), block[cur_block].byte_len, startof(block[cur_block].checksum) + sizeof(uint),
         block[cur_block].checksum, crc, block[cur_block].checksum == crc ? "OK" : "BAD"
     );
 
