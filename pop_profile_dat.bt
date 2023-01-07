@@ -21,7 +21,7 @@ enum bool { off, enabled };
 
 typedef struct section_t
 {
-    enum<uint> { section_controls = 1, section_video = 2, section_audio = 4, section_game = 8, section_debug_maybe = 16} section_type;
+    enum<uint> { section_controls = 1, section_video = 2, section_audio = 4, section_game = 8, section_unlocks = 16} section_type;
     uint byte_len; uint checksum <format=hex>; /* swy: every byte in the data section is checksummed with CRC-32/JAMCRC i.e. 'crc width=32 poly=0x4c11db7 init=0xffffffff xorout=0x0 refin=true refout=true out_endian=big' */
 
 
@@ -39,11 +39,11 @@ typedef struct section_t
     {
         ushort video_ver_maybe;
 
-        enum<uint> full_screen_t {fs_windowed, fs_full_screen};
+        enum<uint>   full_screen_t {fs_windowed, fs_full_screen};
         enum<uint> tex_filtering_t {fi_none, fi_bilinear, fi_trilinear};
-        enum<uint> tex_quality_t {tq_low, tq_high};
-        enum<uint> special_fx_t {sp_low, sp_medium, sp_high };
-        enum<uint> shadow_fx_t {sh_none, sh_medium, sh_high };
+        enum<uint>   tex_quality_t {tq_low, tq_high};
+        enum<uint>    special_fx_t {sp_low, sp_medium, sp_high };
+        enum<uint>     shadow_fx_t {sh_none, sh_medium, sh_high };
 
         switch(video_ver_maybe)
         {
@@ -103,6 +103,10 @@ typedef struct section_t
             uint a[byte_len/4];
             break;
         }
+    }
+    else if (section_type == section_unlocks)
+    {
+        ushort i; uint a[byte_len/4];
     }
     else
     {
