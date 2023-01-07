@@ -334,17 +334,31 @@ typedef struct section_t
     {
         ushort unlocks_ver_maybe;
 
-        // cccccccc cccccccc EEEEcccc EEEEEEEE EEEEEEEE EEEEEEEE ______EE __i_____   | (c) characters (E) environment (i) illustrations (D) daggers (s) swords
-        // XXXXXXXX DDXXXXXX mmmmDDDD RRRRmmmm ssssssss ssssssss pp__RsXs __pp_ppp   | (X) axes       (m) maces       (R) miscellaneous (p) main
-        //                                                           \misc. rayman thingie
+        switch(unlocks_ver_maybe)
+        {
+        case 256: /* swy: WW */
+            // cccccccc cccccccc EEEEcccc EEEEEEEE EEEEEEEE EEEEEEEE ______EE __i_____   | (c) characters (E) environment (i) illustrations (D) daggers (s) swords
+            // XXXXXXXX DDXXXXXX mmmmDDDD RRRRmmmm ssssssss ssssssss pp__RsXs __pp_ppp   | (X) axes       (m) maces       (R) miscellaneous (p) main
+            //                                                           \misc. rayman thingie
+    
+            /* swy: 20 characters, 30 environments, 15 illustrations, 7 main weapons, 18 swords, 14 axes, 8 maces, 6 daggers, 5 misc */
+    
+            ubyte characters_a <format=binary>, characters_b <format=binary>, characters_c : 4 <format=binary>,
+                  environments_a : 4 <format=binary>, environments_b <format=binary>,
+                  environments_c <format=binary>, environments <format=binary>, environments <format=binary>, illustrations <format=binary>,
+                  weapons_axes <format=binary>, weapons_axes_and_daggers <format=binary>, weapons_maces_and_daggers <format=binary>, weapons_misc_minus_one_and_rest_of_maces <format=binary>,
+                  weapons_swords <format=binary>, weapons_more_swords <format=binary>, two_swords_one_axe_rayman_two_first_main_weapons <format=binary>, rest_of_main_weapons <format=binary>;
+            break;
 
-        /* swy: 20 characters, 30 environments, 15 illustrations, 7 main weapons, 18 swords, 14 axes, 8 maces, 6 daggers, 5 misc */
+        case 257: /* swy: TT */
+            uint sand_credits, unlocks[6];
+            break;
 
-        ubyte characters_a <format=binary>, characters_b <format=binary>, characters_c : 4 <format=binary>,
-              environments_a : 4 <format=binary>, environments_b <format=binary>,
-              environments_c <format=binary>, environments <format=binary>, environments <format=binary>, illustrations <format=binary>,
-              weapons_axes <format=binary>, weapons_axes_and_daggers <format=binary>, weapons_maces_and_daggers <format=binary>, weapons_misc_minus_one_and_rest_of_maces <format=binary>,
-              weapons_swords <format=binary>, weapons_more_swords <format=binary>, two_swords_one_axe_rayman_two_first_main_weapons <format=binary>, rest_of_main_weapons <format=binary>;
+        default:
+            uint a[byte_len/4];
+            break;
+        }
+
     }
     else
     {
