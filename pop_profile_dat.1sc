@@ -13,7 +13,7 @@ uint i = 0, j = 0;
         the template results; we depend on this to work */
 //RunTemplate("pop_profile_dat.bt");
 
-char target_file_path[] = GetFileName(); char script_path[] = GetScriptFileName();
+char target_file_path[] = GetFileName(); char script_path[] = FileNameGetPath(GetScriptFileName());
 
 string convert_win_to_wsl_path(char path[])
 {
@@ -37,10 +37,12 @@ string convert_win_to_wsl_path(char path[])
     return Str("/mnt/" + path_wsl);
 }
 
-string p = convert_win_to_wsl_path(target_file_path);
-string p = convert_win_to_wsl_path(target_file_path);
+string path_target_wsl = convert_win_to_wsl_path(target_file_path);
+string path_script_wsl = convert_win_to_wsl_path(script_path);
 
-string param = Str("-- cd '/mnt/x/github/poptools/' && pwd && echo `./delsum.elf check -m 'crc width=32 poly=0x4c11db7 init=0xffffffff xorout=0x0 refin=true refout=true out_endian=big' '%s' -S 0x120 -E 0x19d` > delsum_out.txt && read", path_wsl);
+SetWorkingDirectory(script_path);
+
+string param = Str("-- cd '%s' && pwd && echo `./delsum.elf check -m 'crc width=32 poly=0x4c11db7 init=0xffffffff xorout=0x0 refin=true refout=true out_endian=big' '%s' -S 0x120 -E 0x19d` > delsum_out.txt && read", path_script_wsl, path_target_wsl);
 
 int ret;
 
