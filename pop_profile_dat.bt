@@ -198,9 +198,11 @@ typedef struct section_t
         ushort i;
 
 
-        // cccccccc cccccccc EEEEcccc EEEEEEEE EEEEEEEE EEEEEEEE EEEEEEEE iiiiiiii   | (c) characters (E) environment (i) illustrations (D) daggers (s) swords
-        // XXXXXXXX DDXXXXXX mmmmDDDD RRRRmmmm ssssssss ssssssss pp__RsXs pppppppp   | (X) axes       (m) maces       (R) miscellaneous (p) main
+        // cccccccc cccccccc EEEEcccc EEEEEEEE EEEEEEEE EEEEEEEE ______EE __i_____   | (c) characters (E) environment (i) illustrations (D) daggers (s) swords
+        // XXXXXXXX DDXXXXXX mmmmDDDD RRRRmmmm ssssssss ssssssss pp__RsXs __pp_ppp   | (X) axes       (m) maces       (R) miscellaneous (p) main
         //                                                           \misc. rayman thingie
+
+        /* swy: 20 characters, 30 environments, 15 illustrations, 7 main weapons, 18 swords, 14 axes, 8 maces, 6 daggers, 5 misc */
 
         ubyte characters_a <format=binary>, characters_b <format=binary>, characters_c : 4 <format=binary>,
               environments_a : 4 <format=binary>, environments_b <format=binary>,
