@@ -279,7 +279,7 @@ typedef struct section_t
             uint width, height, bitdepth; enum full_screen_t fullscreen;
             uint gamma; /* swy: stored as fixed point x10. i.e. 77 is 0.77 in-game */
 
-            enum tex_filtering_t filtering; special_fx_t special_effects; bool unk; shadow_fx_t shadow_effects; bool j,k,l,m,n,o,p;
+            enum tex_filtering_t filtering; special_fx_t special_effects; bool unk; shadow_fx_t shadow_effects; bool l,m,n,o,p,q,r;
             bool water_effects, fog; vsync_t vsync; tex_quality_t texture_quality; 
             break;
 
@@ -289,15 +289,15 @@ typedef struct section_t
     
             /* swy: there's a disabled advanced video menu for pinch, smartblur, color diffusion, motion blur,
                     lightmaps, halo occlusion and bitdepth, probably some of the unknown fields here; see pop4pclocal.dat */
-            enum tex_filtering_t filtering; special_fx_t special_effects; bool unk; shadow_fx_t shadow_effects; bool e,f,g,h,i,j,k,l;
-            bool water_effects, fog; vsync_t vsync; tex_quality_t texture_quality_maybe; bool q,r,s,t,u,v,w,x,y; // [12] water effects [13] fog
+            enum tex_filtering_t filtering; special_fx_t special_effects; bool unk; shadow_fx_t shadow_effects; bool l,m,n,o,p,q,r,s;
+            bool water_effects, fog; vsync_t vsync; tex_quality_t texture_quality_maybe; bool a,b,e,f,g,h,y,j,k; // [12] water effects [13] fog
             break;
 
         case 262: /* swy: TT */
             uint width, height; enum full_screen_t fullscreen;
             uint gamma, contrast, brightness; /* swy: stored as fixed point x10. i.e. 165 is 1.65 in-game */
             enum tex_filtering_t filtering; special_fx_t special_effects; bool unk; shadow_fx_t shadow_effects; bool l,m,n,o,p,q,r,s;
-            bool water_effects, fog; vsync_t vsync; bool w,x,y,e,f,g,h,y,j,k; anti_msaa_t antialiasing;
+            bool water_effects, fog; vsync_t vsync; tex_quality_t texture_quality_maybe; bool a,b,e,f,g,h,y,j,k; anti_msaa_t antialiasing;
             break;
 
         default:
