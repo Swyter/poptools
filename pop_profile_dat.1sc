@@ -1,0 +1,40 @@
+//------------------------------------------------
+//--- 010 Editor v12.0.1 Script File
+//
+//      File: Prince of Persia: Warrior Within - Profile.DAT (CRC-recomputer script)
+//   Authors: Swyter
+//   Version: 2023.01.07
+//   Purpose: Recalculate the checksums after tampering with profile files.
+//  Category: Game
+//------------------------------------------------
+uint i = 0, j = 0;
+
+/* swy: run the original template to fill out the data structures in
+        the template results; we depend on this to work */
+//RunTemplate("pop_profile_dat.bt");
+
+char path[] = GetFileName();
+string path_wsl = "";
+
+
+for (i = 0; path[i] != 0; i++)
+{
+    if (path[i] == '\\')
+        path[i] = '/';
+
+    if (path[i + 1] == ':')
+        path[i] = ToLower(path[i]);
+
+    if (path[i] == ':')
+        continue;
+
+    path_wsl+= path[i]; j++;
+}
+
+string param = Str("--exec ./delsum.elf check -m 'crc width=32 poly=0x4c11db7 init=0xffffffff xorout=0x0 refin=true refout=true out_endian=big' '/mnt/%s' -S 0x120 -E 0x19d", path_wsl);
+
+int ret;
+
+Exec("wsl", param, true, ret);
+
+Printf("\n[+] Done\n");
