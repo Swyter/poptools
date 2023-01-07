@@ -21,7 +21,7 @@ enum bool { off, enabled };
 
 typedef struct section_t
 {
-    enum<uint> { section_controls = 1, section_video = 2, section_audio = 4, section_game = 8, section_unlocks = 16} section_type;
+    enum<uint> {section_controls = 1, section_video = 2, section_audio = 4, section_game = 8, section_unlocks = 16} section_type;
     uint byte_len; uint checksum <format=hex>; /* swy: every byte in the data section is checksummed with CRC-32/JAMCRC i.e. 'crc width=32 poly=0x4c11db7 init=0xffffffff xorout=0x0 refin=true refout=true out_endian=big' */
 
 
@@ -29,10 +29,60 @@ typedef struct section_t
     {
         ushort controls_ver_maybe;
 
+        typedef enum<ubyte> /* swy: sourced from Sands of Time's pop4pclocal.dat */
+        {
+            Jump               =  0,
+            Cancel             =  1,
+            Sword Attack       =  2,
+            Use Dagger         =  3,
+            Alternate View     =  4,
+            Camera Look        =  5,
+            Rewind             =  6,
+            Special Action     =  7,
+            e_SEL              =  8,
+            e_START            =  9,
+            Reset camera       = 10,
+            e_L3               = 11,
+            e_UP               = 12,
+            e_RIGHT            = 13,
+            e_DOWN             = 14,
+            e_LEFT             = 15,
+            e_Status           = 16,
+            e_LowerUnit        = 17,
+            e_UpperUnit        = 18,
+            e_AnaStickRightX   = 19,
+            e_AnaStickRightY   = 20,
+            e_AnaStickLeftX    = 21,
+            e_AnaStickLeftY    = 22,
+            e_InfoR            = 23,
+            e_InfoL            = 24,
+            e_InfoU            = 25,
+            e_InfoD            = 26,
+            e_InfoT            = 27,
+            e_InfoC            = 28,
+            e_InfoX            = 29,
+            e_InfoS            = 30,
+            e_InfoL1           = 31,
+            e_InfoR1           = 32,
+            e_InfoL2           = 33,
+            e_InfoR2           = 34,
+            Accelerate         = 35,
+            Decelerate         = 36,
+            Move Left          = 37,
+            Move Right         = 38,
+            Move Forward       = 39,
+            Move Backward      = 40,
+            Camera Left        = 41,
+            Camera Right       = 42,
+            Camera Forward     = 43,
+            Camera Backward    = 44,
+            Walk Toggle        = 45,
+        } action_list_sot;
+
         typedef enum<ubyte> /* swy: sourced from Warrior Within's pop4pclocal.dat */
         {
             Roll_Jump_Eject_Accept           =  0,
-            Pick_up_Throw_Climb_down_Cancel  =  1,  
+            Pick_up_Throw_Climb_down_Cancel  =  1,
             Sword_Attack                     =  2,
             Grab_2nd_weapon_attack           =  3,
             Alternate_View                   =  4,
@@ -77,7 +127,7 @@ typedef struct section_t
             Camera_Forward                   = 43,
             Camera_Backward                  = 44,
             Walk_Toggle                      = 45,
-        } action_list;
+        } action_list_ww;
 
         typedef enum<ubyte>
         {
@@ -104,6 +154,62 @@ typedef struct section_t
 
         typedef enum<ubyte>
         {
+            Btn_1       =  0,
+            Btn_2       =  1,
+            Btn_3       =  2,
+            Btn_4       =  3,
+            Btn_5       =  4,
+            Btn_6       =  5,
+            Btn_7       =  6,
+            Btn_8       =  7,
+            Btn_9       =  8,
+            Btn_10      =  9,
+            Btn_11      = 10,
+            Btn_12      = 11,
+            Btn_13      = 12,
+            Btn_14      = 13,
+            Btn_15      = 14,
+            Btn_16      = 15,
+            Btn_17      = 16,
+            Btn_18      = 17,
+            Btn_19      = 18,
+            Btn_20      = 19,
+            Btn_21      = 20,
+            Btn_22      = 21,
+            Btn_23      = 22,
+            Btn_24      = 23,
+            Btn_25      = 24,
+            Btn_26      = 25,
+            Btn_27      = 26,
+            Btn_28      = 27,
+            Btn_29      = 28,
+            Btn_30      = 29,
+            Btn_31      = 30,
+            Btn_32      = 31,
+            X_Axis_Neg  = 32,
+            X_Axis_Pos  = 33,
+            Y_Axis_Pos  = 34,
+            Y_Axis_Neg  = 35,
+            Z_Axis_Neg  = 36,
+            Z_Axis_Pos  = 37,
+            RX_Axis_Neg = 38,
+            RX_Axis_Pos = 39,
+            RY_Axis_Pos = 40,
+            RY_Axis_Neg = 41,
+            RZ_Axis_Neg = 42,
+            RZ_Axis_Pos = 43,
+            Slider1_Pos = 44,
+            Slider1_Neg = 45,
+            Slider2_Pos = 46,
+            Slider2_Neg = 47,
+            D_Pad_Up    = 48,
+            D_Pad_Down  = 49,
+            D_Pad_Left  = 50,
+            D_Pad_Right = 51,
+        } gamepadb;
+
+        typedef enum<ubyte>
+        {
             iod_keyboard = 0, iod_mouse = 1, iod_gamepad = 2
         } input_type;
 
@@ -117,6 +223,7 @@ typedef struct section_t
 
                  if (type == iod_keyboard) scancode target;
             else if (type == iod_mouse   ) mousebut target;
+            else                           gamepadb target;
             
         } mapped <read=Str("Action_%u - %u - IOD_%u_%u - %s (%u)    [%s]", action, index, type, target, EnumToString(target), target, EnumToString(action)), optimize=false>;
 
@@ -131,8 +238,8 @@ typedef struct section_t
         enum<uint>   full_screen_t {fs_windowed, fs_full_screen};
         enum<uint> tex_filtering_t {fi_none, fi_bilinear, fi_trilinear};
         enum<uint>   tex_quality_t {tq_low, tq_high};
-        enum<uint>    special_fx_t {sp_low, sp_medium, sp_high };
-        enum<uint>     shadow_fx_t {sh_none, sh_medium, sh_high };
+        enum<uint>    special_fx_t {sp_low, sp_medium, sp_high};
+        enum<uint>     shadow_fx_t {sh_none, sh_medium, sh_high};
 
         switch(video_ver_maybe)
         {
@@ -195,8 +302,7 @@ typedef struct section_t
     }
     else if (section_type == section_unlocks) /* swy: the last unknown section (type 16) is only present in WW (ver 256) and TT (ver 257) stores extras/unlocks? */
     {
-        ushort i;
-
+        ushort unlocks_ver_maybe;
 
         // cccccccc cccccccc EEEEcccc EEEEEEEE EEEEEEEE EEEEEEEE ______EE __i_____   | (c) characters (E) environment (i) illustrations (D) daggers (s) swords
         // XXXXXXXX DDXXXXXX mmmmDDDD RRRRmmmm ssssssss ssssssss pp__RsXs __pp_ppp   | (X) axes       (m) maces       (R) miscellaneous (p) main
