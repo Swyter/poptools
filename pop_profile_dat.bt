@@ -351,7 +351,7 @@ typedef struct section_t
             break;
 
         case 257: /* swy: TT */
-            uint sand_credits, video_gallery_unlocks[6];
+            uint sand_credits, video_gallery_unlocks : 1, padding_maybe : 7; uint64 more_padding_maybe, more_padding_maybe_b; uint more_padding;
             break;
 
         default:
