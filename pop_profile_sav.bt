@@ -13,7 +13,7 @@
 LittleEndian();
 char magic[4];
 uint a,b;
-ushort a,b, a,b, a, b, a,b, a, b; uint32 checksum_maybe;
+ushort a,b, year, month, a, b, a,b, a, b; uint32 checksum_maybe;
 
 uint full_size;
 byte data[full_size];
