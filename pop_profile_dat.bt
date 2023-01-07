@@ -270,6 +270,8 @@ typedef struct section_t
         enum<uint>   tex_quality_t {tq_low, tq_high};
         enum<uint>    special_fx_t {sp_low, sp_medium, sp_high};
         enum<uint>     shadow_fx_t {sh_none, sh_medium, sh_high};
+        enum<uint>     anti_msaa_t {msaa_no, msaa_2, msaa_4, msaa_8};
+        enum<uint>         vsync_t {vsync_on, vsync_off};
 
         switch(video_ver_maybe)
         {
@@ -278,7 +280,7 @@ typedef struct section_t
             uint gamma; /* swy: stored as fixed point x10. i.e. 77 is 0.77 in-game */
 
             enum tex_filtering_t filtering; special_fx_t special_effects; bool unk; shadow_fx_t shadow_effects; bool j,k,l,m,n,o,p;
-            bool water_effects, fog, vsync; tex_quality_t texture_quality; 
+            bool water_effects, fog; vsync_t vsync; tex_quality_t texture_quality; 
             break;
 
         case 261: /* swy: WW */
@@ -288,13 +290,14 @@ typedef struct section_t
             /* swy: there's a disabled advanced video menu for pinch, smartblur, color diffusion, motion blur,
                     lightmaps, halo occlusion and bitdepth, probably some of the unknown fields here; see pop4pclocal.dat */
             enum tex_filtering_t filtering; special_fx_t special_effects; bool unk; shadow_fx_t shadow_effects; bool e,f,g,h,i,j,k,l;
-            bool water_effects, fog, vsync; tex_quality_t texture_quality_maybe; bool q,r,s,t,u,v,w,x,y; // [12] water effects [13] fog
+            bool water_effects, fog; vsync_t vsync; tex_quality_t texture_quality_maybe; bool q,r,s,t,u,v,w,x,y; // [12] water effects [13] fog
             break;
 
         case 262: /* swy: TT */
             uint width, height; enum full_screen_t fullscreen;
             uint gamma, contrast, brightness; /* swy: stored as fixed point x10. i.e. 165 is 1.65 in-game */
-            enum tex_filtering_t filtering; special_fx_t special_effects; bool j, shadow_effects, l,m,n,o,p,q,r,s, water_effects, fog, vsync, w,x,y,e,f,g,h,y,j,k, antialiasing;
+            enum tex_filtering_t filtering; special_fx_t special_effects; bool unk; shadow_fx_t shadow_effects; bool l,m,n,o,p,q,r,s;
+            bool water_effects, fog; vsync_t vsync; bool w,x,y,e,f,g,h,y,j,k; anti_msaa_t antialiasing;
             break;
 
         default:
