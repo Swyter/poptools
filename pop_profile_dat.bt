@@ -195,7 +195,12 @@ typedef struct section_t
     }
     else if (section_type == section_unlocks) /* swy: the last unknown section (type 16) is only present in WW (ver 256) and TT (ver 257) stores extras/unlocks? */
     {
-        ushort i; uint a <format=binary>, environments <format=binary>, weapons_a <format=binary>, weapons_b <format=binary>;
+        ushort i;
+
+        ubyte a <format=binary>, b <format=binary>, c <format=binary>, d <format=binary>,
+              environments <format=binary>, environments <format=binary>, environments <format=binary>, illustrations <format=binary>,
+              weapons_a <format=binary>, weapons_b <format=binary>, weapons_c <format=binary>, weapons_d <format=binary>,
+              weapons_a <format=binary>, weapons_b <format=binary>, weapons_c <format=binary>, weapons_d <format=binary>;
     }
     else
     {
