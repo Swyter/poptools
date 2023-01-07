@@ -293,7 +293,8 @@ typedef struct section_t
 
         case 262: /* swy: TT */
             uint width, height; enum full_screen_t fullscreen;
-            bool e,f,g,h,y,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,e,f,g,h,y,j,k,l;
+            uint gamma, contrast, brightness; /* swy: stored as fixed point x10. i.e. 165 is 1.65 in-game */
+            enum tex_filtering_t filtering; special_fx_t special_effects; bool j, shadow_effects, l,m,n,o,p,q,r,s, water_effects, fog, vsync, w,x,y,e,f,g,h,y,j,k, antialiasing;
             break;
 
         default:
