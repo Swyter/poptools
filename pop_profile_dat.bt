@@ -117,9 +117,11 @@ typedef struct section_t
 
 } section <read=Str("%s (%#x) len: %#x, crc: %#x", EnumToString(section_type), section_type, byte_len, checksum), optimize=false>;
 
+local uint block_count = 0;
+
 while (!FEof())
 {
-    section block;
+    section block; block_count++;
 }
 
 

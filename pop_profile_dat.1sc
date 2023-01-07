@@ -11,7 +11,7 @@ uint i = 0, j = 0;
 
 /* swy: run the original template to fill out the data structures in
         the template results; we depend on this to work */
-//RunTemplate("pop_profile_dat.bt");
+RunTemplate("pop_profile_dat.bt");
 
 char target_file_path[] = GetFileName(); char script_path[] = FileNameGetPath(GetScriptFileName()); SetWorkingDirectory(script_path);
 
@@ -53,18 +53,31 @@ uint64 compute_crc_for_block(uint offset, uint size)
     if (ret != 0)
         return 0;
     
+    int idx_act_file = GetFileNum();
     int idx_out_file = FileOpen(Str(script_path + "/delsum_out.txt"));
 
     if (idx_out_file == -1)
         return 0;
     
     string crc_str = ReadString(0); FileClose(); // FileDelete(Str(script_path + "/delsum_out.txt"));
+
+    FileSelect(idx_act_file); /* swy: switch the context back to the actual profile.dat with the template we're working on */
+
     uint32 crc; SScanf(crc_str, "%x", crc);
     return crc;
 }
 
-uint32 crc = compute_crc_for_block(0x120, 0x40);
 
-Printf("\n[+] Done: %x\n", crc);
+
+uint cur_block = 0; uint32 crc;
+
+for (cur_block = 0; cur_block < block_count; cur_block++)
+{
+    crc = compute_crc_for_block(0x120, 0x40);
+
+    Printf("\n[i] block: %u %x\n", block[cur_block].section_type, crc);
+}
+
+Printf("\n[+] Done\n");
 
 
