@@ -104,8 +104,10 @@ typedef struct section_t
             MAB_PAD_L3    /* FIRST_PERSON */ = 0xFF, MAB_PAD_R3    /* ZOOM        */ = 0xFE  /* swy: also reversed :) */
         } scancode;
 
+        
+
         /* swy: see the unpacked pop4pclocal.dat from POP_Data.BF for the action and key names. NOTE: One can unmap actions with Backspace in the press-any-key input box */
-        typedef struct mapped_t { action_list action, type, index, c; ubyte pad[3] <hidden=true>; scancode target; } mapped <read=Str("Action_%u - %u - %s (%u) - %s", action, type, EnumToString(target), target, EnumToString(action))>;
+        typedef struct mapped_t { action_list action; ubyte type, index, c; ubyte pad[3] <hidden=true>; scancode target; } mapped <read=Str("Action_%u - %u/%u - %s (%u) - [%s]", action, type, index, EnumToString(target), target, EnumToString(action))>;
         uint action_count; mapped mapped_action[action_count];
 
         float mouse_speed; if (controls_ver_maybe >= 257) float gamepad_sensitivity; /* swy: normalized. i.e. 0.135 means 13% in-game */
