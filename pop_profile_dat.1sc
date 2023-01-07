@@ -13,25 +13,34 @@ uint i = 0, j = 0;
         the template results; we depend on this to work */
 //RunTemplate("pop_profile_dat.bt");
 
-char path[] = GetFileName();
-string path_wsl = "";
+char target_file_path[] = GetFileName(); char script_path[] = GetScriptFileName();
 
-
-for (i = 0; path[i] != 0; i++)
+string convert_win_to_wsl_path(char path[])
 {
-    if (path[i] == '\\')
-        path[i] = '/';
+    string path_wsl = "";
+    
+    /* swy: convert the Windows paths to the format the Windows subsystem for Linux likes. i.e. \ to / and Y: to /mnt/y/ */
+    for (i = 0; path[i] != 0; i++)
+    {
+        if (path[i] == '\\')
+            path[i] = '/';
+    
+        if (path[i + 1] == ':')
+            path[i] = ToLower(path[i]);
+    
+        if (path[i] == ':')
+            continue;
+    
+        path_wsl+= path[i]; j++;
+    }
 
-    if (path[i + 1] == ':')
-        path[i] = ToLower(path[i]);
-
-    if (path[i] == ':')
-        continue;
-
-    path_wsl+= path[i]; j++;
+    return Str("/mnt/" + path_wsl);
 }
 
-string param = Str("--exec ./delsum.elf check -m 'crc width=32 poly=0x4c11db7 init=0xffffffff xorout=0x0 refin=true refout=true out_endian=big' '/mnt/%s' -S 0x120 -E 0x19d", path_wsl);
+string p = convert_win_to_wsl_path(target_file_path);
+string p = convert_win_to_wsl_path(target_file_path);
+
+string param = Str("-- cd '/mnt/x/github/poptools/' && pwd && echo `./delsum.elf check -m 'crc width=32 poly=0x4c11db7 init=0xffffffff xorout=0x0 refin=true refout=true out_endian=big' '%s' -S 0x120 -E 0x19d` > delsum_out.txt && read", path_wsl);
 
 int ret;
 
