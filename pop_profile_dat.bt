@@ -197,8 +197,9 @@ typedef struct section_t
     {
         ushort i;
 
-        ubyte a <format=binary>, b <format=binary>, c <format=binary>, d <format=binary>,
-              environments <format=binary>, environments <format=binary>, environments <format=binary>, illustrations <format=binary>,
+        ubyte characters_a <format=binary>, characters_b <format=binary>, characters_c : 4 <format=binary>,
+              environments_a : 4 <format=binary>, environments_b <format=binary>,
+              environments_c <format=binary>, environments <format=binary>, environments <format=binary>, illustrations <format=binary>,
               weapons_a <format=binary>, weapons_b <format=binary>, weapons_c <format=binary>, weapons_d <format=binary>,
               weapons_a <format=binary>, weapons_b <format=binary>, weapons_c <format=binary>, weapons_d <format=binary>;
     }
