@@ -200,8 +200,8 @@ typedef struct section_t
         ubyte characters_a <format=binary>, characters_b <format=binary>, characters_c : 4 <format=binary>,
               environments_a : 4 <format=binary>, environments_b <format=binary>,
               environments_c <format=binary>, environments <format=binary>, environments <format=binary>, illustrations <format=binary>,
-              weapons_a <format=binary>, weapons_b <format=binary>, weapons_c <format=binary>, weapons_d <format=binary>,
-              weapons_a <format=binary>, weapons_b <format=binary>, weapons_c <format=binary>, weapons_d <format=binary>;
+              weapons_axes <format=binary>, weapons_axes_b <format=binary>, weapons_maces_and_daggers <format=binary>, weapons_misc_minus_one_and_rest_of_maces <format=binary>,
+              weapons_swords <format=binary>, weapons_more_swords <format=binary>, two_swords_one_axe_rayman_two_first_main_weapons <format=binary>, rest_of_main_weapons <format=binary>;
     }
     else
     {
