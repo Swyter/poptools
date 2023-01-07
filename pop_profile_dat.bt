@@ -127,6 +127,9 @@ typedef struct section_t
             Camera_Forward                   = 43,
             Camera_Backward                  = 44,
             Walk_Toggle                      = 45,
+
+            e__SwySecretF8Action             = 46, /* swy: unnamed, found in WW/TT's SafeProfile.DAT, mapped to F8, fishy */
+            e__SwySecretF9Action             = 47, /* swy:          found in WW/TT's SafeProfile.DAT, mapped to F9        */
         } action_list_ww;
 
         typedef enum<ubyte>
@@ -246,7 +249,7 @@ typedef struct section_t
         {
             action_list_ww action;
             ubyte index; input_type type;
-            ubyte unk, pad[3] <hidden=true>;
+            ubyte unk, pad[3] <hidden=true>; /* swy: the unk value seems to be for gamepads; 79 in SoT, 37 for WW/TT (?) */
 
                  if (type == iod_keyboard) scancode target;
             else if (type == iod_mouse   ) mousebut target;
