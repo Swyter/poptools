@@ -28,20 +28,20 @@ typedef struct section_t
     if (section_type == section_controls) /* swy: 256 for SoT; 257 for WW and TT */
     {
         ushort controls_ver_maybe;
-
-        typedef enum<ubyte> /* swy: sourced from Sands of Time's pop4pclocal.dat */
+/*
+        typedef enum<ubyte> /* swy: sourced from Sands of Time's pop4pclocal.dat * /
         {
             Jump               =  0,
             Cancel             =  1,
-            Sword Attack       =  2,
-            Use Dagger         =  3,
-            Alternate View     =  4,
-            Camera Look        =  5,
+            Sword_Attack       =  2,
+            Use_Dagger         =  3,
+            Alternate_View     =  4,
+            Camera_Look        =  5,
             Rewind             =  6,
-            Special Action     =  7,
+            Special_Action     =  7,
             e_SEL              =  8,
             e_START            =  9,
-            Reset camera       = 10,
+            Reset_camera       = 10,
             e_L3               = 11,
             e_UP               = 12,
             e_RIGHT            = 13,
@@ -68,17 +68,17 @@ typedef struct section_t
             e_InfoR2           = 34,
             Accelerate         = 35,
             Decelerate         = 36,
-            Move Left          = 37,
-            Move Right         = 38,
-            Move Forward       = 39,
-            Move Backward      = 40,
-            Camera Left        = 41,
-            Camera Right       = 42,
-            Camera Forward     = 43,
-            Camera Backward    = 44,
-            Walk Toggle        = 45,
+            Move_Left          = 37,
+            Move_Right         = 38,
+            Move_Forward       = 39,
+            Move_Backward      = 40,
+            Camera_Left        = 41,
+            Camera_Right       = 42,
+            Camera_Forward     = 43,
+            Camera_Backward    = 44,
+            Walk_Toggle        = 45,
         } action_list_sot;
-
+*/
         typedef enum<ubyte> /* swy: sourced from Warrior Within's pop4pclocal.dat */
         {
             Roll_Jump_Eject_Accept           =  0,
@@ -206,6 +206,33 @@ typedef struct section_t
             D_Pad_Down  = 49,
             D_Pad_Left  = 50,
             D_Pad_Right = 51,
+
+            /* Microsoft XInput-style controller, introduced with TT */
+            XB_D_Pad_Up      = 52,
+            XB_XD_Pad_Down    = 53,
+            XB_XD_Pad_Left    = 54,
+            XB_D_Pad_Right   = 55,
+            XB_Start         = 56,
+            XB_Back          = 57,
+            XB_L_Thumb       = 58,
+            XB_R_Thumb       = 59,
+            XB_L_Shoulder    = 60,
+            XB_R_Shoulder    = 61,
+            XB_A             = 62,
+            XB_B             = 63,
+            XB_X             = 64,
+            XB_Y             = 65,
+            XB_L_Trigger     = 66,
+            XB_R_Trigger     = 67,
+            XB_L_Thumb_Up    = 68,
+            XB_L_Thumb_Down  = 69,
+            XB_L_Thumb_Left  = 70,
+            XB_L_Thumb_Right = 71,
+            XB_R_Thumb_Up    = 72,
+            XB_R_Thumb_Down  = 73,
+            XB_R_Thumb_Left  = 74,
+            XB_R_Thumb_Right = 75,
+
         } gamepadb;
 
         typedef enum<ubyte>
@@ -217,7 +244,7 @@ typedef struct section_t
                 NOTE: One can unmap actions with Backspace in the press-any-key input box */
         typedef struct mapped_t
         {
-            action_list action;
+            action_list_ww action;
             ubyte index; input_type type;
             ubyte unk, pad[3] <hidden=true>;
 
