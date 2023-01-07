@@ -40,18 +40,31 @@ string convert_win_to_wsl_path(char path[])
 string path_target_wsl = convert_win_to_wsl_path(target_file_path);
 string path_script_wsl = convert_win_to_wsl_path(script_path);
 
-string param = Str("-- cd '%s' && pwd && echo `./delsum.elf check -m 'crc width=32 poly=0x4c11db7 init=0xffffffff xorout=0x0 refin=true refout=true out_endian=big' '%s' -S 0x120 -E 0x19d` > delsum_out.txt", path_script_wsl, path_target_wsl);
 
-int ret; /* swy: returning 0 is good, 127 is bad */
+uint64 compute_crc_for_block(uint offset, uint size)
+{
+    // e.g. delsum check -m 'crc width=32 poly=0x4c11db7 init=0xffffffff xorout=0x0 refin=true refout=true out_endian=big' Profile.DAT -S 0x120 -E 0x19d # swy: from 0x120 to ((0x120 + 0x7e) - 1) = (0x19e - 1) = 0x19d
+    uint32 start_offset = offset, end_offset = (offset + size) - 1; /* swy: convert it to delsum's weird byte range format */
 
-Exec("wsl", param, true, ret);
+    string param = Str("-- cd '%s' && pwd && echo `./delsum.elf check -m 'crc width=32 poly=0x4c11db7 init=0xffffffff xorout=0x0 refin=true refout=true out_endian=big' '%s' -S %#x -E %#x` > delsum_out.txt", path_script_wsl, path_target_wsl, start_offset, end_offset);
+    
+    int ret; Exec("wsl", param, /* swy: wait */ true, ret); /* swy: returning 0 is good, 127 is bad */
+    
+    if (ret != 0)
+        return 0;
+    
+    int idx_out_file = FileOpen(Str(script_path + "/delsum_out.txt"));
 
-int idx_big_file = FileOpen(Str(script_path + "/delsum_out.txt"));
+    if (idx_out_file == -1)
+        return 0;
+    
+    string crc_str = ReadString(0); FileClose(); // FileDelete(Str(script_path + "/delsum_out.txt"));
+    uint32 crc; SScanf(crc_str, "%x", crc);
+    return crc;
+}
 
-string  str = ReadString(0);
+uint32 crc = compute_crc_for_block(0x120, 0x40);
 
-uint32 crc; SScanf(str, "%x", crc);
-
-Printf("\n[+] Done\n");
+Printf("\n[+] Done: %x\n", crc);
 
 
