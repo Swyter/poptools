@@ -197,6 +197,10 @@ typedef struct section_t
     {
         ushort i;
 
+
+        // 00000000 00000000 11110000 11110000 00000000 00000000 00000000 00000000
+        // aaaaaaaa aaaaaaaa 00000000 00000000 00000000 00000000 mm000000 mmmmmmmm
+
         ubyte characters_a <format=binary>, characters_b <format=binary>, characters_c : 4 <format=binary>,
               environments_a : 4 <format=binary>, environments_b <format=binary>,
               environments_c <format=binary>, environments <format=binary>, environments <format=binary>, illustrations <format=binary>,
