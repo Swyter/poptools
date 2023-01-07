@@ -91,14 +91,23 @@ typedef struct section_t
 
         typedef enum<ubyte>
         {
-            /* swy: custom entries that TaleWorlds seems to have added */
-            MAB_LEFT_MOUSE_BTN = 0xE0, MAB_RIGHT_MOUSE_BTN = 0xE1, MAB_MIDDLE_MOUSE_BTN = 0xE2, MAB_MOUSE_BTN_4 = 0xE3, MAB_MOUSE_BTN_5 = 0xE4, MAB_MOUSE_BTN_6 = 0xE5, MAB_MOUSE_BTN_7 = 0xE6, MAB_MOUSE_BTN_8 = 0xE7, MAB_SCROLL_UP = 0xEE, MAB_SCROLL_DOWN = 0xEF,
-
+            Left_click         =  0,
+            Right_click        =  1,
+            Middle_click       =  2,
+            Mouse_btn_4        =  3,
+            Mouse_btn_5        =  4,
+            Mouse_btn_6        =  5,
+            Mouse_btn_7        =  6,
+            Mouse_btn_8        =  7,
+            Wheel_up           =  8,
+            Wheel_down         =  9,
+            Left_double_click  = 10,
+            Right_double_click = 11,
         } mousebut;
 
         typedef enum<ubyte>
         {
-            it_keyboard = 0, it_mouse = 1
+            iod_keyboard = 0, iod_mouse = 1, iod_gamepad = 2
         } input_type;
 
         /* swy: see the unpacked pop4pclocal.dat from POP_Data.BF for the action and key names.
@@ -109,10 +118,10 @@ typedef struct section_t
             ubyte index; input_type type;
             ubyte unk, pad[3] <hidden=true>;
 
-                 if (type == it_keyboard) scancode target;
-            else if (type == it_mouse   ) mousebut target;
+                 if (type == iod_keyboard) scancode target;
+            else if (type == iod_mouse   ) mousebut target;
             
-        } mapped <read=Str("Action_%u - %u/%u - %s (%u) - [%s]", action, index, type, EnumToString(target), target, EnumToString(action)), optimize=false>;
+        } mapped <read=Str("Action_%u - %u - IOD_%u_%u - %s (%u)    [%s]", action, index, type, target, EnumToString(target), target, EnumToString(action)), optimize=false>;
         uint action_count; mapped mapped_action[action_count];
 
         float mouse_speed; if (controls_ver_maybe >= 257) float gamepad_sensitivity; /* swy: normalized. i.e. 0.135 means 13% in-game */
