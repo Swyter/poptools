@@ -31,7 +31,7 @@ typedef struct section_t
 
         typedef enum<ubyte>
         {
-            ACT_MOVE_FORWARD = 39,
+            ACT_MOVE_LEFT = 37, ACT_MOVE_RIGHT = 38, ACT_MOVE_FORWARD = 39,
         } action_list;
 
         typedef enum<ubyte>
@@ -60,7 +60,7 @@ typedef struct section_t
         } scancode;
 
         /* swy: see the unpacked pop4pclocal.dat from POP_Data.BF for the action and key names. NOTE: One can unmap actions with Backspace in the press-any-key input box */
-        typedef struct mapped_t { action_list action, type, index, c; ubyte pad[3] <hidden=true>; scancode target; } mapped <read=Str("Action_%u - %u - %s (%u)", action, type, EnumToString(target), target)>;
+        typedef struct mapped_t { action_list action, type, index, c; ubyte pad[3] <hidden=true>; scancode target; } mapped <read=Str("Action_%u - %u - %s (%u) - %s", action, type, EnumToString(target), target, EnumToString(action))>;
         uint action_count; mapped mapped_action[action_count];
 
         float mouse_speed; if (controls_ver_maybe >= 257) float gamepad_sensitivity; /* swy: normalized. i.e. 0.135 means 13% in-game */
