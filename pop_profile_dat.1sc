@@ -75,7 +75,17 @@ for (cur_block = 0; cur_block < block_count; cur_block++)
 {
     crc = compute_crc_for_block(startof(block[cur_block].checksum) + 4, block[cur_block].byte_len);
 
-    Printf("\n[i] %16s: byte_len: %#5x, offset: %#x, checksum: %#x/%x", EnumToString(block[cur_block].section_type), startof(block[cur_block].checksum) + 4, block[cur_block].byte_len, block[cur_block].checksum, crc);
+    Assert(crc != 0, "CRC computation failed");
+
+    Printf(
+        "\n[i] %16s: offset: %#x, len: %#5x, checksum: %#x/%x (%s)",
+        EnumToString(block[cur_block].section_type), block[cur_block].byte_len, startof(block[cur_block].checksum) + 4,
+        block[cur_block].checksum, crc, block[cur_block].checksum == crc ? "OK" : "BAD"
+    );
+
+    /* swy: overwrite it with the correct/new checksum if it's not correct */
+    if (block[cur_block].checksum != crc)
+        block[cur_block].checksum  = crc;
 }
 
 Printf("\n\n[+] Done\n");
