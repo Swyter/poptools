@@ -28,108 +28,58 @@ typedef struct section_t
     if (section_type == section_controls) /* swy: 256 for SoT; 257 for WW and TT */
     {
         ushort controls_ver_maybe;
-/*
-        typedef enum<ubyte> /* swy: sourced from Sands of Time's pop4pclocal.dat * /
-        {
-            Jump               =  0,
-            Cancel             =  1,
-            Sword_Attack       =  2,
-            Use_Dagger         =  3,
-            Alternate_View     =  4,
-            Camera_Look        =  5,
-            Rewind             =  6,
-            Special_Action     =  7,
-            e_SEL              =  8,
-            e_START            =  9,
-            Reset_camera       = 10,
-            e_L3               = 11,
-            e_UP               = 12,
-            e_RIGHT            = 13,
-            e_DOWN             = 14,
-            e_LEFT             = 15,
-            e_Status           = 16,
-            e_LowerUnit        = 17,
-            e_UpperUnit        = 18,
-            e_AnaStickRightX   = 19,
-            e_AnaStickRightY   = 20,
-            e_AnaStickLeftX    = 21,
-            e_AnaStickLeftY    = 22,
-            e_InfoR            = 23,
-            e_InfoL            = 24,
-            e_InfoU            = 25,
-            e_InfoD            = 26,
-            e_InfoT            = 27,
-            e_InfoC            = 28,
-            e_InfoX            = 29,
-            e_InfoS            = 30,
-            e_InfoL1           = 31,
-            e_InfoR1           = 32,
-            e_InfoL2           = 33,
-            e_InfoR2           = 34,
-            Accelerate         = 35,
-            Decelerate         = 36,
-            Move_Left          = 37,
-            Move_Right         = 38,
-            Move_Forward       = 39,
-            Move_Backward      = 40,
-            Camera_Left        = 41,
-            Camera_Right       = 42,
-            Camera_Forward     = 43,
-            Camera_Backward    = 44,
-            Walk_Toggle        = 45,
-        } action_list_sot;
-*/
-        typedef enum<ubyte> /* swy: sourced from Warrior Within's pop4pclocal.dat */
-        {
-            Roll_Jump_Eject_Accept           =  0,
-            Pick_up_Throw_Climb_down_Cancel  =  1,
-            Sword_Attack                     =  2,
-            Grab_2nd_weapon_attack           =  3,
-            Alternate_View                   =  4,
-            Camera_Look                      =  5,
-            Rewind_Slowdown                  =  6,
-            Walling_Block                    =  7,
-            Navigation_Map                   =  8,
-            Start                            =  9,
-            Reset_camera                     = 10,
-            e_L3                             = 11, /* swy: investigate why the default mapping includes this action and sets it to «I». ghost/no-clip mode? */
-            Menu_Up                          = 12,
-            Menu_Right                       = 13,
-            Menu_Down                        = 14,
-            Menu_Left                        = 15,
-            e_Status                         = 16, /* swy: what's this, maybe debug keys? */
-            e_LowerUnit                      = 17,
-            e_UpperUnit                      = 18,
-            e_AnaStickRightX                 = 19,
-            e_AnaStickRightY                 = 20,
-            e_AnaStickLeftX                  = 21,
-            e_AnaStickLeftY                  = 22,
-            e_InfoR                          = 23, /* swy: -> */
-            e_InfoL                          = 24, /* swy: <- */
-            e_InfoU                          = 25, /* swy:  ^ */
-            e_InfoD                          = 26, /* swy:  v */
-            e_InfoT                          = 27, /* swy: triangle */
-            e_InfoC                          = 28, /* swy: circle */
-            e_InfoX                          = 29, /* swy: cross */
-            e_InfoS                          = 30, /* swy: square */
-            e_InfoL1                         = 31,
-            e_InfoR1                         = 32,
-            e_InfoL2                         = 33,
-            e_InfoR2                         = 34,
-            Accelerate                       = 35,
-            Decelerate                       = 36,
-            Move_Left                        = 37,
-            Move_Right                       = 38,
-            Move_Forward                     = 39,
-            Move_Backward                    = 40,
-            Camera_Left                      = 41,
-            Camera_Right                     = 42,
-            Camera_Forward                   = 43,
-            Camera_Backward                  = 44,
-            Walk_Toggle                      = 45,
 
-            e__SwySecretF8Action             = 46, /* swy: unnamed, found in WW/TT's SafeProfile.DAT, mapped to F8, fishy */
-            e__SwySecretF9Action             = 47, /* swy:          found in WW/TT's SafeProfile.DAT, mapped to F9        */
+        typedef enum<ubyte> /* swy: sourced from Sands of Time / Warrior Within's / Two Thrones' / pop4pclocal.dat, in order, respectively */
+        {
+          /* Jump             */ Roll_Jump_Eject_Accept          =  0, /* Roll/Jump/Action          */
+          /* Cancel           */ Pick_up_Throw_Climb_down_Cancel =  1, /* Pick up/Throw/Drop down   */
+          /* Sword_Attack     */ Sword_Attack                    =  2, /* Dagger Attack             */
+          /* Use_Dagger       */ Grab_2nd_weapon_attack          =  3, /* 2nd Weap./Grab/Speed Kill */
+          /* Alternate_View   */ Alternate_View                  =  4, /* Landscape View            */
+          /* Camera_Look      */ Camera_Look                     =  5, /* First Person view         */
+          /* Rewind           */ Rewind_Slowdown                 =  6, /* Rewind/Slowdown           */
+          /* Special_Action   */ Walling_Block                   =  7, /* Walling/Block/Swing       */
+          /* e_SEL            */ Navigation_Map                  =  8, /* Navigation Map            */
+          /* e_START          */ Start                           =  9, /* Start                     */
+          /* Reset_camera     */ Reset_camera                    = 10, /* Reset camera              */
+          /* e_L3             */ e_L3                            = 11, /* e_L3                      */ /* swy: investigate why the default mapping includes this action and sets it to «I». ghost/no-clip mode? */
+          /* e_UP             */ Menu_Up                         = 12, /* Up                        */
+          /* e_RIGHT          */ Menu_Right                      = 13, /* Right                     */
+          /* e_DOWN           */ Menu_Down                       = 14, /* Down                      */
+          /* e_LEFT           */ Menu_Left                       = 15, /* Left                      */
+          /* e_Status         */ e_Status                        = 16, /* e_Status                  */ /* swy: what's this, maybe debug keys? */
+          /* e_LowerUnit      */ e_LowerUnit                     = 17, /* e_LowerUnit               */
+          /* e_UpperUnit      */ e_UpperUnit                     = 18, /* e_UpperUnit               */
+          /* e_AnaStickRightX */ e_AnaStickRightX                = 19, /* e_AnaStickRightX          */
+          /* e_AnaStickRightY */ e_AnaStickRightY                = 20, /* e_AnaStickRightY          */
+          /* e_AnaStickLeftX  */ e_AnaStickLeftX                 = 21, /* e_AnaStickLeftX           */
+          /* e_AnaStickLeftY  */ e_AnaStickLeftY                 = 22, /* e_AnaStickLeftY           */
+          /* e_InfoR          */ e_InfoR                         = 23, /* e_InfoR                   */ /* swy: -> */
+          /* e_InfoL          */ e_InfoL                         = 24, /* e_InfoL                   */ /* swy: <- */
+          /* e_InfoU          */ e_InfoU                         = 25, /* e_InfoU                   */ /* swy:  ^ */
+          /* e_InfoD          */ e_InfoD                         = 26, /* e_InfoD                   */ /* swy:  v */
+          /* e_InfoT          */ e_InfoT                         = 27, /* e_InfoT                   */ /* swy: triangle */
+          /* e_InfoC          */ e_InfoC                         = 28, /* e_InfoC                   */ /* swy: circle */
+          /* e_InfoX          */ e_InfoX                         = 29, /* e_InfoX                   */ /* swy: cross */
+          /* e_InfoS          */ e_InfoS                         = 30, /* e_InfoS                   */ /* swy: square */
+          /* e_InfoL1         */ e_InfoL1                        = 31, /* e_InfoL1                  */
+          /* e_InfoR1         */ e_InfoR1                        = 32, /* e_InfoR1                  */
+          /* e_InfoL2         */ e_InfoL2                        = 33, /* e_InfoL2                  */
+          /* e_InfoR2         */ e_InfoR2                        = 34, /* e_InfoR2                  */
+          /* Accelerate       */ Accelerate                      = 35, /* Accelerate                */
+          /* Decelerate       */ Decelerate                      = 36, /* Decelerate                */
+          /* Move_Left        */ Move_Left                       = 37, /* Move Left                 */
+          /* Move_Right       */ Move_Right                      = 38, /* Move Right                */
+          /* Move_Forward     */ Move_Forward                    = 39, /* Move Forward              */
+          /* Move_Backward    */ Move_Backward                   = 40, /* Move Backward             */
+          /* Camera_Left      */ Camera_Left                     = 41, /* Camera Left               */
+          /* Camera_Right     */ Camera_Right                    = 42, /* Camera Right              */
+          /* Camera_Forward   */ Camera_Forward                  = 43, /* Camera Forward            */
+          /* Camera_Backward  */ Camera_Backward                 = 44, /* Camera Backward           */
+          /* Walk_Toggle      */ Walk_Toggle                     = 45, /* Walk Toggle               */
+
+                                 e__SwySecretF8Action            = 46, /* swy: unnamed, found in WW/TT's SafeProfile.DAT, mapped to F8, fishy */
+                                 e__SwySecretF9Action            = 47, /* swy:          found in WW/TT's SafeProfile.DAT, mapped to F9        */
         } action_list_ww;
 
         typedef enum<ubyte>
@@ -296,6 +246,7 @@ typedef struct section_t
         case 262: /* swy: TT */
             uint width, height; enum full_screen_t fullscreen;
             uint gamma, contrast, brightness; /* swy: stored as fixed point x10. i.e. 165 is 1.65 in-game */
+
             enum tex_filtering_t filtering; special_fx_t special_effects; bool unk; shadow_fx_t shadow_effects; bool l,m,n,o,p,q,r,s;
             bool water_effects, fog; vsync_t vsync; tex_quality_t texture_quality_maybe; bool a,b,e,f,g,h,y,j,k; anti_msaa_t antialiasing;
             break;
