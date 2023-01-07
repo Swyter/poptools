@@ -73,11 +73,11 @@ uint cur_block = 0; uint32 crc;
 
 for (cur_block = 0; cur_block < block_count; cur_block++)
 {
-    crc = compute_crc_for_block(0x120, 0x40);
+    crc = compute_crc_for_block(startof(block[cur_block].checksum) + 4, block[cur_block].byte_len);
 
-    Printf("\n[i] block: %u %x\n", block[cur_block].section_type, crc);
+    Printf("\n[i] %16s: byte_len: %#5x, offset: %#x, checksum: %#x/%x", EnumToString(block[cur_block].section_type), startof(block[cur_block].checksum) + 4, block[cur_block].byte_len, block[cur_block].checksum, crc);
 }
 
-Printf("\n[+] Done\n");
+Printf("\n\n[+] Done\n");
 
 
