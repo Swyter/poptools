@@ -19,6 +19,8 @@ uint full_size;
 
 struct
 {
-    uint a, b;
+    uint a, b; uint y[120/4];
+
+    struct { uint a; ushort b, c; uint d; } pattern[108];
 
 } checksummed_save <open=true>;
