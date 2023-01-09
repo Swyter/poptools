@@ -11,7 +11,7 @@
 
 LittleEndian();
 char magic[4];
-uint a,b;
+uint in_game_time_maybe,b;
 ushort a,b, year, month, a, day, hour, minute, a, b; uint32 checksum_maybe;
 
 uint full_size;
@@ -19,8 +19,8 @@ uint full_size;
 
 struct
 {
-    uint a, b; uint y[120/4];
+    uint a, in_game_time_maybe; ushort y[120/2];
 
-    struct { uint a; ushort b, c; uint d; } pattern[108];
+    struct { ushort a, u; ushort b, c; uint d; } pattern[108];
 
 } checksummed_save <open=true>;
