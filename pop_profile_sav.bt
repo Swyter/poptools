@@ -1,19 +1,24 @@
 //------------------------------------------------
 //--- 010 Editor v13.0 Binary Template
 //
-//      File: 
-//   Authors: 
-//   Version: 
-//   Purpose: 
-//  Category: 
-// File Mask: 
-//  ID Bytes: 
+//      File: Prince of Persia Trilogy - Savegame format
+//   Authors: Swyter
+//   Version: 2023.01.09
+//  Category: Game
+// File Mask: Save*.SAV
+//  ID Bytes: 53 41 56 34
 //------------------------------------------------
 
 LittleEndian();
 char magic[4];
 uint a,b;
-ushort a,b, year, month, a, b, a,b, a, b; uint32 checksum_maybe;
+ushort a,b, year, month, a, day, hour, minute, a, b; uint32 checksum_maybe;
 
 uint full_size;
-byte data[full_size];
+//byte data[full_size];
+
+struct
+{
+    uint a, b;
+
+} checksummed_save <open=true>;
