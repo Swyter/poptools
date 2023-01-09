@@ -11,10 +11,10 @@
 
 LittleEndian();
 char magic[4];
-uint in_game_time_maybe,b;
-ushort a,b, year, month, a, day, hour, minute, a, b; uint32 checksum_maybe;
+uint in_game_time_maybe, manual_save_maybe;
+ushort a, b, year, month, a, day, hour, minute, a, b;
 
-uint full_size;
+uint32 checksum; uint full_size;
 //byte data[full_size];
 
 struct
