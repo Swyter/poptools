@@ -36,9 +36,9 @@ New-Object System.Threading.Mutex($false, "POP3Launcher")
 
 The three games use your Profile.DAT to store the video settings, resolution and fullscreen mode. You can use the *010 Editor* template and script in this repository to edit the file yourself, change the field and recompute the checksum or just use these handy premade profiles.
 
-* *Sands of Time*, drop it in your `Profiles/Name` folder: https://cdn.discordapp.com/attachments/760854217509830676/1060513753734598686/Profile.DAT
-* *Warrior Within*, drop it in your *POPWWProfiles/Name* folder: https://cdn.discordapp.com/attachments/760854217509830676/1060513840418263120/Profile.DAT
-* *The Two Thrones* drop it in your *POP3Profiles/Name* folder: https://cdn.discordapp.com/attachments/760854217509830676/1060524464015675402/Profile.DAT
+* *Sands of Time*, drop it in your `<game-dir>/Profiles/<name>/` folder: https://cdn.discordapp.com/attachments/760854217509830676/1060513753734598686/Profile.DAT
+* *Warrior Within*, drop it in your `<game-dir>/POPWWProfiles/<name>/` folder: https://cdn.discordapp.com/attachments/760854217509830676/1060513840418263120/Profile.DAT
+* *The Two Thrones* drop it in your `<game-dir>/POP3Profiles/<name>/` folder: https://cdn.discordapp.com/attachments/760854217509830676/1060524464015675402/Profile.DAT
 
 ## Show the close, minimize and maximize buttons in windowed mode
 
