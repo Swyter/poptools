@@ -34,13 +34,16 @@ New-Object System.Threading.Mutex($false, "POP3Launcher")
 
 # Natively launch the games in windowed mode
 
-The three games use your `Profile.DAT` to store the video settings, resolution and fullscreen mode. You can use the *010 Editor* template and script in this repository to edit the file yourself, change the field and recompute the checksum or just use these handy premade profiles.
+The three games use your `Profile.DAT` to store the video settings, resolution and fullscreen mode. You can use the *010 Editor* template and script in this repository to edit the file yourself, change the field and recompute the checksum... or just use these handy premade profiles:
 
-* *Sands of Time*, drop it in your `<game-dir>/Profiles/<name>/` folder: https://cdn.discordapp.com/attachments/760854217509830676/1060513753734598686/Profile.DAT
-* *Warrior Within*, drop it in your `<game-dir>/POPWWProfiles/<name>/` folder: https://cdn.discordapp.com/attachments/760854217509830676/1060513840418263120/Profile.DAT
-* *The Two Thrones* drop it in your `<game-dir>/POP3Profiles/<name>/` folder: https://cdn.discordapp.com/attachments/760854217509830676/1060524464015675402/Profile.DAT
+* *Sands of Time*, drop it in your `<game-dir>/Profiles/<name>/` folder:
+  *  https://cdn.discordapp.com/attachments/760854217509830676/1060513753734598686/Profile.DAT
+* *Warrior Within*, drop it in your `<game-dir>/POPWWProfiles/<name>/` folder:
+  * https://cdn.discordapp.com/attachments/760854217509830676/1060513840418263120/Profile.DAT
+* *The Two Thrones* drop it in your `<game-dir>/POP3Profiles/<name>/` folder:
+  * https://cdn.discordapp.com/attachments/760854217509830676/1060524464015675402/Profile.DAT
 
-Make a copy of the original one, you will lose your existing options (remapped keys included) and the unlocked extras progress.
+Make a copy of the original one, you will lose your existing options (remapped keys included) and the progress for your unlocked extras.
 
 It will take another restart for the game to start windowed from the beginning; as on start-up the game loads the video and sound settings from `DefaultProfile.DAT`. When you exit the game, the settings for that last profile overwrite the default one.
 
@@ -50,7 +53,7 @@ Open your `POP.exe`, `POP2.exe` or `POP3.exe` in some hex editor, depending on t
 
 This changes the original window style that gets supplied to `CreateWindowEx()` to include the `WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX` bits/window-styles.
 
-*i.e.* Goes from `0xc00000` to `0xcb0000`, the constant appears reversed due to little-endian.
+*i.e.* Goes from `0xc00000` to `0xcb0000`, the constant appears reversed due to the x86 CPU architecture being little-endian.
 
 # Unlocking the level-selector menu
 The easiest way is to replace the `P_StartNewGame` string in `POP2.EXE` with `P_SpecialLoad`. Make sure to keep the zero-padding and add a `NULL` terminator at the end. _i.e._ Don't mess with the alignment.
