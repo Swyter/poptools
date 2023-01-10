@@ -40,6 +40,8 @@ The three games use your Profile.DAT to store the video settings, resolution and
 * *Warrior Within*, drop it in your `<game-dir>/POPWWProfiles/<name>/` folder: https://cdn.discordapp.com/attachments/760854217509830676/1060513840418263120/Profile.DAT
 * *The Two Thrones* drop it in your `<game-dir>/POP3Profiles/<name>/` folder: https://cdn.discordapp.com/attachments/760854217509830676/1060524464015675402/Profile.DAT
 
+Make a copy of the original one, you will lose your existing options (remapped keys included) and the unlocked extras progress.
+
 ## Show the close, minimize and maximize buttons in windowed mode
 
 Open your `POP.exe`, `POP2.exe` or `POP3.exe` in some hex editor, depending on the game. Search for the `05 00 00 c0 00` byte pattern, replace that `c0` with `cb`, and save.
