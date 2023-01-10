@@ -36,10 +36,12 @@ New-Object System.Threading.Mutex($false, "POP3Launcher")
 
 ## Show the close, minimize and maximize buttons in windowed mode
 
-Open your `POP.exe`, `POP2.exe` or `POP3.exe` in some hex editor, depending on the game.
+Open your `POP.exe`, `POP2.exe` or `POP3.exe` in some hex editor, depending on the game. Search for the `05 00 00 c0 00` byte pattern, replace that `c0` with `cb`, and save.
 
-Search for the `05 00 00 c0 00` byte pattern, replace that `c0` with `c8`, and save.
-This changes the original window style that gets supplied to `CreateWindowEx()` to include `WS_SYSMENU | WS_MAXIMIZEBOX | WS_MAXIMIZEBOX` styles.
+This changes the original window style that gets supplied to `CreateWindowEx()` to include the `WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX` bits/window-styles.
+
+*i.e.* Goes from `0xc00000` to `0xcb0000`, the constant appears reversed due to little-endian.
+
 # Unlocking the level-selector menu
 The easiest way is to replace the `P_StartNewGame` string in `POP2.EXE` with `P_SpecialLoad`. Make sure to keep the zero-padding and add a `NULL` terminator at the end. _i.e._ Don't mess with the alignment.
 
