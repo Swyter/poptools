@@ -11,8 +11,28 @@
 
 LittleEndian(); local uint is_sot = ReadUInt(0x20) == 0x8D7C, is_ww = ReadUInt(0x24) == 0xCA1C, is_tt = ReadUInt(0x24) == 0xCA5C;
 
+
+enum sot_labels
+{
+    Empty = 0,
+    The_Maharajahs_treasure_vaults = 1,
+    Corrupted = 2,
+    You_have_unleashed_the_Sands_of_Time = 3,
+    Had_I_really_seen_her = 4,
+    A_secret_passage = 5,
+
+    A_prisoner_seeking_an_escape = 35,
+    At_last_were_here,
+    The_hourglass,
+    The_tomb,
+    Farah_come_back = 39,
+    Climbing_the_tower_of_dawn = 40,
+    The_setting_sun = 41,
+    Honor_and_glory = 42,
+};
+
 char magic[4]; Assert(magic == "SAV4", "Incompatible header data");
-uint level_label, in_game_time_secs; /* swy: in SoT the completion percentage and thumbnail seems to be part of the label */
+enum sot_labels level_label, in_game_time_secs; /* swy: in SoT the completion percentage and thumbnail seems to be part of the label */
 
 if (!is_sot)
     ushort manual_save_maybe, in_game_time_maybe, b;
