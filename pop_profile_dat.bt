@@ -25,9 +25,9 @@ typedef struct section_t
     uint byte_len; uint checksum <format=hex>; /* swy: every byte in the data section is checksummed with CRC-32/JAMCRC i.e. 'crc width=32 poly=0x4c11db7 init=0xffffffff xorout=0x0 refin=true refout=true out_endian=big' */
 
 
-    if (section_type == section_controls) /* swy: 256 for SoT; 257 for WW and TT */
+    if (section_type == section_controls) /* swy: 0x100 for SoT; 0x101 for WW and TT */
     {
-        ushort controls_ver_maybe;
+        ushort section_ver <format=hex>; /* swy: seems like a binary-coded decimal; i.e. 0x305 could be represented as 3.05 */
 
         typedef enum<ubyte> /* swy: sourced from Sands of Time / Warrior Within's / Two Thrones' / pop4pclocal.dat, in order, respectively */
         {
@@ -209,11 +209,11 @@ typedef struct section_t
 
         uint action_count; mapped mapped_action[action_count];
 
-        float mouse_speed; if (controls_ver_maybe >= 257) float gamepad_sensitivity; /* swy: normalized. i.e. 0.135 means 13% in-game */
+        float mouse_speed; if (section_ver >= 0x101) float gamepad_sensitivity; /* swy: normalized. i.e. 0.135 means 13% in-game */
     }
     else if (section_type == section_video)
     {
-        ushort video_ver_maybe;
+        ushort section_ver <format=hex>;
 
         enum<uint>   full_screen_t {fs_windowed, fs_full_screen};
         enum<uint> tex_filtering_t {fi_none, fi_bilinear, fi_trilinear};
@@ -223,9 +223,9 @@ typedef struct section_t
         enum<uint>     anti_msaa_t {msaa_no, msaa_2, msaa_4, msaa_8};
         enum<uint>         vsync_t {vsync_on, vsync_off};
 
-        switch(video_ver_maybe)
+        switch(section_ver)
         {
-        case 256: /* swy: SoT */
+        case 0x100: /* swy: SoT */
             uint width, height, bitdepth; enum full_screen_t fullscreen;
             uint gamma; /* swy: stored as fixed point x10. i.e. 77 is 0.77 in-game */
 
@@ -233,7 +233,7 @@ typedef struct section_t
             bool water_effects, fog; vsync_t vsync; tex_quality_t texture_quality; 
             break;
 
-        case 261: /* swy: WW */
+        case 0x105: /* swy: WW */
             uint width, height; enum full_screen_t fullscreen;
             uint gamma, contrast, brightness; /* swy: stored as fixed point x10. i.e. 165 is 1.65 in-game */
     
@@ -243,7 +243,7 @@ typedef struct section_t
             bool water_effects, fog; vsync_t vsync; tex_quality_t texture_quality_maybe; bool a,b,e,f,g,h,y,j,k; // [12] water effects [13] fog
             break;
 
-        case 262: /* swy: TT */
+        case 0x106: /* swy: TT */
             uint width, height; enum full_screen_t fullscreen;
             uint gamma, contrast, brightness; /* swy: stored as fixed point x10. i.e. 165 is 1.65 in-game */
 
@@ -259,23 +259,23 @@ typedef struct section_t
     }
     else if (section_type == section_audio)
     {
-        ushort game_ver_maybe; /* swy: always 256 in SoT, WW and TT */
+        ushort section_ver <format=hex>; /* swy: always 0x100 in SoT, WW and TT */
 
         float music_vol, voices_vol, effects_vol; /* swy: normalized. i.e. 0.455 means 45% in-game */
         bool three_dee_hardware_accel, eax_maybe /* swy: disabled for me */; enum<uint> {none, light, full} audio_virtualization;
     }
     else if (section_type == section_game)
     {
-        ushort game_ver_maybe; enum<uint> freq_t {freq_none, freq_few, freq_normal, freq_many}; enum<uint> cam_inversion_t {ci_inverted, ci_normal};
+        ushort section_ver <format=hex>; enum<uint> freq_t {freq_none, freq_few, freq_normal, freq_many}; enum<uint> cam_inversion_t {ci_inverted, ci_normal};
 
-        switch(game_ver_maybe)
+        switch (section_ver)
         {
-        case 256: /* swy: SoT */
+        case 0x100: /* swy: SoT */
             enum cam_inversion_t camera_freelook, camera_navigation; /* swy: shown as part of the Controls section */
             enum freq_t insert_frequency; bool tutorials; /* swy: shown as part of the Game section */
             break;
 
-        case 258: /* swy: WW, TT */
+        case 0x102: /* swy: WW, TT */
             enum cam_inversion_t free_look, navigation; /* swy: shown as part of the Controls section */
             enum freq_t slow_motion_camera; bool tutorials, subtitles, blood; /* swy: shown as part of the Game section */
             break;
@@ -285,13 +285,13 @@ typedef struct section_t
             break;
         }
     }
-    else if (section_type == section_unlocks) /* swy: the last unknown section (type 16) is only present in WW (ver 256) and TT (ver 257) stores extras/unlocks? */
+    else if (section_type == section_unlocks) /* swy: the last unknown section (type 16) is only present in WW (ver 0x100) and TT (ver 0x101) stores extras/unlocks? */
     {
-        ushort unlocks_ver_maybe;
+        ushort section_ver <format=hex>;
 
-        switch(unlocks_ver_maybe)
+        switch (section_ver)
         {
-        case 256: /* swy: WW */
+        case 0x100: /* swy: WW */
             // cccccccc cccccccc EEEEcccc EEEEEEEE EEEEEEEE EEEEEEEE ______EE __i_____   | (c) characters (E) environment (i) illustrations (D) daggers (s) swords
             // XXXXXXXX DDXXXXXX mmmmDDDD RRRRmmmm ssssssss ssssssss pp__RsXs __pp_ppp   | (X) axes       (m) maces       (R) miscellaneous (p) main
             //                                                           \misc. rayman thingie
@@ -305,7 +305,7 @@ typedef struct section_t
                   weapons_swords <format=binary>, weapons_more_swords <format=binary>, two_swords_one_axe_rayman_two_first_main_weapons <format=binary>, rest_of_main_weapons <format=binary>;
             break;
 
-        case 257: /* swy: TT */
+        case 0x101: /* swy: TT */
             uint sand_credits, video_gallery_unlocks : 1, padding_maybe : 7; uint64 more_padding_maybe, more_padding_maybe_b; uint more_padding;
             break;
 
@@ -322,7 +322,9 @@ typedef struct section_t
 
     //byte data[byte_len];
 
-} section <read=Str("%s (%#x) len: %#x, crc: %#x", EnumToString(section_type), section_type, byte_len, checksum), optimize=false>;
+    local float formatted_version_decimal = (((((section_ver & 0xFF00) >> 8) * 100) + ((section_ver & 0x00FF) >> 0))) / 100.0; /* swy: this turns 0x106 -> 1.06f */
+
+} section <read=Str("%s (%#x) ver: %.02f len: %#x, crc: %#x", EnumToString(section_type), section_type, formatted_version_decimal, byte_len, checksum), optimize=false>;
 
 local uint block_count = 0;
 
