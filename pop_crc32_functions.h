@@ -89,7 +89,7 @@ void generate_checksum_lookup(uint dest_buf[])
         val_a = -(uint)((val_a & 0x80000000) != 0) & 0x4c11db7 ^ val_a * 2;
         val_a = -(uint)((val_a & 0x80000000) != 0) & 0x4c11db7 ^ val_a * 2;
         
-        dest_buf[idx] = val_a; Printf("%3i, a - %#010x, ", idx, dest_buf[idx]);
+        dest_buf[idx] = val_a; // Printf("%3i, a - %#010x, ", idx, dest_buf[idx]);
         
         for (j = 31, val = 0; j < 0x80000000; j -= 1)
         {
@@ -98,7 +98,7 @@ void generate_checksum_lookup(uint dest_buf[])
             val_a >>= 1;
         }
         
-        dest_buf[idx] = val; Printf("final - %08x\n", dest_buf[idx]);
+        dest_buf[idx] = val; // Printf("final - %08x\n", dest_buf[idx]);
     }
     return;
 }
