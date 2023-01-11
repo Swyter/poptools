@@ -68,7 +68,7 @@ uint64 compute_crc_for_block(uint offset, uint size)
 }
 
 
-void GenerateChecksumLookUp(uint dest_buf[]) /* swy: function starts at 0x0420080 on POP2.exe; you can also search by the 0x4c11db7 polynomial constant */
+void generate_checksum_lookup(uint dest_buf[]) /* swy: function starts at 0x0420080 on POP2.exe; you can also search by the 0x4c11db7 polynomial constant */
 {
   uint val_a = 0, j, val = 0, idx = 0;
 
@@ -107,9 +107,9 @@ void GenerateChecksumLookUp(uint dest_buf[]) /* swy: function starts at 0x042008
 }
 
 uint precomputed_table[256]; /* swy: the game fills out the CRC look-up table buffer at 0x93F2F8 on POP2.exe during startup, instead of including the constants statically in the binary */
-GenerateChecksumLookUp(precomputed_table);
+generate_checksum_lookup(precomputed_table);
 
-uint ChecksumCRC32(uint crc_lut_buf[], uchar data[], uint size)
+uint checksum_crc32(uint crc_lut_buf[], uint offset, uint size)
 {
     uint checksum = 0xffffffff; local uint i = 0;
 
@@ -117,14 +117,12 @@ uint ChecksumCRC32(uint crc_lut_buf[], uchar data[], uint size)
         return checksum;
 
     for (i = 0; i < size; i++)
-    {
-        checksum = checksum >> 8 ^ crc_lut_buf[checksum & 0xff ^ data[i]];
-    }
+        checksum = checksum >> 8 ^ crc_lut_buf[checksum & 0xff ^ ReadUByte(offset + i)];
 
     return checksum;
 }
 
-uint cur_block = 0, overwritten_blocks = 0; uint32 crc; uchar tmpbuf[0xfffffff];
+uint cur_block = 0, overwritten_blocks = 0; uint32 crc;
 
 for (cur_block = 0; cur_block < block_count; cur_block++)
 {
@@ -138,9 +136,7 @@ for (cur_block = 0; cur_block < block_count; cur_block++)
         block[cur_block].checksum, crc, block[cur_block].checksum == crc ? "OK" : "BAD"
     );
 
-    ReadBytes(tmpbuf, startof(block[cur_block].checksum) + sizeof(uint), block[cur_block].byte_len);
-
-    Printf("%#010x", ChecksumCRC32(precomputed_table, tmpbuf, block[cur_block].byte_len));
+    Printf(" - built-in crc gen: %#010x", checksum_crc32(precomputed_table, startof(block[cur_block].checksum) + sizeof(uint), block[cur_block].byte_len));
 
     /* swy: overwrite it with the correct/new checksum if it's not correct */
     if (block[cur_block].checksum != crc)
