@@ -28,6 +28,6 @@ struct
 
     ushort a,b, setting_to_ff_freezes_the_game, setting_to_ff_rejects_the_save_and_goes_back_to_main_menu; // intermediate_zone
 
-    struct { ushort a, u; ushort b, c; uint d; } pattern[108];
+    struct { ushort a, u; ushort b, c; uint d; } pattern[108]; // swy: sands of time counter at 0xf0
 
 } checksummed_save <open=true>;
