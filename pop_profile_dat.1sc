@@ -41,7 +41,7 @@ string path_target_wsl = convert_win_to_wsl_path(target_file_path);
 string path_script_wsl = convert_win_to_wsl_path(script_path);
 
 
-uint64 compute_crc_for_block(uint offset, uint size)
+uint64 compute_crc_for_block_delsum(uint offset, uint size)
 {
     // e.g. delsum check -m 'crc width=32 poly=0x4c11db7 init=0xffffffff xorout=0x0 refin=true refout=true out_endian=big' Profile.DAT -S 0x120 -E 0x19d # swy: from 0x120 to ((0x120 + 0x7e) - 1) = (0x19e - 1) = 0x19d
     uint32 start_offset = offset, end_offset = (offset + size) - 1; /* swy: convert it to delsum's weird byte range format */
@@ -68,65 +68,69 @@ uint64 compute_crc_for_block(uint offset, uint size)
 }
 
 
-void generate_checksum_lookup(uint dest_buf[]) /* swy: function starts at 0x0420080 on POP2.exe; you can also search by the 0x4c11db7 polynomial constant */
+
+/* swy: function starts at 0x0420080 on POP2.exe; you can also search
+        by the 0x4c11db7 polynomial constant: 'crc width=32 poly=0x4c11db7 init=0xffffffff xorout=0x0 refin=true refout=true out_endian=big' */
+void generate_checksum_lookup(uint dest_buf[]) 
 {
-  uint val_a = 0, j, val = 0, idx = 0;
-
-  for (idx = 0; idx < 256; idx += 1)
-  {
-    if ((idx >> 0 & 1) != 0)  val_a  = 128;
-    if ((idx >> 1 & 1) != 0)  val_a |=  64;
-    if ((idx >> 2 & 1) != 0)  val_a |=  32;
-    if ((idx >> 3 & 1) != 0)  val_a |=  16;
-    if ((idx >> 4 & 1) != 0)  val_a |=   8;
-    if ((idx >> 5 & 1) != 0)  val_a |=   4;
-    if ((idx >> 6 & 1) != 0)  val_a |=   2;
-    if ((idx >> 6 & 2) != 0)  val_a |=   1;
-
-    val_a = -(uint)((val_a & 0x80)       != 0) & 0x4c11db7 ^ val_a * 0x2000000;
-    val_a = -(uint)((val_a & 0x80000000) != 0) & 0x4c11db7 ^ val_a * 2;
-    val_a = -(uint)((val_a & 0x80000000) != 0) & 0x4c11db7 ^ val_a * 2;
-    val_a = -(uint)((val_a & 0x80000000) != 0) & 0x4c11db7 ^ val_a * 2;
-    val_a = -(uint)((val_a & 0x80000000) != 0) & 0x4c11db7 ^ val_a * 2;
-    val_a = -(uint)((val_a & 0x80000000) != 0) & 0x4c11db7 ^ val_a * 2;
-    val_a = -(uint)((val_a & 0x80000000) != 0) & 0x4c11db7 ^ val_a * 2;
-    val_a = -(uint)((val_a & 0x80000000) != 0) & 0x4c11db7 ^ val_a * 2;
-
-    dest_buf[idx] = val_a; Printf("%3i, a - %#010x, ", idx, dest_buf[idx]);
-
-    for (j = 31, val = 0; j < 0x80000000; j -= 1)
+    uint val_a = 0, j, val = 0, idx = 0;
+    
+    for (idx = 0; idx < 256; idx += 1)
     {
-      if ((val_a & 1) != 0)
-        val |= 1 << ((byte) j & 31);
-      val_a >>= 1;
+        if ((idx >> 0 & 1) != 0)  val_a  = 128;
+        if ((idx >> 1 & 1) != 0)  val_a |=  64;
+        if ((idx >> 2 & 1) != 0)  val_a |=  32;
+        if ((idx >> 3 & 1) != 0)  val_a |=  16;
+        if ((idx >> 4 & 1) != 0)  val_a |=   8;
+        if ((idx >> 5 & 1) != 0)  val_a |=   4;
+        if ((idx >> 6 & 1) != 0)  val_a |=   2;
+        if ((idx >> 6 & 2) != 0)  val_a |=   1;
+        
+        val_a = -(uint)((val_a & 0x80)       != 0) & 0x4c11db7 ^ val_a * 0x2000000;
+        val_a = -(uint)((val_a & 0x80000000) != 0) & 0x4c11db7 ^ val_a * 2;
+        val_a = -(uint)((val_a & 0x80000000) != 0) & 0x4c11db7 ^ val_a * 2;
+        val_a = -(uint)((val_a & 0x80000000) != 0) & 0x4c11db7 ^ val_a * 2;
+        val_a = -(uint)((val_a & 0x80000000) != 0) & 0x4c11db7 ^ val_a * 2;
+        val_a = -(uint)((val_a & 0x80000000) != 0) & 0x4c11db7 ^ val_a * 2;
+        val_a = -(uint)((val_a & 0x80000000) != 0) & 0x4c11db7 ^ val_a * 2;
+        val_a = -(uint)((val_a & 0x80000000) != 0) & 0x4c11db7 ^ val_a * 2;
+        
+        dest_buf[idx] = val_a; Printf("%3i, a - %#010x, ", idx, dest_buf[idx]);
+        
+        for (j = 31, val = 0; j < 0x80000000; j -= 1)
+        {
+            if ((val_a & 1) != 0)
+                val |= 1 << ((byte) j & 31);
+            val_a >>= 1;
+        }
+        
+        dest_buf[idx] = val; Printf("final - %08x\n", dest_buf[idx]);
     }
-
-    dest_buf[idx] = val; Printf("final - %08x\n", dest_buf[idx]);
-  }
-  return;
+    return;
 }
 
-uint precomputed_table[256]; /* swy: the game fills out the CRC look-up table buffer at 0x93F2F8 on POP2.exe during startup, instead of including the constants statically in the binary */
-generate_checksum_lookup(precomputed_table);
+/* swy: the game fills out the CRC look-up table buffer at 0x93F2F8 on POP2.exe during startup,
+        instead of including the constants statically in the binary */
+uint precomputed_table[256]; generate_checksum_lookup(precomputed_table);
 
-uint checksum_crc32(uint crc_lut_buf[], uint offset, uint size)
+/* swy: uses the precomputed look-up table to generate a CRC32 over a buffer range, see function 0x0420040 on POP2.exe */
+uint compute_crc_for_block(uint crc_lut_buf[], uint offset, uint size)
 {
     uint checksum = 0xffffffff; local uint i = 0;
 
-    if (size == 0)
-        return checksum;
-
-    for (i = 0; i < size; i++)
-        checksum = checksum >> 8 ^ crc_lut_buf[checksum & 0xff ^ ReadUByte(offset + i)];
+    if (size > 0)
+        for (i = 0; i < size; i++)
+            checksum = checksum >> 8 ^ crc_lut_buf[checksum & 0xff ^ ReadUByte(offset + i)];
 
     return checksum;
 }
+
 
 uint cur_block = 0, overwritten_blocks = 0; uint32 crc;
 
 for (cur_block = 0; cur_block < block_count; cur_block++)
 {
-    crc = compute_crc_for_block(startof(block[cur_block].checksum) + sizeof(uint) /* swy: from the field after the CRC */, block[cur_block].byte_len);
+    crc = compute_crc_for_block_delsum(startof(block[cur_block].checksum) + sizeof(uint) /* swy: from the field after the CRC */, block[cur_block].byte_len);
 
     Assert(crc != 0, "CRC computation failed");
 
@@ -136,7 +140,7 @@ for (cur_block = 0; cur_block < block_count; cur_block++)
         block[cur_block].checksum, crc, block[cur_block].checksum == crc ? "OK" : "BAD"
     );
 
-    Printf(" - built-in crc gen: %#010x", checksum_crc32(precomputed_table, startof(block[cur_block].checksum) + sizeof(uint), block[cur_block].byte_len));
+    Printf(" - built-in crc gen: %#010x", compute_crc_for_block(precomputed_table, startof(block[cur_block].checksum) + sizeof(uint) /* swy: from the field after the CRC */, block[cur_block].byte_len));
 
     /* swy: overwrite it with the correct/new checksum if it's not correct */
     if (block[cur_block].checksum != crc)
