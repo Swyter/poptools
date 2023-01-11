@@ -19,12 +19,14 @@ enum<ushort> day_of_week_t { Sun, Mon, Tue, Wed, Thu, Fri, Sat };
 typedef struct { ushort year, month; enum day_of_week_t day_of_week; ushort day, hour, minute, seconds, milliseconds; } systemtime <read=Str("%04u-%02u-%02u %02u:%02u:%02u.%03u (%s)", year, month, day, hour, minute, seconds, milliseconds, EnumToString(day_of_week))>;
 systemtime time;
 
-uint32 checksum <format=hex>; uint full_size <format=hex>;
+uint32 checksum <format=hex>; uint full_size <format=hex>; /* swy: WW: CA1Ch, TT: CA5Ch */
 //byte data[full_size];
 
 struct
 {
-    uint a, in_game_time_maybe; ushort y[120/2];
+    uint a, in_game_time_maybe; ushort y[18]; ushort map_a, map_b; ushort combos_maybe[40]; ushort double_skinned_prince[24];
+
+    ushort a,b, setting_to_ff_freezes_the_game, setting_to_ff_rejects_the_save_and_goes_back_to_main_menu; // intermediate_zone
 
     struct { ushort a, u; ushort b, c; uint d; } pattern[108];
 
