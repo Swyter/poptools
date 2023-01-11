@@ -109,17 +109,16 @@ void GenerateChecksumLookUp(uint dest_buf[]) /* swy: function starts at 0x042008
 uint precomputed_table[256]; /* swy: the game fills out the CRC look-up table buffer at 0x93F2F8 on POP2.exe during startup, instead of including the constants statically in the binary */
 GenerateChecksumLookUp(precomputed_table);
 
-uint Checksum(uint crc_lut_buf[], char data[], uint size)
+uint ChecksumCRC32(uint crc_lut_buf[], uchar data[], uint size)
 {
-    uint checksum = 0xffffffff;
+    uint checksum = 0xffffffff; local uint i = 0;
 
     if (size == 0)
         return checksum;
 
-    for (; size != 0; size -= 1)
+    for (i = 0; i < size; i++)
     {
-        checksum = checksum >> 8 ^ crc_lut_buf[checksum & 0xff ^ (uint)(byte)*data];
-        data = (char *)((byte *)data + 1);
+        checksum = checksum >> 8 ^ crc_lut_buf[checksum & 0xff ^ data[i]];
     }
 
     return checksum;
@@ -139,7 +138,10 @@ for (cur_block = 0; cur_block < block_count; cur_block++)
         block[cur_block].checksum, crc, block[cur_block].checksum == crc ? "OK" : "BAD"
     );
 
-    Printf("%#010x", Checksum(precomputed_table, 0, 0, block[cur_block].byte_len);
+    uchar tmpbuf[block[cur_block].byte_len];
+    ReadBytes(tmpbuf, startof(block[cur_block].checksum) + sizeof(uint), block[cur_block].byte_len);
+
+    Printf("%#010x", ChecksumCRC32(precomputed_table, tmpbuf, block[cur_block].byte_len));
 
     /* swy: overwrite it with the correct/new checksum if it's not correct */
     if (block[cur_block].checksum != crc)
