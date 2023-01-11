@@ -124,7 +124,7 @@ uint ChecksumCRC32(uint crc_lut_buf[], uchar data[], uint size)
     return checksum;
 }
 
-uint cur_block = 0, overwritten_blocks = 0; uint32 crc;
+uint cur_block = 0, overwritten_blocks = 0; uint32 crc; uchar tmpbuf[0xfffffff];
 
 for (cur_block = 0; cur_block < block_count; cur_block++)
 {
@@ -138,7 +138,6 @@ for (cur_block = 0; cur_block < block_count; cur_block++)
         block[cur_block].checksum, crc, block[cur_block].checksum == crc ? "OK" : "BAD"
     );
 
-    uchar tmpbuf[block[cur_block].byte_len];
     ReadBytes(tmpbuf, startof(block[cur_block].checksum) + sizeof(uint), block[cur_block].byte_len);
 
     Printf("%#010x", ChecksumCRC32(precomputed_table, tmpbuf, block[cur_block].byte_len));
