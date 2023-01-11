@@ -24,7 +24,7 @@ uint32 checksum <format=hex>; uint full_size <format=hex>; /* swy: WW: CA1Ch, TT
 
 struct
 {
-    uint a, in_game_time_maybe; ushort y[18]; ushort map_a, map_b; ushort combos_maybe[40]; ushort double_skinned_prince[24]; // swy: secondary weapon at 60h, 4 bytes?, player skin at 0xc8
+    uint a, in_game_time_maybe; ushort y[18]; ushort map_a, map_b; uint unk, unk_b; uint secondary_weapon; ushort combos_maybe[40 - 6]; uint double_skinned_prince[32/4]; uint skin_toggle; uint double_skinned_prince_b[12/4];  // swy: secondary weapon at 60h, 4 bytes?, player skin at 0xc8
 
     // swy: changing DCh from 90 1F 00 0E to F7 00 00 90 changes the map
     ushort a,b, setting_to_ff_freezes_the_game, setting_to_ff_rejects_the_save_and_goes_back_to_main_menu; // intermediate_zone
