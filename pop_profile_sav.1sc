@@ -39,8 +39,8 @@ uint cur_block = 0, overwritten_blocks = 0; uint32 crc;
 Printf("\n\n[+] Done, overwritten %u/%u.\n", overwritten_blocks, 1);
 
 
-for (j = 0; j <= 53; j++)
-{
-    level_label = j; story_chapter_title = j <= 31 ? j : 31; in_game_time_secs = j * 60; time.year = j * 100; time.minute = story_chapter_title;
-    FileSaveRange(Str("%s\\..\\tester\\Save%u.SAV", FileNameGetPath(GetFileName()), j), 0, FileSize());
-}
+//for (j = 0; j <= 53; j++)
+//{
+//    level_label = j; story_chapter_title = j <= 31 ? j : 31; in_game_time_secs = j * 60; time.year = j * 100; time.minute = story_chapter_title;
+//    FileSaveRange(Str("%s\\..\\tester\\Save%u.SAV", FileNameGetPath(GetFileName()), j), 0, FileSize());
+//}
