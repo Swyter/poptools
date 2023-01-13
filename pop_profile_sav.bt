@@ -35,7 +35,7 @@ char magic[4]; Assert(magic == "SAV4", "Incompatible header data");
 enum sot_labels level_label; /* swy: in SoT the completion percentage and thumbnail seems to be part of the label */
 
 if (!is_sot)
-    ushort manual_save_maybe, b;
+    ushort story_chapter_title, b;
 
 uint in_game_time_secs;
 
