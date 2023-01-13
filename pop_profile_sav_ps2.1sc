@@ -15,36 +15,44 @@ uint compute_crc_for_block_ps2(uint offset, uint size) /* swy: calc_checksum_may
 {
   int i; uint align; uint base_offset = offset;
   
-  uint ck = 0;
+  uint ck = 0; i = size; int i_;
 
-  for (i = size; (i - 8) > 8; i -= 8)
+  do
   {
-    align = i - 1U & 1;
+    i_ = i;
+
+    align = i_ - 1U & 1;
     ck = (int) (ck) * 3 +         (uint) ReadUByte(offset + 0);
     ck = (int) (ck) * 3 + (align + 1) * (ReadUByte(offset + 1) + align);
 
-    align = i - 3U & 1;
+    align = i_ - 3U & 1;
     ck = (int) (ck) * 3 +         (uint) ReadUByte(offset + 2);
     ck = (int) (ck) * 3 + (align + 1) * (ReadUByte(offset + 3) + align);
 
-    align = i - 5U & 1;
+    align = i_ - 5U & 1;
     ck = (int) (ck) * 3 +         (uint) ReadUByte(offset + 4);
     ck = (int) (ck) * 3 + (align + 1) * (ReadUByte(offset + 5) + align);
 
-    align = i - 7U & 1;
+    align = i_ - 7U & 1;
     ck = (int) (ck) * 3 +         (uint) ReadUByte(offset + 6);
     ck = (int) (ck) * 3 + (align + 1) * (ReadUByte(offset + 7) + align);
 
-    Printf("%#6x - %#6x - %#010x\n", i, offset, ck); offset += 8;
-  }
+    offset += 8; i = i_ - 8;
 
-  align = i -  9U & 1;
+    Printf("%#6x - %#6x - %#010x\n", i, offset, ck); 
+  } while (8 < i_ + -8);
+offset -= 8;
+  align = i_ -  9U & 1;
   ck = (int) (ck) * 3 +         (uint) ReadUByte(offset +  8);
   ck = (int) (ck) * 3 + (align + 1) * (ReadUByte(offset +  9) + align);
 
-  align = i - 11U & 1;
+  align = i_ - 11U & 1;
   ck = (int) (ck) * 3 +         (uint) ReadUByte(offset + 10);
   ck = (int) (ck) * 3 + (align + 1) * (ReadUByte(offset + 11) + align);
+
+  offset += 8; i -= 8;
+
+  Printf("%#6x - %#6x - %#010x -- final\n", i, offset, ck); 
 
   return ck;
 
