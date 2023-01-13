@@ -7,6 +7,9 @@
 //  Category: Game
 //------------------------------------------------
 
+/* swy: run the original template to fill out the data structures in
+        the template results; we depend on this to work */
+RunTemplate("pop_profile_sav_ps2.bt");
 
 void calc_checksum_maybe_00525fc0(ww_save *sav,undefined8 param_unused_maybe,char *param_sav_index_str)
 {
@@ -68,3 +71,14 @@ void calc_checksum_maybe_00525fc0(ww_save *sav,undefined8 param_unused_maybe,cha
   sav->field_0x10 = 6;
   return;
 }
+
+
+local uint crc = compute_crc_for_block(startof(checksummed_block), sizeof(checksummed_block));
+
+Assert(crc != 0xffffffff, "CRC computation failed");
+
+Printf(
+    "\n[i] %16s: offset: %#5x, len: %#5x, checksum: %#010x/%08x (%s)",
+    "intro", startof(checksummed_block), sizeof(checksummed_block),
+    tailing_checksum, crc, tailing_checksum == crc ? "OK" : "BAD"
+);
