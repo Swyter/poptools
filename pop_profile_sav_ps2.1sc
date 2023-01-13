@@ -44,8 +44,8 @@ uint calc_checksum_maybe_00525fc0(ww_save *sav,undefined8 param_unused_maybe,cha
     ck = ck * 3 +            (uint) buf[ 6];
     ck = ck * 3 + (_aligned + 1) * (buf[ 7] + _aligned);
 
-    p_buf = buf + 8; cur_size = i + -8;
-  } while (8 < i + -8);
+    p_buf = buf + 8; cur_size = i - 8;
+  } while (8 < i - 8);
 
   _aligned = i - 9U & 1;
   ck = ck * 3 +            (uint) buf[ 8];
