@@ -65,16 +65,13 @@ uint compute_crc_for_block_ps2_simple(uint offset, uint size) /* swy: calc_check
 {
   uint ck = 0; int i = size; uint align;
 
-  do /* swy: process one ushort of data at a time */
+  for (i = size; i > 0; i -= 2) /* swy: process one ushort/16 bits of data at a time */
   {
     align = i - 1U & 1;
 
-    ck = ck * 3 +                ReadUByte(offset + 0);
-    ck = ck * 3 + (align + 1) * (ReadUByte(offset + 1) + align);
-
-    Printf("%#6x - %#6x - %#010x\n", i, offset, ck);
-    offset += 2; i -= 2;
-  } while (i > 0);
+    ck = ck * 3 +                ReadUByte(offset++);
+    ck = ck * 3 + (align + 1) * (ReadUByte(offset++) + align);
+  };
 
   Printf("%#6x - %#6x - %#010x -- final\n", i, offset, ck);
   
