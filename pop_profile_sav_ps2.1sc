@@ -21,12 +21,10 @@ uint calc_checksum_maybe_00525fc0(ww_save *sav,undefined8 param_unused_maybe,cha
   int cur_size;
   byte *p_buf;
   
-  uint ck = 0;
+  uint ck = 0; buf = *(byte **) sav->start_save; cur_size = 0xca1c; 
 
-  buf = *(byte **) sav->start_save;
-  cur_size = 0xca1c; i = cur_size;
-
-  do {
+  for (i = cur_size; (i - 8) > 8; i -= 8)
+  {
     _aligned = i - 1U & 1;
     ck = ck * 3 +           (uint) *buf[ 0];
     ck = ck * 3 + (_aligned + 1) * (buf[ 1] + _aligned);
@@ -43,8 +41,8 @@ uint calc_checksum_maybe_00525fc0(ww_save *sav,undefined8 param_unused_maybe,cha
     ck = ck * 3 +            (uint) buf[ 6];
     ck = ck * 3 + (_aligned + 1) * (buf[ 7] + _aligned);
 
-    buf += 8; i -= 8;
-  } while ((i - 8) > 8);
+    buf += 8; 
+  }
 
   _aligned = i - 9U & 1;
   ck = ck * 3 +            (uint) buf[ 8];
