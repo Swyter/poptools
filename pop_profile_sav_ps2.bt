@@ -1,0 +1,13 @@
+//------------------------------------------------
+//--- 010 Editor v13.0 Binary Template
+//
+//      File: Prince of Persia Trilogy - Savegame format - PS2
+//   Authors: Swyter
+//   Version: 2023.01.13
+//  Category: Game
+// File Mask: B?SL?S-?????S??
+//------------------------------------------------
+
+
+ubyte checksummed_block[FileSize() - 4];
+uint  tailing_checksum <format=hex>;

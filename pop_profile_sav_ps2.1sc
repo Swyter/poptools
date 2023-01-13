@@ -1,0 +1,70 @@
+//------------------------------------------------
+//--- 010 Editor v13.0 Binary Template
+//
+//      File: Prince of Persia Trilogy - Reverse-engineered PS2-checksumming functions
+//   Authors: Swyter
+//   Version: 2023.01.13
+//  Category: Game
+//------------------------------------------------
+
+
+void calc_checksum_maybe_00525fc0(ww_save *sav,undefined8 param_unused_maybe,char *param_sav_index_str)
+{
+  byte *buf;
+  int get_save_idx;
+  int i;
+  uint _aligned;
+  int sav_buf_start;
+  int cur_size;
+  byte *p_buf;
+  
+  sav->ck = 0;
+  p_buf = *(byte **) sav->start_save;
+  cur_size = 0xca1c;
+  do {
+    i = cur_size;
+    buf = p_buf;
+    _aligned = i - 1U & 1;
+    sav->ck = sav->ck * 3 + (uint) *buf;
+    sav->ck = sav->ck * 3 + (_aligned + 1) * (buf[1] + _aligned);
+    _aligned = i - 3U & 1;
+    sav->ck = sav->ck * 3 + (uint) buf[2];
+    sav->ck = sav->ck * 3 + (_aligned + 1) * (buf[3] + _aligned);
+    _aligned = i - 5U & 1;
+    sav->ck = sav->ck * 3 + (uint) buf[4];
+    sav->ck = sav->ck * 3 + (_aligned + 1) * (buf[5] + _aligned);
+    _aligned = i - 7U & 1;
+    sav->ck = sav->ck * 3 + (uint) buf[6];
+    sav->ck = sav->ck * 3 + (_aligned + 1) * (buf[7] + _aligned);
+    p_buf = buf + 8;
+    cur_size = i + -8;
+  } while (8 < i + -8);
+  _aligned = i - 9U & 1;
+  sav->ck = sav->ck * 3 + (uint) buf[8];
+  sav->ck = sav->ck * 3 + (_aligned + 1) * (buf[9] + _aligned);
+  _aligned = i - 0xbU & 1;
+  sav->ck = sav->ck * 3 + (uint) buf[10];
+  sav->ck = sav->ck * 3 + (_aligned + 1) * (buf[0xb] + _aligned);
+
+  sav_buf_start = *(int *) sav->start_save;
+  /* swy: write a tailing checksum, right after the buffer. do it in reverse */
+  *(char *)(sav_buf_start + 0xca1c) = (char)(sav->ck >> 24); 
+  *(char *)(sav_buf_start + 0xca1d) = (char)(sav->ck >> 16);
+  *(char *)(sav_buf_start + 0xca1e) = (char)(sav->ck >>  8);
+  *(char *)(sav_buf_start + 0xca1f) = (char)(sav->ck >>  0);
+
+ 
+
+  sav->field_0x28 = 0;
+  get_save_idx = stroul(param_sav_index_str);
+  FUN_0011ce88((uint *)&sav->field_0x8648,"%02d", get_save_idx + 1);
+  FUN_0011d700((uint *)&sav->field_0x85c8, "S");
+  FUN_0011d280((uint *)&sav->field_0x85c8, param_sav_index_str);
+  FUN_0011d700((uint *)&sav->field_0x8588, (char *)&sav->field_0x8608);
+  FUN_0011d280((uint *)&sav->field_0x8588, "S");
+  FUN_0011d280((uint *)&sav->field_0x8588, param_sav_index_str);
+  FUN_004a92c0(1);
+  sav->field_0x18 = 7;
+  sav->field_0x10 = 6;
+  return;
+}
