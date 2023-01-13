@@ -13,38 +13,38 @@ RunTemplate("pop_profile_sav_ps2.bt");
 
 uint compute_crc_for_block_ps2(uint offset, uint size) /* swy: calc_checksum_maybe_00525fc0() */
 {
-  int i; uint _aligned; uint base_offset = offset;
+  int i; uint align; uint base_offset = offset;
   
   uint ck = 0;
 
   for (i = size; (i - 8) > 8; i -= 8)
   {
-    _aligned = i - 1U & 1;
-    ck = ck * 3 +            (uint) ReadUByte(offset + 0);
-    ck = ck * 3 + (_aligned + 1) * (ReadUByte(offset + 1) + _aligned);
+    align = i - 1U & 1;
+    ck = (int) (ck) * 3 +         (uint) ReadUByte(offset + 0);
+    ck = (int) (ck) * 3 + (align + 1) * (ReadUByte(offset + 1) + align);
 
-    _aligned = i - 3U & 1;
-    ck = ck * 3 +            (uint) ReadUByte(offset + 2);
-    ck = ck * 3 + (_aligned + 1) * (ReadUByte(offset + 3) + _aligned);
+    align = i - 3U & 1;
+    ck = (int) (ck) * 3 +         (uint) ReadUByte(offset + 2);
+    ck = (int) (ck) * 3 + (align + 1) * (ReadUByte(offset + 3) + align);
 
-    _aligned = i - 5U & 1;
-    ck = ck * 3 +            (uint) ReadUByte(offset + 4);
-    ck = ck * 3 + (_aligned + 1) * (ReadUByte(offset + 5) + _aligned);
+    align = i - 5U & 1;
+    ck = (int) (ck) * 3 +         (uint) ReadUByte(offset + 4);
+    ck = (int) (ck) * 3 + (align + 1) * (ReadUByte(offset + 5) + align);
 
-    _aligned = i - 7U & 1;
-    ck = ck * 3 +            (uint) ReadUByte(offset + 6);
-    ck = ck * 3 + (_aligned + 1) * (ReadUByte(offset + 7) + _aligned);
+    align = i - 7U & 1;
+    ck = (int) (ck) * 3 +         (uint) ReadUByte(offset + 6);
+    ck = (int) (ck) * 3 + (align + 1) * (ReadUByte(offset + 7) + align);
 
-    offset += 8; 
+    Printf("%#6x - %#6x - %#010x\n", i, offset, ck); offset += 8;
   }
 
-  _aligned = i -  9U & 1;
-  ck = ck * 3 +            (uint) ReadUByte(offset +  8);
-  ck = ck * 3 + (_aligned + 1) * (ReadUByte(offset +  9) + _aligned);
+  align = i -  9U & 1;
+  ck = (int) (ck) * 3 +         (uint) ReadUByte(offset +  8);
+  ck = (int) (ck) * 3 + (align + 1) * (ReadUByte(offset +  9) + align);
 
-  _aligned = i - 11U & 1;
-  ck = ck * 3 +            (uint) ReadUByte(offset + 10);
-  ck = ck * 3 + (_aligned + 1) * (ReadUByte(offset + 11) + _aligned);
+  align = i - 11U & 1;
+  ck = (int) (ck) * 3 +         (uint) ReadUByte(offset + 10);
+  ck = (int) (ck) * 3 + (align + 1) * (ReadUByte(offset + 11) + align);
 
   return ck;
 
