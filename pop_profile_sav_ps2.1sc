@@ -11,7 +11,7 @@
         the template results; we depend on this to work */
 RunTemplate("pop_profile_sav_ps2.bt");
 
-void calc_checksum_maybe_00525fc0(ww_save *sav,undefined8 param_unused_maybe,char *param_sav_index_str)
+uint calc_checksum_maybe_00525fc0(ww_save *sav,undefined8 param_unused_maybe,char *param_sav_index_str)
 {
   byte *buf;
   int get_save_idx;
@@ -21,47 +21,47 @@ void calc_checksum_maybe_00525fc0(ww_save *sav,undefined8 param_unused_maybe,cha
   int cur_size;
   byte *p_buf;
   
-  sav->ck = 0;
+  uint ck = 0;
+
   p_buf = *(byte **) sav->start_save;
   cur_size = 0xca1c;
   do {
-    i = cur_size;
-    buf = p_buf;
+    i = cur_size; buf = p_buf;
 
     _aligned = i - 1U & 1;
-    sav->ck = sav->ck * 3 + (uint) *buf;
-    sav->ck = sav->ck * 3 + (_aligned + 1) * (buf[1] + _aligned);
+    ck = ck * 3 +           (uint) *buf[ 0];
+    ck = ck * 3 + (_aligned + 1) * (buf[ 1] + _aligned);
 
     _aligned = i - 3U & 1;
-    sav->ck = sav->ck * 3 + (uint) buf[2];
-    sav->ck = sav->ck * 3 + (_aligned + 1) * (buf[3] + _aligned);
+    ck = ck * 3 +            (uint) buf[ 2];
+    ck = ck * 3 + (_aligned + 1) * (buf[ 3] + _aligned);
 
     _aligned = i - 5U & 1;
-    sav->ck = sav->ck * 3 + (uint) buf[4];
-    sav->ck = sav->ck * 3 + (_aligned + 1) * (buf[5] + _aligned);
+    ck = ck * 3 +            (uint) buf[ 4];
+    ck = ck * 3 + (_aligned + 1) * (buf[ 5] + _aligned);
 
     _aligned = i - 7U & 1;
-    sav->ck = sav->ck * 3 + (uint) buf[6];
-    sav->ck = sav->ck * 3 + (_aligned + 1) * (buf[7] + _aligned);
+    ck = ck * 3 +            (uint) buf[ 6];
+    ck = ck * 3 + (_aligned + 1) * (buf[ 7] + _aligned);
 
-    p_buf = buf + 8;
-    cur_size = i + -8;
+    p_buf = buf + 8; cur_size = i + -8;
   } while (8 < i + -8);
 
   _aligned = i - 9U & 1;
-  sav->ck = sav->ck * 3 + (uint) buf[8];
-  sav->ck = sav->ck * 3 + (_aligned + 1) * (buf[9] + _aligned);
+  ck = ck * 3 +            (uint) buf[ 8];
+  ck = ck * 3 + (_aligned + 1) * (buf[ 9] + _aligned);
 
-  _aligned = i - 0xbU & 1;
-  sav->ck = sav->ck * 3 + (uint) buf[10];
-  sav->ck = sav->ck * 3 + (_aligned + 1) * (buf[0xb] + _aligned);
+  _aligned = i - 11U & 1;
+  ck = ck * 3 +            (uint) buf[10];
+  ck = ck * 3 + (_aligned + 1) * (buf[11] + _aligned);
 
   sav_buf_start = *(int *) sav->start_save;
+
   /* swy: write a tailing checksum, right after the buffer. do it in reverse */
-  *(char *)(sav_buf_start + 0xca1c) = (char)(sav->ck >> 24); 
-  *(char *)(sav_buf_start + 0xca1d) = (char)(sav->ck >> 16);
-  *(char *)(sav_buf_start + 0xca1e) = (char)(sav->ck >>  8);
-  *(char *)(sav_buf_start + 0xca1f) = (char)(sav->ck >>  0);
+  *(char *)(/* sav_buf_start + 0xca1c */) = (char)(ck >> 24); 
+  *(char *)(/* sav_buf_start + 0xca1d */) = (char)(ck >> 16);
+  *(char *)(/* sav_buf_start + 0xca1e */) = (char)(ck >>  8);
+  *(char *)(/* sav_buf_start + 0xca1f */) = (char)(ck >>  0);
 
   return;
 }
