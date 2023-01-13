@@ -11,50 +11,52 @@
         the template results; we depend on this to work */
 RunTemplate("pop_profile_sav_ps2.bt");
 
-uint compute_crc_for_block_ps2(uint base_offset, uint size) /* swy: calc_checksum_maybe_00525fc0() */
+uint compute_crc_for_block_ps2(uint offset, uint size) /* swy: calc_checksum_maybe_00525fc0() */
 {
-  int i; uint _aligned; uint offset = 0;
+  int i; uint _aligned; uint base_offset = offset;
   
   uint ck = 0;
 
   for (i = size; (i - 8) > 8; i -= 8)
   {
     _aligned = i - 1U & 1;
-    ck = ck * 3 +            (uint) ReadUByte(base_offset + offset + 0);
-    ck = ck * 3 + (_aligned + 1) * (ReadUByte(base_offset + offset + 1) + _aligned);
+    ck = ck * 3 +            (uint) ReadUByte(offset + 0);
+    ck = ck * 3 + (_aligned + 1) * (ReadUByte(offset + 1) + _aligned);
 
     _aligned = i - 3U & 1;
-    ck = ck * 3 +            (uint) ReadUByte(base_offset + offset + 2);
-    ck = ck * 3 + (_aligned + 1) * (ReadUByte(base_offset + offset + 3) + _aligned);
+    ck = ck * 3 +            (uint) ReadUByte(offset + 2);
+    ck = ck * 3 + (_aligned + 1) * (ReadUByte(offset + 3) + _aligned);
 
     _aligned = i - 5U & 1;
-    ck = ck * 3 +            (uint) ReadUByte(base_offset + offset + 4);
-    ck = ck * 3 + (_aligned + 1) * (ReadUByte(base_offset + offset + 5) + _aligned);
+    ck = ck * 3 +            (uint) ReadUByte(offset + 4);
+    ck = ck * 3 + (_aligned + 1) * (ReadUByte(offset + 5) + _aligned);
 
     _aligned = i - 7U & 1;
-    ck = ck * 3 +            (uint) ReadUByte(base_offset + offset + 6);
-    ck = ck * 3 + (_aligned + 1) * (ReadUByte(base_offset + offset + 7) + _aligned);
+    ck = ck * 3 +            (uint) ReadUByte(offset + 6);
+    ck = ck * 3 + (_aligned + 1) * (ReadUByte(offset + 7) + _aligned);
 
     offset += 8; 
   }
 
-  _aligned = i - 9U & 1;
-  ck = ck * 3 +            (uint) ReadUByte(base_offset + offset + 8);
-  ck = ck * 3 + (_aligned + 1) * (ReadUByte(base_offset + offset + 9) + _aligned);
+  _aligned = i -  9U & 1;
+  ck = ck * 3 +            (uint) ReadUByte(offset +  8);
+  ck = ck * 3 + (_aligned + 1) * (ReadUByte(offset +  9) + _aligned);
 
   _aligned = i - 11U & 1;
-  ck = ck * 3 +            (uint) ReadUByte(base_offset + offset + 10);
-  ck = ck * 3 + (_aligned + 1) * (ReadUByte(base_offset + offset + 11) + _aligned);
+  ck = ck * 3 +            (uint) ReadUByte(offset + 10);
+  ck = ck * 3 + (_aligned + 1) * (ReadUByte(offset + 11) + _aligned);
+
+  return ck;
 
   /* int sav_buf_start = *(int *) sav->start_save; */
 
-  local union { uint integer; ubyte octet[4]; } flipped_checksum;
+  uint flipped_checksum = 0;
 
   /* swy: write a tailing checksum, right after the buffer. do it in reverse */
-  /* *(char *)(sav_buf_start + 0xca1c) */ flipped_checksum.octet[0] = (char)(ck >> 24); 
-  /* *(char *)(sav_buf_start + 0xca1d) */ flipped_checksum.octet[1] = (char)(ck >> 16);
-  /* *(char *)(sav_buf_start + 0xca1e) */ flipped_checksum.octet[2] = (char)(ck >>  8);
-  /* *(char *)(sav_buf_start + 0xca1f) */ flipped_checksum.octet[3] = (char)(ck >>  0);
+  /* *(char *)(sav_buf_start + 0xca1c) */ flipped_checksum |= (char)(ck >> 24); 
+  /* *(char *)(sav_buf_start + 0xca1d) */ flipped_checksum |= (char)(ck >> 16);
+  /* *(char *)(sav_buf_start + 0xca1e) */ flipped_checksum |= (char)(ck >>  8);
+  /* *(char *)(sav_buf_start + 0xca1f) */ flipped_checksum |= (char)(ck >>  0);
 
   return flipped_checksum.integer;
 }
