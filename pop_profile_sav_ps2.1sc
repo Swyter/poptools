@@ -50,16 +50,13 @@ uint compute_crc_for_block_ps2(uint offset, uint size) /* swy: calc_checksum_may
   ck = ck * 3 + (align + 1) * (ReadUByte(offset + 11) + align);
 
   Printf("%#6x - %#6x - %#010x -- final\n", i, offset, ck);
-
-  /* int sav_buf_start = *(int *) sav->start_save; */
-
-  uint flipped_checksum = 0;
+  
 
   /* swy: write a tailing checksum, right after the buffer. do it in reverse */
-  /* *(char *)(sav_buf_start + 0xca1c) */ flipped_checksum |= ((ck & 0xFF000000) >> 3 * 8); /* swy: --____44 */
-  /* *(char *)(sav_buf_start + 0xca1d) */ flipped_checksum |= ((ck & 0x00FF0000) >> 1 * 8); /* swy: __--33__ */
-  /* *(char *)(sav_buf_start + 0xca1e) */ flipped_checksum |= ((ck & 0x0000FF00) << 1 * 8); /* swy: __22--__ */
-  /* *(char *)(sav_buf_start + 0xca1f) */ flipped_checksum |= ((ck & 0x000000FF) << 3 * 8); /* swy: 11____-- */
+  uint flipped_checksum |= ((ck & 0xFF000000) >> 3 * 8); /* swy: --____44 */
+       flipped_checksum |= ((ck & 0x00FF0000) >> 1 * 8); /* swy: __--33__ */
+       flipped_checksum |= ((ck & 0x0000FF00) << 1 * 8); /* swy: __22--__ */
+       flipped_checksum |= ((ck & 0x000000FF) << 3 * 8); /* swy: 11____-- */
 
   return flipped_checksum;
 }
