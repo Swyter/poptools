@@ -13,11 +13,12 @@ BigEndian();
 
 struct
 {
-    char game_id[4]; char publisher_id[2]; ushort id_b <format=hex>;
+    char game_id[4]; char publisher_id[2];
+    ubyte unk_ff <format=hex>, banner_format <format=hex>; /* swy: FF 00 = no banner */
     char game_tag[4 + 28];
-    uint variable_size_thing <format=hex>;
-    uint banner_assets_offset <format=hex>;
-    ushort icon_fmt, icn_fmt_b, icon_anim_frames, unk_bc, storage_blocks, unk_cb;
+    uint variable_size_thing_timestamp_maybe <format=hex>;
+    uint graphic_assets_offset <format=hex>;
+    ushort icn_anim_fmt, icon_fmt_b, icon_unk, unk_bc, storage_blocks, unk_ff;
     uint text_labels_offset <format=hex>;
 
     FSeek(startof(text_labels_offset) + sizeof(text_labels_offset) + text_labels_offset);
@@ -25,7 +26,7 @@ struct
     char game_descr_str[32];
 
 
-    FSeek(startof(text_labels_offset) + sizeof(text_labels_offset) + banner_assets_offset);
+    FSeek(startof(text_labels_offset) + sizeof(text_labels_offset) + graphic_assets_offset);
     byte img_icon[0x3000];
 } gci_head;
 
