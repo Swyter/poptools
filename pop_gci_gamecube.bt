@@ -13,15 +13,16 @@ BigEndian();
 
 struct
 {
-    char game_id[6]; ushort id_b <format=hex>;
+    char game_id[4]; char publisher_id[2]; ushort id_b <format=hex>;
     char game_tag[4 + 28];
     uint variable_size_thing <format=hex>;
     uint checksummed_data_begin_offset <format=hex>;
-    ushort unk_a, unk_ab, unk_b, unk_bc, unk_c, unk_cb; uint custom_extra_data_len <format=hex>;
+    ushort icon_fmt, icn_fmt_b, icon_anim_frames, unk_bc, storage_blocks, unk_cb;
+    uint custom_extra_data_len <format=hex>;
 
     ubyte custom_extra_data_for_devs_maybe[custom_extra_data_len];
 
-    FSeek(checksummed_data_begin_offset);
+    FSeek(startof(custom_extra_data_len) + sizeof(custom_extra_data_len) + custom_extra_data_len);
     char game_title_str[32];
     char game_descr_str[32];
 
