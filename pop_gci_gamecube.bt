@@ -16,19 +16,22 @@ struct
     char game_id[4]; char publisher_id[2]; ushort id_b <format=hex>;
     char game_tag[4 + 28];
     uint variable_size_thing <format=hex>;
-    uint checksummed_data_begin_offset <format=hex>;
+    uint banner_assets_offset <format=hex>;
     ushort icon_fmt, icn_fmt_b, icon_anim_frames, unk_bc, storage_blocks, unk_cb;
-    uint custom_extra_data_len <format=hex>;
+    uint text_labels_offset <format=hex>;
 
-    ubyte custom_extra_data_for_devs_maybe[custom_extra_data_len];
-
-    FSeek(startof(custom_extra_data_len) + sizeof(custom_extra_data_len) + custom_extra_data_len);
+    FSeek(startof(text_labels_offset) + sizeof(text_labels_offset) + text_labels_offset);
     char game_title_str[32];
     char game_descr_str[32];
 
+
+    FSeek(startof(text_labels_offset) + sizeof(text_labels_offset) + banner_assets_offset);
     byte img_icon[0x3000];
 } gci_head;
 
+Assert(gci_head.game_id[1] == '2' && gci_head.game_id[2] == 'O', "This doesn't look like a Prince of Persia: Warrior Within GameCube save. Stopping.");
+
+FSeek(0x3080);
 uint head_marker <format=hex>; /* swy: ABCDEF00h */
 byte slot_a[0xca1c]; uint pad_align;
 byte slot_b[0xca1c]; uint pad_align;
