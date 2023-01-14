@@ -19,8 +19,7 @@ struct
     uint checksummed_data_begin_offset <format=hex>;
     ushort unk_a, unk_ab, unk_b, unk_bc, unk_c, unk_cb; uint custom_extra_data_len <format=hex>;
 
-    uint checksum <format=hex>; /* swy: from 0x1c0 to data end (0x28040) */
-
+    ubyte custom_extra_data_for_devs_maybe[custom_extra_data_len];
 
     FSeek(checksummed_data_begin_offset);
     char game_title_str[32];
@@ -29,9 +28,8 @@ struct
     byte img_icon[0x3000];
 } gci_head;
 
-uint magic_maybe <format=hex>;
+uint head_marker <format=hex>; /* swy: ABCDEF00h */
 byte slot_a[0xca1c]; uint pad_align;
 byte slot_b[0xca1c]; uint pad_align;
 byte slot_c[0xca1c]; uint pad_align;
-
-uint unk_a <format=hex>, unk_b <format=hex>;
+uint checksum <format=hex>, tail_marker <format=hex>; /* swy: 00FEDCBAh */
