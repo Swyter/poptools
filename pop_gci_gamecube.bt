@@ -13,12 +13,12 @@ BigEndian();
 
 struct
 {
-    char game_id[6];
-    ushort id_b <format=hex>;
+    char game_id[6]; ushort id_b <format=hex>;
     char game_tag[4 + 28];
     uint variable_size_thing <format=hex>;
     uint checksummed_data_begin_offset <format=hex>;
-    uint stuff[4] <format=hex>;
+    ushort unk_a, unk_ab, unk_b, unk_bc, unk_c, unk_cb; uint custom_extra_data_len <format=hex>;
+
     uint checksum <format=hex>; /* swy: from 0x1c0 to data end (0x28040) */
 
 
