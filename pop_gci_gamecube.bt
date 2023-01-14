@@ -1,0 +1,35 @@
+//------------------------------------------------
+//--- 010 Editor v12.0.1k Binary Template
+//
+//      File: Spyro: A Hero's Tail - GameCube save data (three-slot sections)
+//   Authors: Swyter
+//   Version: 2022.11.22
+//   Purpose: This will probably work for any other GCI saves, I think.
+//  Category: Game
+// File Mask: *.gci
+//------------------------------------------------
+
+BigEndian();
+
+struct
+{
+    char game_id[6];
+    ushort id_b <format=hex>;
+    char game_tag[4 + 28];
+    uint variable_size_thing <format=hex>;
+    uint checksummed_data_begin_offset <format=hex>;
+    uint stuff[4] <format=hex>;
+    uint checksum <format=hex>; /* swy: from 0x1c0 to data end (0x28040) */
+
+
+    FSeek(checksummed_data_begin_offset);
+    char game_title_str[32];
+    char game_descr_str[32];
+
+    byte img_icon[0x3004];
+} gci_head;
+
+
+byte slot_a[0xca1c]; uint u;
+byte slot_b[0xca1c]; uint u;
+byte slot_c[0xca1c]; uint u;
