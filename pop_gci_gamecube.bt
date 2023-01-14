@@ -26,10 +26,12 @@ struct
     char game_title_str[32];
     char game_descr_str[32];
 
-    byte img_icon[0x3004];
+    byte img_icon[0x3000];
 } gci_head;
 
+uint magic_maybe <format=hex>;
+byte slot_a[0xca1c]; uint pad_align;
+byte slot_b[0xca1c]; uint pad_align;
+byte slot_c[0xca1c]; uint pad_align;
 
-byte slot_a[0xca1c]; uint u;
-byte slot_b[0xca1c]; uint u;
-byte slot_c[0xca1c]; uint u;
+uint unk_a <format=hex>, unk_b <format=hex>;
