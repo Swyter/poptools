@@ -13,12 +13,17 @@ BigEndian();
 
 struct
 {
+    enum<ubyte> gci_tex_fmt { fmt_none = 0, fmt_palette = 1, fmt_truecolor = 2, fmt_palette_pingpong = 5, fmt_truecolor_pingpong = 6 };
+
     char game_id[4]; char publisher_id[2];
-    ubyte unk_ff <format=hex>, banner_format <format=hex>; /* swy: FF 00 = no banner */
+    ubyte unk_ff <format=hex>; gci_tex_fmt banner_format; /* swy: FF 00 = no banner */
     char game_tag[4 + 28];
     uint variable_size_thing_timestamp_maybe <format=hex>;
     uint graphic_assets_offset <format=hex>;
-    ushort icn_anim_fmt, icon_fmt_b, icon_unk, unk_bc;
+    union { ushort val; struct { ushort a:4; ushort b:4; ushort c:4; ushort d:4; } ind; } icon_frame_color_fmt; /* swy: seems like each nibble controls the format of two frames, so there's probably a maximum of 8 frames */
+    ushort icon_anim_speed_data; /* swy: top bit of the second nibble controls animation speed, rest controls the amount of frames somehow */
+
+    ushort unk_a, unk_b;
     ushort storage_blocks, unk_ff;
     uint text_labels_offset <format=hex>;
 } gci_head;
@@ -35,14 +40,21 @@ FSeek(startof(gci_head) + sizeof(gci_head) + gci_head.graphic_assets_offset);
 /* swy: a banner seems to always be 96x32px, the icon seems 32x32px, 96*32 = 3072, 32*32 = 1024 */
 /* swy: format 5 seems to be grayscale, 1 too, 2 has colors, takes double of space, 3 no banner, 4 no banner, 6 seems same at 2 */
 /* swy: 1/5 = 1 byte is 1 pixel, 2/6 = colors, 0/3/7 = none */
-local uint banner_byte_size = (96 * 32) * ((gci_head.banner_format == 2) ? 2 : (gci_head.banner_format == 6) ? 2 : 1);
+
+local uint has_palette = (gci_head.banner_format & 0b11) == 1;
+local uint banner_byte_size = (96 * 32) * (has_palette ? 1 : 2);
 local uint   icon_byte_size = (32 * 32) * 1.5; /* swy: usually 0x600 bytes per icon*/
 
 byte gci_img_banner[banner_byte_size]; /* swy: banner goes first, if any. then the icon, many eurocom games take 0x2000 for both, so I thought it was static */
-byte gci_img_banner_pal[0x200];
+if (has_palette) byte gci_img_banner_pal[0x200];
 
-byte gci_img_icon  [(32 * 32 * 8)]; /* swy: 0x2200, 8 images */
-byte gci_img_icon_pal[0x200];
+local uint frame_count = ((gci_head.icon_frame_color_fmt.ind.a != 0) ? 2 : 0) +
+                         ((gci_head.icon_frame_color_fmt.ind.b != 0) ? 2 : 0) +
+                         ((gci_head.icon_frame_color_fmt.ind.c != 0) ? 2 : 0) +
+                         ((gci_head.icon_frame_color_fmt.ind.d != 0) ? 2 : 0);
+
+byte gci_img_icon  [(32 * 32 * frame_count)]; /* swy: 0x2200, 8 images */
+if (has_palette) byte gci_img_icon_pal[0x200];
 
 /* -- */
 
