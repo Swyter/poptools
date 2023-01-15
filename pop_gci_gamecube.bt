@@ -20,6 +20,7 @@ struct
     uint graphic_assets_offset <format=hex>;
     ushort icn_anim_fmt, icon_fmt_b, icon_unk, unk_bc; //Printf("%x", (FileSize() - 0x40) / 0x2000);
     ushort storage_blocks, unk_ff; /* swy: hex(int(0x18000/12)) = 0x2000 bytes per block? */ //Assert(FileSize() == storage_blocks * 0x2000);
+    Printf("%#x bytes / %u storage blocks = %f, computed: %f", FileSize(), storage_blocks, FileSize() / storage_blocks, (FileSize() - 0x40) / 0x2000);
     uint text_labels_offset <format=hex>;
 
     FSeek(startof(text_labels_offset) + sizeof(text_labels_offset) + text_labels_offset);
