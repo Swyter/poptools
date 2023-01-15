@@ -57,14 +57,21 @@ if (has_palette) byte gci_img_banner_pal[0x200];
 local uint frame_count = ((gci_head.icon_frame_color_fmt.ind.a != 0) ? 2 : 0) +
                          ((gci_head.icon_frame_color_fmt.ind.b != 0) ? 2 : 0) +
                          ((gci_head.icon_frame_color_fmt.ind.c != 0) ? 2 : 0) +
-                         ((gci_head.icon_frame_color_fmt.ind.d != 0) ? 2 : 0);
+                         ((gci_head.icon_frame_color_fmt.ind.d != 0) ? 2 : 0) + 0;
 
-byte gci_img_icon  [(32 * 32 * frame_count)]; /* swy: 0x2200, 8 images */
+local uint i = 0; struct icon_t { byte data[32 * 32 * 2]; };
+for (i = 0; i < frame_count; i++)
+    icon_t gci_img_icon; /* swy: 0x2200, 8 images */
+
 if (has_palette) byte gci_img_icon_pal[0x200];
 
 /* -- */
 
-Assert(gci_head.game_id[1] == '2' && gci_head.game_id[2] == 'O', "This doesn't look like a Prince of Persia: Warrior Within GameCube save. Stopping.");
+if (!(gci_head.game_id[1] == '2' && gci_head.game_id[2] == 'O'))
+{
+    Warning("This doesn't look like a Prince of Persia: Warrior Within GameCube save. Stopping.");
+    return;
+} //Assert(gci_head.game_id[1] == '2' && gci_head.game_id[2] == 'O', "This doesn't look like a Prince of Persia: Warrior Within GameCube save. Stopping.");
 
 FSeek(0x3080);
 uint head_marker <format=hex>; /* swy: ABCDEF00h */
