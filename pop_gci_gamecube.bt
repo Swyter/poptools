@@ -41,7 +41,13 @@ FSeek(startof(gci_head) + sizeof(gci_head) + gci_head.graphic_assets_offset);
 /* swy: format 5 seems to be grayscale, 1 too, 2 has colors, takes double of space, 3 no banner, 4 no banner, 6 seems same at 2 */
 /* swy: 1/5 = 1 byte is 1 pixel, 2/6 = colors, 0/3/7 = none */
 
-local uint has_palette = (gci_head.banner_format & 0b11) == 1;
+/* swy: format 1 = (width * height * frames) + 0x200 of palette */
+/* swy: format 6 = (width * height * frames) * 2                */
+
+/* swy: 2 restart animation again, 6 ping-pong */
+/* swy: 1 restart animation again, 5 ping-pong - probably */
+
+local uint has_palette = (gci_head.banner_format & 0b11) == 1; /* swy: third bit signals ping-pong animation */
 local uint banner_byte_size = (96 * 32) * (has_palette ? 1 : 2);
 local uint   icon_byte_size = (32 * 32) * 1.5; /* swy: usually 0x600 bytes per icon*/
 
