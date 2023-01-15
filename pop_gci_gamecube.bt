@@ -49,7 +49,7 @@ FSeek(startof(gci_head) + sizeof(gci_head) + gci_head.graphic_assets_offset);
 
 local uint has_palette = (gci_head.banner_format & 0b11) == 1; /* swy: third bit signals ping-pong animation */
 local uint banner_byte_size = (96 * 32) * (has_palette ? 1 : 2);
-local uint   icon_byte_size = (32 * 32) * 1.5; /* swy: usually 0x600 bytes per icon*/
+local uint   icon_byte_size = (32 * 32) * 1.5; /* swy: usually 0x600 bytes per icon */
 
 if ((gci_head.banner_format & 0b11) != 0)
 {
@@ -57,7 +57,8 @@ if ((gci_head.banner_format & 0b11) != 0)
     if (has_palette) byte gci_img_banner_pal[0x200];
 }
 
-/* swy: we should check each entry individually instead of only a, but the C standard doesn't allow arrays of bitfields */
+/* swy: now parse the cursed icon animation descriptor mechanism that took hours to reverse;
+        prettiest code in town, see below */
 ubyte icon_get_anim_frame(uint index)
 {
     switch (index)
@@ -73,17 +74,18 @@ ubyte icon_get_anim_frame(uint index)
     }
 }
 
-local uint frame_count = ((icon_get_anim_frame(0) != 0) ? 1 : 0) +
-                         ((icon_get_anim_frame(1) != 0) ? 1 : 0) +
-                         ((icon_get_anim_frame(2) != 0) ? 1 : 0) +
-                         ((icon_get_anim_frame(3) != 0) ? 1 : 0) +
-                         ((icon_get_anim_frame(4) != 0) ? 1 : 0) +
-                         ((icon_get_anim_frame(5) != 0) ? 1 : 0) +
-                         ((icon_get_anim_frame(6) != 0) ? 1 : 0) +
-                         ((icon_get_anim_frame(7) != 0) ? 1 : 0);
+/* swy: go 2-bit frame slot by 2-bit frame slot and see who's at home */
+local uint i = 0; local uint frame_count = 0;
 
-/* swy: we should check each entry individually instead of only a, but the C standard doesn't allow arrays of bitfields */
-local uint i = 0; struct icon_t { byte data[32 * 32 * (icon_get_anim_frame(i) == 1 ? 1 : 2)]; };
+for (i = 0; i < 8; i++)
+    frame_count += (icon_get_anim_frame(i) != 0) ? 1 : 0;
+
+
+/* swy: we check each entry individually instead of only the first one, but the C standard
+        doesn't allow arrays of bitfields, forcing us to make an accessor
+        function for syntax reasons, and to be able to loop */
+struct icon_t { byte data[32 * 32 * (icon_get_anim_frame(i) == 1 ? 1 : 2)]; };
+
 for (i = 0; i < frame_count; i++)
     icon_t gci_img_icon; /* swy: 0x2200, 8 images */
 
