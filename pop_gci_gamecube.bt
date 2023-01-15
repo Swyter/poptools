@@ -31,7 +31,17 @@ char gci_game_title_str[32];
 char gci_game_descr_str[32];
 
 FSeek(startof(gci_head) + sizeof(gci_head) + gci_head.graphic_assets_offset);
-byte gci_img_icon[0x2000]; /* swy: banner goes first, if any. then the icon */
+
+/* swy: a banner seems to always be 96x32px, the icon seems 32x32px, 96*32 = 3072, 32*32 = 1024 */
+/* swy: format 5 seems to be grayscale, 1 too, 2 has colors, takes double of space, 3 no banner, 4 no banner, 6 seems same at 2 */
+/* swy: 1/5 = 1 byte is 1 pixel, 2/6 = colors, 0/3/7 = none */
+local uint banner_byte_size = (96 * 32) * ((gci_head.banner_format == 2) ? 2 : (gci_head.banner_format == 6) ? 2 : 1);
+local uint   icon_byte_size = (32 * 32) * 1.5; /* swy: usually 0x600 bytes per icon */
+
+byte gci_img_banner[banner_byte_size]; /* swy: banner goes first, if any. then the icon, many eurocom games take 0x2000 for both, so I thought it was static */
+byte gci_img_icon  [icon_byte_size*6];
+
+/* -- */
 
 Assert(gci_head.game_id[1] == '2' && gci_head.game_id[2] == 'O', "This doesn't look like a Prince of Persia: Warrior Within GameCube save. Stopping.");
 
