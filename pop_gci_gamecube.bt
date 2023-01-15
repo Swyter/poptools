@@ -39,7 +39,7 @@ local uint banner_byte_size = 0x200 + (96 * 32) * ((gci_head.banner_format == 2)
 local uint   icon_byte_size = (32 * 32) * 1.5; /* swy: usually 0x600 bytes per icon*/
 
 byte gci_img_banner[banner_byte_size]; /* swy: banner goes first, if any. then the icon, many eurocom games take 0x2000 for both, so I thought it was static */
-byte gci_img_icon  [icon_byte_size * 6]; /* swy: 0x2200, 6 images */
+byte gci_img_icon  [(32 * 32 * 8) + 0x200]; /* swy: 0x2200, 6 images */
 
 /* -- */
 
