@@ -20,7 +20,7 @@ struct
     char game_tag[4 + 28];
     uint variable_size_thing_timestamp_maybe <format=hex>;
     uint graphic_assets_offset <format=hex>;
-    union { ushort val; struct { ushort a:2; ushort b:2; ushort c:2; ushort d:2; ushort e:2; ushort f:2; ushort g:2; ushort h:2; } ind; } icon_frame_color_fmt; /* swy: seems like each nibble controls the format of two frames, so there's probably a maximum of 8 frames */
+    union { ushort val; struct { ushort h:2; ushort g:2; ushort f:2; ushort e:2; ushort d:2; ushort c:2; ushort b:2; ushort a:2; } ind; } icon_frame_color_fmt; /* swy: seems like each nibble controls the format of two frames, so there's probably a maximum of 8 frames */
     ushort icon_anim_speed_data; /* swy: top bit of the second nibble controls animation speed, rest controls the amount of frames somehow */
 
     ushort unk_a, unk_b;
@@ -51,7 +51,7 @@ local uint has_palette = (gci_head.banner_format & 0b11) == 1; /* swy: third bit
 local uint banner_byte_size = (96 * 32) * (has_palette ? 1 : 2);
 local uint   icon_byte_size = (32 * 32) * 1.5; /* swy: usually 0x600 bytes per icon*/
 
-if (gci_head.banner_format != 0)
+if ((gci_head.banner_format & 0b11) != 0)
 {
     byte gci_img_banner[banner_byte_size]; /* swy: banner goes first, if any. then the icon, many eurocom games take 0x2000 for both, so I thought it was static */
     if (has_palette) byte gci_img_banner_pal[0x200];
@@ -66,11 +66,12 @@ local uint frame_count = ((gci_head.icon_frame_color_fmt.ind.a != 0) ? 1 : 0) +
                          ((gci_head.icon_frame_color_fmt.ind.g != 0) ? 1 : 0) +
                          ((gci_head.icon_frame_color_fmt.ind.h != 0) ? 1 : 0);
 
-local uint i = 0; struct icon_t { byte data[32 * 32 * (gci_head.icon_frame_color_fmt.ind.h==1 ? 1 : 2)]; };
+/* swy: we should check each entry individually instead of only a, but the C standard doesn't allow arrays of bitfields */
+local uint i = 0; struct icon_t { byte data[32 * 32 * (gci_head.icon_frame_color_fmt.ind.a==1 ? 1 : 2)]; };
 for (i = 0; i < frame_count; i++)
     icon_t gci_img_icon; /* swy: 0x2200, 8 images */
 
-if (gci_head.icon_frame_color_fmt.ind.h==1) byte gci_img_icon_pal[0x200];
+if (gci_head.icon_frame_color_fmt.ind.a==1) byte gci_img_icon_pal[0x200];
 
 /* -- */
 
