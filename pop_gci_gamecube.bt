@@ -100,8 +100,8 @@ if (!(gci_head.game_id[1] == '2' && gci_head.game_id[2] == 'O'))
 } //Assert(gci_head.game_id[1] == '2' && gci_head.game_id[2] == 'O', "This doesn't look like a Prince of Persia: Warrior Within GameCube save. Stopping.");
 
 FSeek(0x3080);
-uint head_marker <format=hex>; /* swy: ABCDEF00h */
+uint ubi_head_marker <format=hex>; /* swy: ABCDEF00h */
 byte slot_a[0xca1c]; uint pad_align;
 byte slot_b[0xca1c]; uint pad_align;
 byte slot_c[0xca1c]; uint pad_align;
-uint checksum <format=hex>, tail_marker <format=hex>; /* swy: 00FEDCBAh */
+uint checksum <format=hex>, ubi_tail_marker <format=hex>; /* swy: 00FEDCBAh */
