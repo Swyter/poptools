@@ -11,18 +11,19 @@
 
 char magic[4]; uint one;
 
-uint offset <format=hex>, png_file_offset <format=hex> /* swy: +130h */, zero, png_file_size <format=hex>;
-ubyte md5_checksum_maybe[16] <format=hex>;
-
+uint data_offset <format=hex>, png_file_offset <format=hex> /* swy: +130h */, zero, png_file_size <format=hex>;
+ubyte md5_checksum_game_id_maybe[16] <format=hex>; /* 08 31 D4 06 F3 E6 1D 48 B3 DA 92 DD 9D CD B3 E9 */
 
 wchar_t game_title[800h / 2];
 wchar_t game_subtitle[1800h / 2];
 
 uint one, constant <format=hex>, size <format=hex>; ushort year; ubyte month, day;
-ubyte hour, minute, second; uint a, b; char id[42];
+ubyte hour, minute, second; uint offset_to_next_section, one; char map_id[42];
 wchar_t place[258 / 2];
 
-uint block_size <format=hex>, a,b,c,d,e,f,g;
+uint block_size <format=hex>;
+ubyte block_data[block_size];
+uint a,b,c,d,e,f,g[80];
 
 FSeek(png_file_offset + 0x130);
 
