@@ -18,8 +18,7 @@ wchar_t game_title[800h / 2];
 wchar_t game_subtitle[1800h / 2];
 
 uint one, constant, size; ushort year; ubyte month, day;
-
-ubyte a,b,c,d,e,f,g,h; ubyte pad[3]; char id[42];
+ubyte hour, minute, second; uint a, b; char id[42];
 wchar_t place[255 / 2];
 
 FSeek(png_file_offset + 0x130);
