@@ -1,0 +1,20 @@
+//------------------------------------------------
+//--- 010 Editor v13.0.1 Binary Template
+//
+//      File: Prince of Persia (2008) - Saved game
+//   Authors: Swyter
+//   Version: 2023.01.19
+//  Category: Game
+// File Mask: *.PoPSavedGame
+//  ID Bytes: 52 47 4D 48
+//------------------------------------------------
+
+char magic[4];
+
+uint one, offset, thing, thing, thing, thing, thing, thing, thing;
+
+
+wchar_t game_title[800h / 2];
+wchar_t game_subtitle[1800h / 2];
+
+uint more;
