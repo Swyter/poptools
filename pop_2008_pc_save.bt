@@ -11,10 +11,14 @@
 
 char magic[4];
 
-uint one, offset, thing, thing, thing, thing, thing, thing, thing;
+uint one, offset, png_file_offset /* swy: +130h */, thing, thing, thing, thing, thing, thing;
 
 
 wchar_t game_title[800h / 2];
 wchar_t game_subtitle[1800h / 2];
 
 uint more;
+
+FSeek(png_file_offset + 0x130);
+
+ubyte embedded_png_file[FileSize() - FTell()];
