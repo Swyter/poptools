@@ -17,7 +17,7 @@ uint one, offset, png_file_offset /* swy: +130h */, zero, png_file_size, thing, 
 wchar_t game_title[800h / 2];
 wchar_t game_subtitle[1800h / 2];
 
-uint more[68 / 4]; ubyte a; wchar_t place[100];
+uint one, constant, size; ushort year; ubyte month, day; uint more[(68 / 4) - 4]; ubyte a; wchar_t place[100];
 
 FSeek(png_file_offset + 0x130);
 
