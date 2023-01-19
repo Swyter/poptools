@@ -9,17 +9,20 @@
 //  ID Bytes: 52 47 4D 48
 //------------------------------------------------
 
-char magic[4];
+char magic[4]; uint one;
 
-uint one, offset, png_file_offset /* swy: +130h */, zero, png_file_size, thing, thing, thing, thing;
+uint offset <format=hex>, png_file_offset <format=hex> /* swy: +130h */, zero, png_file_size <format=hex>;
+ubyte md5_checksum_maybe[16] <format=hex>;
 
 
 wchar_t game_title[800h / 2];
 wchar_t game_subtitle[1800h / 2];
 
-uint one, constant, size; ushort year; ubyte month, day;
+uint one, constant <format=hex>, size <format=hex>; ushort year; ubyte month, day;
 ubyte hour, minute, second; uint a, b; char id[42];
-wchar_t place[255 / 2];
+wchar_t place[258 / 2];
+
+uint block_size <format=hex>, a,b,c,d,e,f,g;
 
 FSeek(png_file_offset + 0x130);
 
