@@ -19,8 +19,10 @@ char scimitar_magic[4] /* RGMH (HMGR?, HManager?) */; uint scimitar_version /* s
 uint data_offset <format=hex>, png_file_offset <format=hex> /* swy: +130h */, zero_pad, png_file_size <format=hex>;
 GUID game_guid <format=hex>; /* Same as the ApplicationId in the Windows Game-Definition-File: POP 2008: {06D43108-E6F3-481D-B3DA-92DD9DCDB3E9}, POP: The Forgotten Sands: {E12F3AF6-6886-415A-B60B-D8D0CBBB2662} */
 
-struct { wchar_t _game_title   [ 800h / 2]; } game_title    <read=_game_title>; /* swy: none of these strings or padding gets validated */
-struct { wchar_t _game_subtitle[1800h / 2]; } game_subtitle <read=_game_subtitle>;
+struct { wchar_t _game_title[800h / 2]; } game_title <read=_game_title>; /* swy: none of these strings or padding gets validated */
+struct { wchar_t _game_descr[800h / 2]; } game_descr <read=_game_descr>;
+
+wchar_t game_str_buf_empty[800h / 2]; wchar_t game_str_buf_empty_b[800h / 2]; /* swy: the save code has another two empty buffers */
 
 uint subversion, constant <format=hex> /* swy: 2144DF1Ch (¿?) */, size <format=hex>;
 ushort year; ubyte month, day, hour, minute, second; /* swy: unlike the filename, here it's stored in UTC format */
@@ -42,7 +44,7 @@ else if (offset_to_next_section == 0x4) /* swy: POP TFS */
     uint extra_unk <format=hex>;
 }
 
-/* swy: offset_to_next_section points right into the custom per-game data */
+/* swy: offset_to_next_section points right into the actual custom per-game data */
 FSeek(startof(offset_to_next_section) + sizeof(offset_to_next_section) + offset_to_next_section);
 
 uint block_size <format=hex>;
