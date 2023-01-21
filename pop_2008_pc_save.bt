@@ -18,8 +18,11 @@ wchar_t game_title[800h / 2]; /* swy: none of these strings or padding gets vali
 wchar_t game_subtitle[1800h / 2];
 
 uint one, constant <format=hex> /* swy: 2144DF1Ch (¿?) */, size <format=hex>;
-ushort year; ubyte month, day; ubyte hour, minute, second; /* swy: unlike the filename, here it's stored in UTC format */
-uint offset_to_next_section, one; char map_id[42];
+ushort year; ubyte month, day, hour, minute, second; /* swy: unlike the filename, here it's stored in UTC format */
+
+uint offset_to_next_section; /* swy: the game first reads the first 0x203f bytes of the file, just past offset_to_next_section */
+
+uint one; char map_id[42];
 wchar_t place[258 / 2]; /* swy: localized for the end-user, same as game_subtitle, I think */
 
 
@@ -27,9 +30,9 @@ FSeek(startof(offset_to_next_section) + sizeof(offset_to_next_section) + offset_
 
 /* swy: offset_to_next_section points right here */
 uint block_size <format=hex>;
-uint block_data[block_size / 4] <format=hex>;
+ubyte block_data[block_size] <format=hex>; /* swy: 4 bytes too big in POP:TFS, overlaps with the PNG, WTH? */
 // uint a,b,c,d,e,f,g[80];
 
 /* swy: there's a normal/generic 256x256px, square, PNG-based icon at the end */
-FSeek(png_file_offset + 0x130); //Assert(png_file_size == (FileSize() - FTell()), "PNG size doesn't match what's in the header");
+FSeek(png_file_offset + offset_to_next_section); //Assert(png_file_size == (FileSize() - FTell()), "PNG size doesn't match what's in the header");
 ubyte embedded_png_file[png_file_size]; /* swy: the image file is independently checksummed but can be moved around */
