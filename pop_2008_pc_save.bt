@@ -9,12 +9,12 @@
 //  ID Bytes: 52 47 4D 48
 //------------------------------------------------
 
-char magic[4] /* RGMH (HMGR?, HManager?) */; uint version /* swy: one */; Assert(magic == "RGMH" && version == 1, "Header version doesn't seem to match");
+char magic[4] /* RGMH (HMGR?, HManager?) */; uint version /* swy: one */; //Assert(magic == "RGMH" && version == 1, "Header version doesn't seem to match");
 
-uint data_offset <format=hex>, png_file_offset <format=hex> /* swy: +130h */, zero, png_file_size <format=hex>;
+uint data_offset <format=hex>, png_file_offset <format=hex> /* swy: +130h */, zero_pad, png_file_size <format=hex>;
 ubyte md5_checksum_game_id_maybe[16] <format=hex>; /* 08 31 D4 06 F3 E6 1D 48 B3 DA 92 DD 9D CD B3 E9 */
 
-wchar_t game_title[800h / 2];
+wchar_t game_title[800h / 2]; /* swy: none of these strings or padding gets validated */
 wchar_t game_subtitle[1800h / 2];
 
 uint one, constant <format=hex> /* swy: 2144DF1Ch (¿?) */, size <format=hex>;
@@ -22,11 +22,14 @@ ushort year; ubyte month, day; ubyte hour, minute, second; /* swy: unlike the fi
 uint offset_to_next_section, one; char map_id[42];
 wchar_t place[258 / 2]; /* swy: localized for the end-user, same as game_subtitle, I think */
 
+
+FSeek(startof(offset_to_next_section) + sizeof(offset_to_next_section) + offset_to_next_section);
+
 /* swy: offset_to_next_section points right here */
 uint block_size <format=hex>;
 uint block_data[block_size / 4] <format=hex>;
 // uint a,b,c,d,e,f,g[80];
 
 /* swy: there's a normal/generic 256x256px, square, PNG-based icon at the end */
-FSeek(png_file_offset + 0x130); Assert(png_file_size == (FileSize() - FTell()), "PNG size doesn't match what's in the header");
-ubyte embedded_png_file[png_file_size];
+FSeek(png_file_offset + 0x130); //Assert(png_file_size == (FileSize() - FTell()), "PNG size doesn't match what's in the header");
+ubyte embedded_png_file[png_file_size]; /* swy: the image file is independently checksummed but can be moved around */
