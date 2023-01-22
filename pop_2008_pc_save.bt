@@ -48,8 +48,8 @@ else if (offset_to_next_section == 0x4) /* swy: POP TFS */
 FSeek(startof(offset_to_next_section) + sizeof(offset_to_next_section) + offset_to_next_section);
 
 uint block_size <format=hex>;
-uint block_data[block_size / 4] <format=hex>; /* swy: 4 bytes too big in POP:TFS, overlaps with the PNG, WTH? */
-// uint a,b,c,d,e,f,g[80];
+//uint block_data[block_size / 4] <format=hex>; /* swy: 4 bytes too big in POP:TFS, overlaps with the PNG, WTH? */
+uint constant; ubyte padd[18]; struct { uint a,b,c,d,e,f,g,h; ubyte pad[3]; } test[500];
 
 /* swy: there's a generic square 256x256px PNG icon concatenated at the end, based on the cover art */
 FSeek(sav_start + png_file_offset + offset_to_next_section); Assert(png_file_size == (FileSize() - FTell()), "PNG size doesn't match what's in the header");
