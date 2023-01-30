@@ -17,7 +17,10 @@ uint elem_count, thong; uint more[12];
 uint unk <format=hex>; struct
 {
     uint offset <format=hex>, b <format=hex>;
-    local uint cur_pos = FTell(); FSeek(offset); uint data; FSeek(cur_pos);
+    /* -- */
+    local uint cur_pos = FTell(); FSeek(offset);
+    uint size <format=hex>; ubyte data[size]; /* swy: the first four bytes of the pointed data block specify its size */
+    FSeek(cur_pos);
 
 } list[elem_count] <optimize=false, read=Str("%X %X", offset, b)>; uint empty;
 
