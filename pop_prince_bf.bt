@@ -24,9 +24,9 @@ uint unk <format=hex>; struct
 
 } list[elem_count] <optimize=false, read=Str("%X %X", offset, b)>; uint empty;
 
-     if (version == 37     ) FSeek(0x1796EC);
-else if (elem_count == 5346) FSeek(0x1C90AC);
-else if (elem_count == 6648) FSeek(0x1C34EC);
+     if (version == 37 && elem_count == 3308) FSeek(0x1796EC);
+else if (version == 38 && elem_count == 5346) FSeek(0x1C90AC);
+else if (version == 38 && elem_count == 6648) FSeek(0x1C34EC);
  // sot/prince.bf: 1796ECh; ww/prince.bf: 1C90ACh; pop3.bf: 0x1C34EC
 
 struct { ubyte data[0x54]; } string_table[elem_count];
