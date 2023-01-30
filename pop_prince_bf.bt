@@ -13,9 +13,14 @@ char magic[4]; // BIG
 uint version;
 
 uint elem_count, elem_thing; uint64 long_zero; uint64 long_ffff <format=hex>;
-uint big_a <format=hex>, one, constant <format=hex>, elem_count_b, elem_thing_b, fourty_four <format=hex>, fffs <format=hex>, zero;
+uint big_a <format=hex>;
 
-uint big_b <format=hex>; struct
+uint one, constant <format=hex>;
+
+uint elem_count_b<comment="same as elem_thing">, elem_thing_b, elem_start_offset <format=hex>, fffs <format=hex>, zero;
+uint big_b <format=hex>;
+
+struct
 {
     uint offset <format=hex>, b <format=hex>;
     /* -- */
