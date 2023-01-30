@@ -12,4 +12,9 @@
 char magic[4]; // BIG
 uint version;
 
-uint thing, thong;
+uint thing, thong; uint more[12];
+
+struct { uint a, b; } list[50] <read=Str("%x %x", a, b)>;
+
+
+// swy: string table: 17:96ECh  FC A7 00 00                                      ü§..
