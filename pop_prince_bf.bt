@@ -14,7 +14,7 @@ uint version;
 
 uint thing, thong; uint more[12];
 
-struct { uint a, b; } list[50] <read=Str("%x %x", a, b)>;
+uint unk; struct { uint a, b; } list[thing] <read=Str("%x %x", a, b)>; uint empty;
 
 
 // swy: string table: 17:96ECh  FC A7 00 00                                      ü§..
