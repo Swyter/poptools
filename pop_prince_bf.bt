@@ -19,10 +19,14 @@ uint unk <format=hex>; struct
     uint offset <format=hex>, b <format=hex>;
     /* -- */
     local uint cur_pos = FTell(); FSeek(offset);
-    uint size <format=hex>; ubyte data[size]; /* swy: the first four bytes of the pointed data block specify its size */
+    uint size <format=hex>; ubyte data[size] <bgcolor=cRed>; /* swy: the first four bytes of the pointed data block specify its size */
     FSeek(cur_pos);
 
 } list[elem_count] <optimize=false, read=Str("%X %X", offset, b)>; uint empty;
 
+
+FSeek(0x1C34EC); // sot/prince.bf: 1796ECh; ww/prince.bf: 1C90ACh; pop3.bf: 0x1C34EC
+
+struct { ubyte data[0x54]; } string_table[elem_count];
 
 // swy: string table: 17:96ECh  FC A7 00 00                                      ü§..
