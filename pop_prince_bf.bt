@@ -31,4 +31,6 @@ else if (version == 38 && elem_count == 6648) FSeek(0x1C34EC);
 
 struct { int a <format=hex>, counter_a, counter_b, d <format=hex>, e <format=hex>; char str[64]; } string_table[elem_count] <read=Str("%X %i %i %X %X - %s", a, counter_a, counter_b, d, e, str)>;
 
+FSeek(startof(empty)); ubyte space_between[startof(string_table) - startof(empty)] <bgcolor=cGreen>;
+
 // swy: string table: 17:96ECh  FC A7 00 00                                      ü§..
