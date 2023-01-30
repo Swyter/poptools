@@ -14,7 +14,12 @@ uint version;
 
 uint elem_count, thong; uint more[12];
 
-uint unk <format=hex>; struct { uint offset <format=hex>, b <format=hex>; } list[elem_count] <read=Str("%X %X", offset, b)>; uint empty;
+uint unk <format=hex>; struct
+{
+    uint offset <format=hex>, b <format=hex>;
+    local uint cur_pos = FTell(); FSeek(offset); uint data; FSeek(cur_pos);
+
+} list[elem_count] <optimize=false, read=Str("%X %X", offset, b)>; uint empty;
 
 
 // swy: string table: 17:96ECh  FC A7 00 00                                      ü§..
