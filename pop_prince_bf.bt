@@ -39,4 +39,11 @@ struct { int a <format=hex>, counter_a, counter_b, d <format=hex>, e <format=hex
 
 FSeek(startof(empty)); ubyte space_between[startof(string_table) - startof(empty)] <bgcolor=cGreen>;
 
-// swy: string table: 17:96ECh  FC A7 00 00                                      ü§..
+
+local uint i = 0;
+
+for (i = 0; i < elem_count; i++)
+{
+    FSeek(list[i].offset);
+    struct { uint len <format=hex, bgcolor=cAqua>; ubyte data[len]; local string filename = string_table[i].str; } file <read=filename>;
+}
