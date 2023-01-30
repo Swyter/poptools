@@ -29,6 +29,6 @@ else if (version == 38 && elem_count == 5346) FSeek(0x1C90AC);
 else if (version == 38 && elem_count == 6648) FSeek(0x1C34EC);
  // sot/prince.bf: 1796ECh; ww/prince.bf: 1C90ACh; pop3.bf: 0x1C34EC
 
-struct { uint data[(0x54 - 64)/4] <format=hex>; char str[64]; } string_table[elem_count] <read=str>;
+struct { int a <format=hex>, counter_a, counter_b, d <format=hex>, e <format=hex>; char str[64]; } string_table[elem_count] <read=Str("%X %i %i %X %X - %s", a, counter_a, counter_b, d, e, str)>;
 
 // swy: string table: 17:96ECh  FC A7 00 00                                      ü§..
