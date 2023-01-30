@@ -12,9 +12,9 @@
 char magic[4]; // BIG
 uint version;
 
-uint thing, thong; uint more[12];
+uint elem_count, thong; uint more[12];
 
-uint unk; struct { uint a, b; } list[thing] <read=Str("%x %x", a, b)>; uint empty;
+uint unk <format=hex>; struct { uint offset <format=hex>, b <format=hex>; } list[elem_count] <read=Str("%X %X", offset, b)>; uint empty;
 
 
 // swy: string table: 17:96ECh  FC A7 00 00                                      ü§..
