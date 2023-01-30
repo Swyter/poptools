@@ -12,7 +12,8 @@
 char magic[4]; // BIG
 uint version;
 
-uint elem_count, thong; uint more[12] <format=hex>;
+uint elem_count, thong; uint64 long_zero; uint64 long_ffff <format=hex>;
+uint big_a <format=hex>, one, constant <format=hex>, cec <format=hex>, small <format=hex>, small_b <format=hex>, fffs <format=hex>, big_b <format=hex>;
 
 uint unk <format=hex>; struct
 {
