@@ -1,0 +1,15 @@
+//------------------------------------------------
+//--- 010 Editor v13.0.1 Binary Template
+//
+//      File: Prince of Persia Trilogy - prince.bf, pop3.bf format
+//   Authors: Swyter
+//   Version: 2023.01.30
+//  Category: Game
+// File Mask: *.bf
+//  ID Bytes: 42 49 47 00
+//------------------------------------------------
+
+char magic[4]; // BIG
+uint version;
+
+uint thing, thong;
