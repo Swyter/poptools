@@ -12,7 +12,7 @@
 char magic[4]; // BIG
 uint version;
 
-uint elem_count, thong; uint more[12]  <format=hex>;
+uint elem_count, thong; uint more[12] <format=hex>;
 
 uint unk <format=hex>; struct
 {
@@ -29,6 +29,6 @@ else if (version == 38 && elem_count == 5346) FSeek(0x1C90AC);
 else if (version == 38 && elem_count == 6648) FSeek(0x1C34EC);
  // sot/prince.bf: 1796ECh; ww/prince.bf: 1C90ACh; pop3.bf: 0x1C34EC
 
-struct { ubyte data[0x54 - 64]; char str[64]; } string_table[elem_count] <read=str>;
+struct { uint data[(0x54 - 64)/4] <format=hex>; char str[64]; } string_table[elem_count] <read=str>;
 
 // swy: string table: 17:96ECh  FC A7 00 00                                      ü§..
