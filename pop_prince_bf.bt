@@ -30,10 +30,11 @@ struct
 
 } list[elem_count] <optimize=false, read=Str("%X %X", offset, b)>; uint empty;
 
-     if (version == 37 && elem_count == 3308) FSeek(0x1796EC);
-else if (version == 38 && elem_count == 5346) FSeek(0x1C90AC);
-else if (version == 38 && elem_count == 6648) FSeek(0x1C34EC);
- // sot/prince.bf: 1796ECh; ww/prince.bf: 1C90ACh; pop3.bf: 0x1C34EC
+     if (version == 37 && elem_count == 3308) FSeek(0x1796EC); // sot/prince.bf: 1796ECh (pc)
+else if (version == 38 && elem_count == 5346) FSeek(0x1C90AC); //  ww/prince.bf: 1C90ACh (pc)
+else if (version == 38 && elem_count == 6648) FSeek(0x1C34EC); //  tt/  pop3.bf: 1C34ECh (pc)
+
+else if (version == 38 && elem_count == 3897) FSeek(0x1B5E84); //  ww/prince.bf: 1B5E84h (gc)
 
 struct { int a <format=hex>, counter_a, counter_b, d <format=hex>, e <format=hex>; char str[64]; } string_table[elem_count] <read=Str("%X %i %i %X %X - %s", a, counter_a, counter_b, d, e, str)>;
 
@@ -45,5 +46,5 @@ local uint i = 0;
 for (i = 0; i < elem_count; i++)
 {
     FSeek(list[i].offset);
-    struct { uint len <format=hex, bgcolor=cAqua>; ubyte data[len]; local string filename = string_table[i].str; } file <read=filename>;
+    struct { uint len <format=hex>; ubyte data[len]; local string filename = string_table[i].str; } file <read=filename>;
 }
