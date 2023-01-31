@@ -9,6 +9,8 @@
 //  ID Bytes: 42 49 47 00
 //------------------------------------------------
 
+LittleEndian();
+
 char magic[4]; // BIG
 uint version;
 
@@ -51,5 +53,18 @@ local uint i = 0;
 for (i = 0; i < elem_count; i++)
 {
     FSeek(list[i].offset);
-    struct { uint aligned_len <format=hex>; ubyte data[aligned_len]; local string filename = string_table[i].str; local uint st_aligned_len = string_table[i].aligned_len; } file <read=Str("%s (%x/%x)", filename, aligned_len, st_aligned_len)>;
+    struct {
+        uint aligned_len <format=hex>;
+
+        if (string_table[i].str == "size.grs")
+        {
+            struct { uint thingo <format=hex>, thungo <format=hex>; } thengo[elem_count] <read=Str("%x %x",thingo, thungo)>;
+        }
+        else
+            ubyte data[aligned_len];
+
+        local string       filename = string_table[i].str;
+        local   uint st_aligned_len = string_table[i].aligned_len;
+
+    } file <read=Str("%s (%x/%x)", filename, aligned_len, st_aligned_len)>;
 }
