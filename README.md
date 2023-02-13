@@ -70,11 +70,11 @@ It needs to be called from the _Options_ menu itself, does not seem to work from
 
 
 # Internal names
-| Game         | Codename | Engine |
-|--------------|------------|------------|
-| Prince of Persia: The Sands of Time | POP4       | Jade |
-| Prince of Persia: Warrior Within | POP5       | Jade |
-| Prince of Persia: The Two Thrones | POP3       | Jade |
-| Prince of Persia (*2008*) | POP0, POP09 |  Scimitar |
-| Prince of Persia: The Forgotten Sands | POPTM       | Scimitar |
-| Prince of Persia: The Forgotten Sands (*Wii variant*) | Djinn       | Jade |
+| Year | Game         | Codename | Engine | Team |
+|--------------|--------------|------------|------------|------------|
+| 2003 | Prince of Persia: The Sands of Time | POP4       | Jade | Montréal |
+| 2004 | Prince of Persia: Warrior Within | POP5       | Jade | Montréal |
+| 2005 | Prince of Persia: The Two Thrones | POP3       | Jade | Montréal |
+| 2008 | Prince of Persia (*2008*) | POP0, POP09 |  Scimitar | Montréal |
+| 2010 | Prince of Persia: The Forgotten Sands | POPTM       | Scimitar | Montréal |
+| 2010 | Prince of Persia: The Forgotten Sands (*Wii variant*) | Djinn       | Jade | Québec |
