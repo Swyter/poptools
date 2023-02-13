@@ -67,3 +67,11 @@ One of the (still unidentified) options causes the _Tab_ and _C_ keys to pause t
 Replace `P_SoundsMenu` with `P_VideoAdvanced` by hex-editing the string in the game's binary without affecting the other string's positions and ensuring it ends with `00`; a `NULL` terminator.
 
 It needs to be called from the _Options_ menu itself, does not seem to work from the main menu. _Options > Sounds_ will lead to it.
+
+
+# Internal names
+| Game         | Codename | Engine |
+|--------------|------------|------------|
+| Prince of Persia (*2008*) | POP0, POP09 |  Scimitar |
+| Prince of Persia: The Forgotten Sands | POPTM       | Scimitar |
+| Prince of Persia: The Forgotten Sands (*Wii variant*) | Djinn       | Jade |
