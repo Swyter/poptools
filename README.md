@@ -70,6 +70,7 @@ It needs to be called from the _Options_ menu itself, does not seem to work from
 
 
 # Internal names
+Here is a list of the project names that seem to be used internally for each of these games:
 | Year | Game         | Codename | Engine | Team |
 |--------------|--------------|------------|------------|------------|
 | 2003 | Prince of Persia: The Sands of Time | POP4       | Jade | Montréal |
@@ -78,3 +79,7 @@ It needs to be called from the _Options_ menu itself, does not seem to work from
 | 2008 | Prince of Persia (*2008*) | POP0, POP09 |  Scimitar | Montréal |
 | 2010 | Prince of Persia: The Forgotten Sands | POPTM       | Scimitar | Montréal |
 | 2010 | Prince of Persia: The Forgotten Sands (*Wii variant*) | Djinn       | Jade | Québec |
+
+# Fun facts
+
+* The PS2 version of *Warrior Within* includes a full standalone demo ISO disguised as padding files. On the NTSC version `PRINCE01.BF`, `PRINCE02.BF`, `PRINCE03.BF`, `PRINCE04.BF`, `PRINCE05.BF` under the `DATA` folder all hold multiple copies of the same PS2 disc image, on the PAL version the file is called both `DUMMY.PAD` and `DUMMY2.PAD`. It works out of the box with PCSX2. The SHA1 is `dbdec007953d67f480a6f5d2c91df01dd233cad9`.
