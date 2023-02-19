@@ -78,11 +78,11 @@ Here is a list of the project names that seem to be used internally for each of 
 | 2005 | Prince of Persia: The Two Thrones                     | POP3        | Jade, BIG file `v38` |                                | DARE | Montréal |
 | 2008 | Prince of Persia (*2008*)                             | POP0, POP09 |  Scimitar            |                                | DARE | Montréal |
 | 2010 | Prince of Persia: The Forgotten Sands                 | POPTM       | Scimitar             |                                | DARE| Montréal |
-| 2010 | Prince of Persia: The Forgotten Sands (*Wii variant*) | Djinn       | Jade, BIG file `v42` | Scaleform GFx, Ubisoft Technology Group GEAR, zlib, lzo | DARE |   Québec |
+| 2010 | Prince of Persia: The Forgotten Sands (*Wii variant*) | Djinn       | Jade, BIG file `v42` | Scaleform GFx, GEAR, zlib, lzo | DARE |   Québec |
 
 ## Libraries internal to Ubisoft's Technology Group:
- * `GEAR`: Generic engine abstraction layer/framework: Async, data containers, intrinsics, byte-swapping, platform-specific, input, logging, math, memory, C++ STL, stream, string, threading primitives like rwlock, atomics, and so on.
- * `DARE`: Sound engine. Seems to be split into `dare`, `dare_ext`, and `dare_plus`.
+ * `GEAR`: Generic engine C++ abstraction layer/framework; async, data containers, intrinsics, byte-swapping, platform-specific, input, logging, math, memory, C++ STL, I/O, stream, string, plus threading primitives like rwlock, atomics, and so on.
+ * `DARE`: Sound engine; seems to be split into `dare`, `dare_ext`, and `dare_plus`. Streaming, playback, 3D spatialization, signal filtering and audio effects. The system seems to be built around 3D objects in a map, with callbacks for interacting with the main game.
 
 # Fun facts
 
