@@ -84,6 +84,10 @@ Here is a list of the project names that seem to be used internally for each of 
  * `GEAR`: Generic engine C++ abstraction layer/framework; various special allocators, async, data containers, intrinsics, byte-swapping, platform-specific, input, logging, math, memory, C++ STL, I/O, stream, string, plus threading primitives like rwlock, atomics, and so on.
  * `DARE`: Sound engine; seems to be split into `dare`, `dare_ext`, and `dare_plus`. Streaming, playback, 3D spatialization, signal filtering and audio effects. The system seems to be built around 3D objects in a map, with callbacks for interacting with the main game.
 
+## Glossary
+* `LOA`: Loading subsystem, to retrieve BF archive data from the FAT descriptor.
+* `GAO`: Game object, they retain their names once exported.
+* `MDF`: Modified vertex data at runtime, an effect like the water displacement, wind, look-at or folliage that can be applied each frame to a mesh instance.
 # Fun facts
 
 * The PS2 version of *Warrior Within* includes a full standalone demo ISO disguised as padding files. On the NTSC version `PRINCE01.BF`, `PRINCE02.BF`, `PRINCE03.BF`, `PRINCE04.BF`, `PRINCE05.BF` under the `DATA` folder all hold multiple copies of the same PS2 disc image, on the PAL version the file is called both `DUMMY.PAD` and `DUMMY2.PAD`. It works out of the box with PCSX2. The SHA1 is `dbdec007953d67f480a6f5d2c91df01dd233cad9`.
