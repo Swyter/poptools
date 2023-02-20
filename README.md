@@ -86,7 +86,7 @@ Here is a list of the project names that seem to be used internally for each of 
 
 ## Glossary
 * `BIG`: Big file subsystem; files with the `.bf` extension that store most game assets. Each file stored in the container has a unique numeric 'key' that the game uses to retrieve it.
-* `LOA`: Loading subsystem, to retrieve BF archive data from the FAT descriptor.
+* `LOA`: Loading subsystem, to retrieve BF archive data from the FAT descriptor. This code reads generic data types and does endian-swapping as needed (the data is generally stored in little-endian everywhere, but the GameCube needs it in big-endian, so it has routines for flipping the bytes).
 * `GAO`: Game object, they retain their names once exported.
 * `MDF`: Modified vertex data at runtime, an effect like the wavy water displacement, wind, look-at rotator or folliage-moved-by-player that can be applied each frame to a mesh instance to transform it.
 # Fun facts
