@@ -73,12 +73,12 @@ It needs to be called from the _Options_ menu itself, does not seem to work from
 Here is a list of the project names that seem to be used internally for each of these games:
 | Year | Game         | Codename | Game engine | Frameworks + Middleware | Audio engine | Team |
 |------|--------------|----------|-------------|-------------------------|--------------|------|
-| 2003 | Prince of Persia: The Sands of Time                   | POP4        | Jade, BIG file `v37` | Vorbis, libpng 1.0.5 + zlib, lzo                      | DARE | Montréal |
-| 2004 | Prince of Persia: Warrior Within                      | POP5        | Jade, BIG file `v38` | Vorbis, libpng 1.0.5 + zlib, lzo                      | DARE | Montréal |
-| 2005 | Prince of Persia: The Two Thrones                     | POP3        | Jade, BIG file `v38` | GEAR, Vorbis, libpng 1.0.5 + zlib, lzo                | DARE | Montréal |
+| 2003 | Prince of Persia: The Sands of Time                   | POP4        | Jade, BIG file `v37` | Vorbis, libpng 1.0.5 + zlib, libjpeg 6b, lzo                      | DARE | Montréal |
+| 2004 | Prince of Persia: Warrior Within                      | POP5        | Jade, BIG file `v38` | Vorbis, libpng 1.0.5 + zlib, libjpeg 6b, lzo                      | DARE | Montréal |
+| 2005 | Prince of Persia: The Two Thrones                     | POP3        | Jade, BIG file `v38` | GEAR, Vorbis, libpng 1.0.5 + zlib, libjpeg 6b, lzo                | DARE | Montréal |
 | 2008 | Prince of Persia (*2008*)                             | POP0, POP09 | Scimitar             | Havok, GEAR, Vorbis, lzo               | DARE | Montréal |
 | 2010 | Prince of Persia: The Forgotten Sands                 | POPTM       | Scimitar             | Havok, GEAR, Vorbis, lzo               | DARE | Montréal |
-| 2010 | Prince of Persia: The Forgotten Sands (*Wii variant*) | Djinn       | Jade, BIG file `v42` | Scaleform GFx + zlib, GEAR, Vorbis, lzo | DARE |   Québec |
+| 2010 | Prince of Persia: The Forgotten Sands (*Wii variant*) | Djinn       | Jade, BIG file `v42` | Scaleform GFx + zlib, GEAR, Vorbis, libjpeg 6, lzo | DARE |   Québec |
 
 ## Libraries internal to Ubisoft's Technology Group:
  * `GEAR`: Generic engine C++ abstraction layer/framework; various special allocators, async, data containers, intrinsics, byte-swapping, platform-specific, input, logging, math, memory, C++ STL, I/O, stream, string, plus threading primitives like rwlock, atomics, and so on.
