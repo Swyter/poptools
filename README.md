@@ -71,8 +71,8 @@ It needs to be called from the _Options_ menu itself, does not seem to work from
 
 # Internal names
 Here is a list of the project names that seem to be used internally for each of these games:
-| Year | Game         | Codename | Game engine | Frameworks + Middleware | Audio engine | Known debug symbols | Team |
-|------|--------------|----------|-------------|-------------------------|--------------|---------------|------|
+| Year | Game         | Codename | Game engine | Frameworks + Middleware | Audio engine | Symbols | Team |
+|------|--------------|----------|-------------|-------------------------|:------------:|:--------:|------|
 | 2003 | Prince of Persia: The Sands of Time                   | POP4        | Jade, BIG file `v37` | Vorbis, libpng 1.0.5 + zlib, libjpeg 6b, lzo                      | DARE | ✓ | Montréal |
 | 2004 | Prince of Persia: Warrior Within                      | POP5        | Jade, BIG file `v38` | Vorbis, libpng 1.0.5 + zlib, libjpeg 6b, lzo                      | DARE |  | Montréal |
 | 2005 | Prince of Persia: The Two Thrones                     | POP3        | Jade, BIG file `v38` | GEAR, Vorbis, libpng 1.0.5 + zlib, libjpeg 6b, lzo                | DARE |  | Montréal |
