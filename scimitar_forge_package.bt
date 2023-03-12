@@ -16,8 +16,10 @@ char magic[9]; uint32 a, b,c, d,e; ubyte pad[0x3f9]; uint32 count, a, b, c, d, e
 
 struct
 {
-    uint a, b, c, offset <format=hex>;
-} file[count] <read=offset>;
+    uint a, b, size, offset <format=hex>;
+
+    local uint saved = FTell(); FSeek(offset); uint buf; FSeek(saved);
+} file[count] <read=offset, optimize=false>;
 
 uint trail[6];
 
