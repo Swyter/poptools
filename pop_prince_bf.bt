@@ -43,6 +43,7 @@ else if (hea.version == 38 && hea.elem_count == 3897) FSeek(0x1B5E84); //  ww/pr
 else if (hea.version == 38 && hea.elem_count == 5272) FSeek(0x1C07F4); //  ww/prince.bf: 1C07F4h (ps2)
 else if (hea.version == 38 && hea.elem_count ==  538) FSeek(0x10F34C); //  ww/prince.bf: 10F34Ch (ps2 demo disc ISO stored as DUMMY.PAD in the ps2 retail build ¯\_(ツ)_/¯)
 else if (hea.version == 42 && hea.elem_count == 2517) FSeek(0x009C84); //  tfs/djinn_bin_wii.bf:   9C84h (pal rvl version of the forgotten sands)
+else if (hea.version == 38 && hea.elem_count == 6432) FSeek(0x1A2DF4); //  tt/pop3.bf:   1A2DF4h (xbox prototype)
 
 /* swy: the string table seems more like a linked list, where entries point to the next and previous file entry */
 struct
@@ -73,7 +74,7 @@ for (i = 0; i < hea.elem_count; i++)
         local   uint st_aligned_len <format=hex> = string_table[i].aligned_len;
         local   uint             id <format=hex> = list[i].id;
 
-             if (id == 0xFC000001) // WOLInfo.bin
+             if (0 && id == 0xFC000001) // WOLInfo.bin
         {
             uint entries; struct { uint wol_info[(st_aligned_len / 4) / entries] <format=hex>; } wol_entry[entries] <optimize=false>;
         }
