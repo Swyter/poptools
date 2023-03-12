@@ -1,0 +1,14 @@
+//------------------------------------------------
+//--- 010 Editor v13.0.1 Binary Template
+//
+//      File: Package files for Scimitar engine-based titles
+//   Authors: Swyter
+//   Version: 2023.03.12
+//   Purpose: 
+//  Category: 
+// File Mask: *.forge
+//  ID Bytes: 73 63 69 6D 69 74 61 72
+//------------------------------------------------
+
+
+char magic[9]; uint32 a, b,c, d,e,f;
