@@ -78,7 +78,7 @@ Here is a list of the project names that seem to be used internally for each of 
 | 2005 | Prince of Persia: The Two Thrones                     | POP3        | Jade, BIG file `v38` | GEAR, Vorbis, libpng 1.0.5 + zlib, libjpeg 6b, lzo                | DARE |  | Montréal |
 | 2008 | Prince of Persia (*2008*)                             | POP0, POP09 | Scimitar             | Havok 4.6.1-r1, GEAR, Vorbis, lzo               | DARE  |  | Montréal |
 | 2010 | Prince of Persia: The Forgotten Sands                 | POPTM       | Scimitar             | Havok 6.5.0-r1, GEAR, Quazal Net-Z and Rendez-Vous 2008.9 SP1, Vorbis, lzo               | DARE |  | Montréal |
-| 2010 | Prince of Persia: The Forgotten Sands (*Wii variant*) | Djinn       | Jade, BIG file `v42` | Scaleform GFx + zlib, GEAR, Vorbis, libjpeg 6, lzo | DARE  | ✓ |   Québec |
+| 2010 | Prince of Persia: The Forgotten Sands (*Wii variant*) | Djinn       | Jade, BIG file `v42` | Scaleform GFx + zlib, GEAR, Vorbis, libjpeg 6, lzo | DARE 34.0.21 | ✓ |   Québec |
 
 ## Libraries internal to Ubisoft's Technology Group:
  * `GEAR`: Generic engine C++ abstraction layer/framework; various special allocators, async, data containers, intrinsics, byte-swapping, platform-specific, input, logging, math, memory, C++ STL, I/O, stream, string, plus threading primitives like rwlock, atomics, and so on.
