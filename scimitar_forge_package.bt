@@ -16,7 +16,7 @@ char magic[9]; uint32 a, b,c, d,e; ubyte pad[0x3f9]; uint32 count, a, b, c, d, e
 
 struct
 {
-    uint a, b, size, offset <format=hex>;
+    uint a, key <format=hex>, size, offset <format=hex>;
 
     local uint saved = FTell(); FSeek(offset); char filedata[8]; char tag[383]; FSeek(saved);
 } file[count] <read=Str("[/] %x / %s", offset, tag), optimize=false>;
@@ -27,5 +27,5 @@ FSeek(0x13CEE);
 
 struct
 {
-    uint a <format=hex>, b <format=hex>, c <format=hex>, d44, e55, b66, c77 <format=hex>; int next_index, prev_index; uint bee <format=hex>, ccc <format=hex>; char filename[128]; byte pad[16];
+    uint size_maybe <format=hex>, b <format=hex>, c <format=hex>, d44, e55, b66, c77 <format=hex>; int next_index, prev_index; uint bee <format=hex>, ccc <format=hex>; char filename[128]; byte pad[16];
 } entry[count] <read=filename>;
