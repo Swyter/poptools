@@ -18,8 +18,8 @@ struct
 {
     uint a, b, size, offset <format=hex>;
 
-    local uint saved = FTell(); FSeek(offset); uint buf; FSeek(saved);
-} file[count] <read=offset, optimize=false>;
+    local uint saved = FTell(); FSeek(offset); char filedata[8]; char tag[383]; FSeek(saved);
+} file[count] <read=Str("[/] %x / %s", offset, tag), optimize=false>;
 
 uint trail[6];
 
