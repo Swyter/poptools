@@ -11,4 +11,12 @@
 //------------------------------------------------
 
 
-char magic[9]; uint32 a, b,c, d,e,f;
+char magic[9]; uint32 a, b,c, d,e; ubyte pad[0x3f9]; uint32 count, a, b, c, d, e, f, g, h, i, j,k,l,n, a, b, c, d, e, f, g, h, i, j,k,l,n, a, b, c, d, e, f, g, h, i, j,k,l,n, a, b, c, d, e, f, g, h, i, j,k,l,n;
+
+
+FSeek(0x13CEE);
+
+struct
+{
+    uint a, b, c, d, e, b, c, d, e, b, c, d, e, b, c, d, e;
+} entry[count];
