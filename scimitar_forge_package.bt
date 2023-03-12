@@ -18,5 +18,5 @@ FSeek(0x13CEE);
 
 struct
 {
-    uint a, b, c, d, e, b, c, d, e, b, c, d, e, b, c, d, e;
+    uint a, b, c, d, e, b, c, d, eee, b, ccc; char filename[128]; byte pad[16];
 } entry[count];
