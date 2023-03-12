@@ -11,8 +11,15 @@
 //------------------------------------------------
 
 
-char magic[9]; uint32 a, b,c, d,e; ubyte pad[0x3f9]; uint32 count, a, b, c, d, e, f, g33, h, i, count_b ,k,l,n, a, b, c, d, e, f, offset, h, offset_b, j,k,l,n, a, b, c, d, e, f, g, h, i, j,k,l,n, a, b, c, d, e, f, g, h, i, j,k,l,n;
+char magic[9]; uint32 a, b,c, d,e; ubyte pad[0x3f9]; uint32 count, a, b, c, d, e, f, g33, h, i, count_b ,k,l,n, a, b, c, d, e;
 
+
+struct
+{
+    uint a, b, c, offset <format=hex>;
+} file[count] <read=offset>;
+
+uint trail[6];
 
 FSeek(0x13CEE);
 
