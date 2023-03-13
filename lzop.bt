@@ -26,7 +26,7 @@ typedef struct
     struct 
     {
         ushort bcd_ver <format=hex>, bcd_ver_b <format=hex>, bcd_ver_c <format=hex>;
-        ubyte me_a, me_b; uint fl <format=hex>, mo <format=octal>;
+        ubyte me_a, me_b; uint flags <format=hex>, mode_permissions <format=octal>;
     
         time_t mod_time, mod_time_b <comment="swy: modification time, one of them should be the creation time, I think?">;
         byte len; char filename[len] <bgcolor=cRed, comment="swy: original file name of the packed file">;
@@ -51,16 +51,26 @@ typedef struct
         {
             uint dec_size <format=hex, bgcolor=cDkBlue, comment="swy: size of the decompressed file">,
                 comp_size <format=hex, bgcolor=cDkBlue, comment="swy: size of the compressed buffer that follows">;
-            
-            uint adler_data_ck <format=hex, bgcolor=cBlue, comment="swy: this is a checksum of the *uncompressed* data">;
+
+            if (checksummed_header.flags & 1) /* swy: when -F, --no-checksum is not used */
+                uint adler_data_ck <format=hex, bgcolor=cBlue, comment="swy: this is a checksum of the *uncompressed* data">;
+            else
+                local uint adler_data_ck = 0;
+
+            if (checksummed_header.flags & 0x1000)
+                uint crc32_data_ck;
+
             ubyte data_buf[comp_size] <bgcolor=cDkYellow, comment="swy: the real compressed data">;
             
-            local uint64 computed_adler_data_ck = Checksum(CHECKSUM_ADLER32, startof(data_buf), comp_size);
-            
-            Printf(
-                "[i] data adler32 checksum: %#010x, computed: %#010x (%s)\n\n", adler_data_ck,   computed_adler_data_ck,
-                                                                                adler_data_ck == computed_adler_data_ck ? "OK" : "BAD"
-            );
+            if (checksummed_header.flags & 1)
+            {
+              //  local uint64 computed_adler_data_ck = Checksum(CHECKSUM_ADLER32, startof(data_buf), comp_size);
+              //  
+              //  Printf(
+              //      "[i] data adler32 checksum: %#010x, computed: %#010x (%s)\n\n", adler_data_ck,   computed_adler_data_ck,
+              //                                                                      adler_data_ck == computed_adler_data_ck ? "OK" : "BAD"
+              //  );
+            }
 
             cumulative_dec_size += dec_size; cumulative_comp_size += comp_size; block_count++;
           
