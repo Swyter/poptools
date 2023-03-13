@@ -81,7 +81,7 @@ typedef struct
 
             cumulative_dec_size += dec_size; cumulative_comp_size += comp_size; block_count++;
           
-        } block <read=Str("(%#x/%x) comp: %u%% -- uncomp'd %s ck: %x", dec_size, comp_size, comp_size * 100 / dec_size, parentof(this).use_crc32_instead ? "crc32" : "adler32", checksum_data)>;
+        } block <read=Str("(%#x/%x) comp: %u%% -- uncomp'd %s ck: %x%s", dec_size, comp_size, comp_size * 100 / dec_size, parentof(this).use_crc32_instead ? "crc32" : "adler32", checksum_data, has_data_checksum ? "": ", no checksum!")>;
 
         /* swy: keep adding new blocks until the
                 next one starts with four zeroes */
