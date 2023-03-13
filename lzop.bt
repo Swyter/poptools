@@ -34,21 +34,30 @@ typedef struct
                                                                       adler_ck_head == computed_adler_head_ck ? "OK" : "BAD"
     );
     
-    uint dec_size <format=hex, bgcolor=cDkBlue, comment="swy: size of the decompressed file">,
-        comp_size <format=hex, bgcolor=cDkBlue, comment="swy: size of the compressed buffer that follows">;
-    
-    uint adler_data_ck <format=hex, bgcolor=cBlue, comment="swy: this is a checksum of the *uncompressed* data">;
-    ubyte data_buf[comp_size] <bgcolor=cDkYellow, comment="swy: the real compressed data">;
-    
-    local uint64 computed_adler_data_ck = Checksum(CHECKSUM_ADLER32, startof(data_buf), comp_size);
-    
-    Printf(
-        "[i] data adler32 checksum: %#010x, computed: %#010x (%s)\n\n", adler_data_ck,   computed_adler_data_ck,
-                                                                        adler_data_ck == computed_adler_data_ck ? "OK" : "BAD"
-    );
-    
+    /* swy: files bigger than 0x40000 seem to be split in independent chunks */
+    do
+    {
+        struct block
+        {
+            uint dec_size <format=hex, bgcolor=cDkBlue, comment="swy: size of the decompressed file">,
+                comp_size <format=hex, bgcolor=cDkBlue, comment="swy: size of the compressed buffer that follows">;
+            
+            uint adler_data_ck <format=hex, bgcolor=cBlue, comment="swy: this is a checksum of the *uncompressed* data">;
+            ubyte data_buf[comp_size] <bgcolor=cDkYellow, comment="swy: the real compressed data">;
+            
+            local uint64 computed_adler_data_ck = Checksum(CHECKSUM_ADLER32, startof(data_buf), comp_size);
+            
+            Printf(
+                "[i] data adler32 checksum: %#010x, computed: %#010x (%s)\n\n", adler_data_ck,   computed_adler_data_ck,
+                                                                                adler_data_ck == computed_adler_data_ck ? "OK" : "BAD"
+            );
+          
+        } blk;
+    } while(ReadUInt() != 0);
+
     uint zero_pad;
-} lzop_file <read=Str("[%s] comp: %u%%",checksummed_header.filename, comp_size * 100 / dec_size)>;
+
+} lzop_file <read=Str("[%s] comp: u%%",checksummed_header.filename)>; //, comp_size * 100 / dec_size)>;
 
 while (!FEof())
     lzop_file file;
