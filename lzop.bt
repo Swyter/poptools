@@ -45,8 +45,7 @@ typedef struct
                                                                        checksummed_header.filename
     );
     
-    /* swy: files bigger than 0x40000 seem to be split in independent chunks */
-
+    /* swy: files bigger than 0x40000 seem to be split in independent chunks; find out the total size */
     local uint64 cumulative_dec_size = 0, cumulative_comp_size = 0, block_count = 0;
 
     do
@@ -62,7 +61,7 @@ typedef struct
                 local uint adler_data_ck = 0;
 
             if ((checksummed_header.flags & 0x1000 /* swy: use crc32 in general instead of adler32 */) && (checksummed_header.flags & 0x100 /* swy: has a crc32 here at the block level */)) /* swy: --crc32 complicates the code for nothing; stupid */
-                uint crc32_data_ck;
+                uint crc32_data_ck <format=hex, bgcolor=cBlue, comment="swy: this is a checksum of the *uncompressed* data">;
 
             ubyte data_buf[comp_size] <bgcolor=cDkYellow, comment="swy: the real compressed data">;
             
@@ -80,12 +79,17 @@ typedef struct
           
         } block <read=Str("(%#x/%x) comp: %u%% -- uncomp'd %s ck: %x", dec_size, comp_size, comp_size * 100 / dec_size, parentof(this).use_crc32_instead ? "crc32" : "adler32", adler_data_ck)>;
 
+        /* swy: keep adding new blocks until the
+                next one starts with four zeroes */
         block blk;
+
     } while(ReadUInt() != 0);
 
     uint zero_pad <comment="swy: this being zero means that there isn't another concatenated file afterwards">;
 
 } lzop_file <read=Str("[%s] (%#x/%x) comp: %u%%, %u block%s", checksummed_header.filename, cumulative_dec_size, cumulative_comp_size, cumulative_comp_size * 100 / cumulative_dec_size, block_count, block_count > 1 ? "s" : "")>;
 
+/* swy: keep adding new consecutive LZOP files
+        until we reach the end of the file */
 while (!FEof())
     lzop_file file;
