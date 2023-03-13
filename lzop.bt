@@ -35,9 +35,12 @@ typedef struct
     );
     
     /* swy: files bigger than 0x40000 seem to be split in independent chunks */
+
+    local uint64 cumulative_dec_size = 0, cumulative_comp_size = 0, block_count = 0;
+
     do
     {
-        struct block
+        typedef struct
         {
             uint dec_size <format=hex, bgcolor=cDkBlue, comment="swy: size of the decompressed file">,
                 comp_size <format=hex, bgcolor=cDkBlue, comment="swy: size of the compressed buffer that follows">;
@@ -51,13 +54,17 @@ typedef struct
                 "[i] data adler32 checksum: %#010x, computed: %#010x (%s)\n\n", adler_data_ck,   computed_adler_data_ck,
                                                                                 adler_data_ck == computed_adler_data_ck ? "OK" : "BAD"
             );
+
+            cumulative_dec_size += dec_size; cumulative_comp_size += comp_size; block_count++;
           
-        } blk;
+        } block <read=Str("%#x/%x comp: %u%% -- uncomp'd adler ck: %x", dec_size, comp_size, comp_size * 100 / dec_size, adler_data_ck)>;
+
+        block blk;
     } while(ReadUInt() != 0);
 
     uint zero_pad;
 
-} lzop_file <read=Str("[%s] comp: u%%",checksummed_header.filename)>; //, comp_size * 100 / dec_size)>;
+} lzop_file <read=Str("[%s] comp: %u%%, %u block%s",checksummed_header.filename, cumulative_comp_size * 100 / cumulative_dec_size, block_count, block_count > 1 ? "s" : "")>;
 
 while (!FEof())
     lzop_file file;
