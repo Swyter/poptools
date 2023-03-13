@@ -4,8 +4,8 @@
 //      File: LZOP compressed file format
 //   Authors: Swyter
 //   Version: 2023.03.13
-//   Purpose: 
-//  Category: Compression
+//   Purpose: Parse LZO-compressed files with the LZOP header.
+//  Category: Archive
 // File Mask: *.lzo
 //  ID Bytes: 89 4C 5A 4F 00
 //------------------------------------------------
@@ -16,11 +16,11 @@ byte magic[5] <bgcolor=cDkGreen>; ubyte version_maybe[4];
 
 struct 
 {
-    ubyte always_the_same[16]; time_t mod_time, mod_time_b;
-    byte len; char filename[len] <bgcolor=cRed>;
+    ubyte always_the_same[16]; time_t mod_time, mod_time_b <comment="swy: modification time, one of them should be the creation time, I think?">;
+    byte len; char filename[len] <bgcolor=cRed, comment="swy: original file name of the packed file">;
 } checksummed_header <open=true, bgcolor=cDkPurple>;
 
-uint adler_ck_head <format=hex, bgcolor=cBlue>;
+uint adler_ck_head <format=hex, bgcolor=cBlue, comment="swy: checksum for the whole struct above">;
 
 local uint64 computed_adler_head_ck = Checksum(CHECKSUM_ADLER32, startof(checksummed_header), sizeof(checksummed_header));
 
@@ -29,10 +29,11 @@ Printf(
                                                                   adler_ck_head == computed_adler_head_ck ? "OK" : "BAD"
 );
 
-uint dec_size <format=hex, bgcolor=cDkBlue>, comp_size <format=hex, bgcolor=cDkBlue>;
+uint dec_size <format=hex, bgcolor=cDkBlue, comment="swy: size of the decompressed file">,
+    comp_size <format=hex, bgcolor=cDkBlue, comment="swy: size of the compressed buffer that follows">;
 
-uint adler_data_ck <format=hex, bgcolor=cBlue>; /* swy: this is a checksum of the uncompressed data */
-ubyte data_buf[comp_size] <bgcolor=cDkYellow>;
+uint adler_data_ck <format=hex, bgcolor=cBlue, comment="swy: this is a checksum of the uncompressed data">;
+ubyte data_buf[comp_size] <bgcolor=cDkYellow, comment="swy: the real compressed data">;
 
 local uint64 computed_adler_data_ck = Checksum(CHECKSUM_ADLER32, startof(data_buf), comp_size);
 
@@ -41,4 +42,4 @@ Printf(
                                                                   adler_data_ck == computed_adler_data_ck ? "OK" : "BAD"
 );
 
-uint zeros;
+uint zero_pad;
