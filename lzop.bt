@@ -43,8 +43,8 @@ typedef struct
     local uint64 computed_adler_data_ck = Checksum(CHECKSUM_ADLER32, startof(data_buf), comp_size);
     
     Printf(
-        "[i] data adler32 checksum: %#010x, computed: %#010x (%s)\n", adler_data_ck,   computed_adler_data_ck,
-                                                                      adler_data_ck == computed_adler_data_ck ? "OK" : "BAD"
+        "[i] data adler32 checksum: %#010x, computed: %#010x (%s)\n\n", adler_data_ck,   computed_adler_data_ck,
+                                                                        adler_data_ck == computed_adler_data_ck ? "OK" : "BAD"
     );
     
     uint zero_pad;
