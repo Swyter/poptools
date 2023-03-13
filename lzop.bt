@@ -1,0 +1,18 @@
+//------------------------------------------------
+//--- 010 Editor v13.0.1 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: *.lzo
+//  ID Bytes: 89 4C 5A 4F 00
+//   History: 
+//------------------------------------------------
+
+BigEndian();
+
+byte magic[5]; byte h[28]; byte len; char filename[len]; uint ck <format=hex>, dec_size <format=hex>, comp_size <format=hex>;
+
+ubyte buf[comp_size];
