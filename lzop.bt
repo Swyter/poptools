@@ -12,15 +12,28 @@
 
 BigEndian();
 
-byte magic[5] <bgcolor=cDkGreen>; ubyte u[20] <bgcolor=cDkPurple>; uint a, b;
+byte magic[5] <bgcolor=cDkGreen>; uint version_maybe; ubyte checksummed_header_start[16] <bgcolor=cDkPurple>; time_t mod_time, mod_time_b;
 
 byte len; char filename[len] <bgcolor=cRed>;
 
-uint ck_maybe <format=hex>, dec_size <format=hex>, comp_size <format=hex>;
+uint adler_ck_head <format=hex>;
+
+local uint64 computed_adler_head_ck = Checksum(CHECKSUM_ADLER32, startof(checksummed_header_start), sizeof(checksummed_header_start) + sizeof(mod_time) + sizeof(mod_time_b) + sizeof(len) + len);
+
+Printf(
+    "[i] head adler32 checksum: %#010x, computed: %#010x (%s)\n", adler_ck_head,   computed_adler_head_ck,
+                                                                  adler_ck_head == computed_adler_head_ck ? "OK" : "BAD"
+);
+
+uint dec_size <format=hex>, comp_size <format=hex>;
 uint adler_data_ck <format=hex>;
 ubyte buf[comp_size] <bgcolor=cDkYellow>;
 
 local uint64 computed_adler_data_ck = Checksum(CHECKSUM_ADLER32, startof(buf), comp_size);
-Printf("[i] data adler32 checksum: %x, computed: %x (%s)", adler_data_ck, computed_adler_data_ck, adler_data_ck == computed_adler_data_ck ? "OK" : "BAD");
+
+Printf(
+    "[i] data adler32 checksum: %#010x, computed: %#010x (%s)\n", adler_data_ck,   computed_adler_data_ck,
+                                                                  adler_data_ck == computed_adler_data_ck ? "OK" : "BAD"
+);
 
 uint zeros;
