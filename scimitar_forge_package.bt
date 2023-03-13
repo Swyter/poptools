@@ -18,7 +18,14 @@ struct
 {
     uint offset <format=hex>, unk_zero <format=hex>, key <format=hex>, size_maybe <format=hex>;
 
-    local uint saved = FTell(); FSeek(offset); char filedata[8]; char tag[383]; uint key <format=hex>, size_maybe <format=hex>, more[11] <format=hex>; ubyte buf[size_maybe]; byte after; FSeek(saved);
+    local uint saved = FTell(); FSeek(offset);
+
+    char filedata[8]; char tag[383];
+    uint key <format=hex>, size_maybe <format=hex>, more[11] <format=hex>;
+    ubyte buf[size_maybe]; byte after;
+
+    FSeek(saved);
+
 } file[count] <read=Str("[/] %x / %x / %s", offset, key, tag), optimize=false>;
 
 uint trail[6];
