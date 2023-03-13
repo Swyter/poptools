@@ -35,7 +35,10 @@ typedef struct
     
     uint checksum_head <format=hex, bgcolor=cBlue, comment="swy: checksum for the whole struct above; usually adler32, but can be changed to crc32 via command-line flags">;
     
+    /* swy: use crc32 in general instead of adler32; --crc32
+            complicates the code for nothing; stupid */
     local byte   use_crc32_instead = !!(checksummed_header.flags & 0x1000);
+
     local uint64 computed_checksum_head = Checksum(use_crc32_instead ? CHECKSUM_CRC32 : CHECKSUM_ADLER32, startof(checksummed_header), sizeof(checksummed_header));
     
     Printf(
@@ -55,13 +58,14 @@ typedef struct
             uint dec_size <format=hex, bgcolor=cDkBlue, comment="swy: size of the decompressed file">,
                 comp_size <format=hex, bgcolor=cDkBlue, comment="swy: size of the compressed buffer that follows">;
 
-            if (checksummed_header.flags & 1 /* swy: has an adler32 checksum here */) /* swy: when -F, --no-checksum is *not* used */
-                uint adler_data_ck <format=hex, bgcolor=cBlue, comment="swy: this is a checksum of the *uncompressed* data">;
-            else
-                local uint adler_data_ck = 0;
+            /* swy: when -F, --no-checksum is used some flags change to let us now */
+            local byte has_data___crc32_checksum =  parentof(this).use_crc32_instead && !!(checksummed_header.flags & 0x100); /* swy: has a crc32 here at the block level */
+            local byte has_data_adler32_checksum = !parentof(this).use_crc32_instead && !!(checksummed_header.flags & 0x001); /* swy: has an adler32 checksum here */
 
-            if ((checksummed_header.flags & 0x1000 /* swy: use crc32 in general instead of adler32 */) && (checksummed_header.flags & 0x100 /* swy: has a crc32 here at the block level */)) /* swy: --crc32 complicates the code for nothing; stupid */
-                uint crc32_data_ck <format=hex, bgcolor=cBlue, comment="swy: this is a checksum of the *uncompressed* data">;
+            local byte has_data_checksum = has_data___crc32_checksum || has_data_adler32_checksum;
+
+            if (has_data_checksum) uint checksum_data <format=hex, bgcolor=cBlue, comment="swy: this is a checksum of the *uncompressed* data">;
+            else             local uint checksum_data = 0; /* swy: dummy variable for display */
 
             ubyte data_buf[comp_size] <bgcolor=cDkYellow, comment="swy: the real compressed data">;
             
@@ -77,7 +81,7 @@ typedef struct
 
             cumulative_dec_size += dec_size; cumulative_comp_size += comp_size; block_count++;
           
-        } block <read=Str("(%#x/%x) comp: %u%% -- uncomp'd %s ck: %x", dec_size, comp_size, comp_size * 100 / dec_size, parentof(this).use_crc32_instead ? "crc32" : "adler32", adler_data_ck)>;
+        } block <read=Str("(%#x/%x) comp: %u%% -- uncomp'd %s ck: %x", dec_size, comp_size, comp_size * 100 / dec_size, parentof(this).use_crc32_instead ? "crc32" : "adler32", checksum_data)>;
 
         /* swy: keep adding new blocks until the
                 next one starts with four zeroes */
