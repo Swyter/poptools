@@ -14,8 +14,15 @@ BigEndian();
 
 typedef struct
 {
-    byte magic[5] <bgcolor=cDkGreen>; ubyte version_maybe[4];
-    
+    ubyte bin_marker <format=hex, comment="swy: binary escape marker for text editors">;
+    char magic[4] <bgcolor=cDkGreen>; ubyte version_maybe[4];
+
+    if (bin_marker != 0x89 || magic != "LZO") /* swy: ‰LZO */
+    {
+        Warning("swy: the LZO header doesn't match; probably you chose the wrong filetype. Bailing out.");
+        Exit(1);
+    }
+
     struct 
     {
         ushort bcd_ver <format=hex>, bcd_ver_b <format=hex>, bcd_ver_c <format=hex>;
@@ -62,7 +69,7 @@ typedef struct
         block blk;
     } while(ReadUInt() != 0);
 
-    uint zero_pad;
+    uint zero_pad <comment="swy: this being zero means that there isn't another concatenated file afterwards">;
 
 } lzop_file <read=Str("[%s] comp: %u%%, %u block%s",checksummed_header.filename, cumulative_comp_size * 100 / cumulative_dec_size, block_count, block_count > 1 ? "s" : "")>;
 
