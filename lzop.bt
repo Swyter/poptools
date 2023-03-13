@@ -12,7 +12,7 @@
 
 BigEndian();
 
-byte magic[5] <bgcolor=cDkGreen>; byte h[28];
+byte magic[5] <bgcolor=cDkGreen>; ubyte u[20] <bgcolor=cDkPurple>; uint a, b;
 
 byte len; char filename[len] <bgcolor=cRed>;
 
@@ -21,5 +21,6 @@ uint adler_data_ck <format=hex>;
 ubyte buf[comp_size] <bgcolor=cDkYellow>;
 
 local uint64 computed_adler_data_ck = Checksum(CHECKSUM_ADLER32, startof(buf), comp_size);
-Printf("data adler32 checksum: %x, computed: %x (%s)", adler_data_ck, computed_adler_data_ck, adler_data_ck == computed_adler_data_ck ? "OK" : "BAD");
+Printf("[i] data adler32 checksum: %x, computed: %x (%s)", adler_data_ck, computed_adler_data_ck, adler_data_ck == computed_adler_data_ck ? "OK" : "BAD");
+
 uint zeros;
