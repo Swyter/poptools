@@ -33,15 +33,15 @@ typedef struct
 
     } checksummed_header <open=true, bgcolor=cDkPurple>;
     
-    uint adler_ck_head <format=hex, bgcolor=cBlue, comment="swy: checksum for the whole struct above">;
+    uint checksum_head <format=hex, bgcolor=cBlue, comment="swy: checksum for the whole struct above; usually adler32, but can be changed to crc32 via command-line flags">;
     
     local byte   use_crc32_instead = !!(checksummed_header.flags & 0x1000);
-    local uint64 computed_adler_head_ck = Checksum(use_crc32_instead ? CHECKSUM_CRC32 : CHECKSUM_ADLER32, startof(checksummed_header), sizeof(checksummed_header));
+    local uint64 computed_checksum_head = Checksum(use_crc32_instead ? CHECKSUM_CRC32 : CHECKSUM_ADLER32, startof(checksummed_header), sizeof(checksummed_header));
     
     Printf(
         "[i] head %s checksum: %#010x, computed: %#010x (%s) -- %s\n", use_crc32_instead ? "crc32" : "adler32",
-                                                                       adler_ck_head,   computed_adler_head_ck,
-                                                                       adler_ck_head == computed_adler_head_ck ? "OK" : "BAD",
+                                                                       checksum_head,   computed_checksum_head,
+                                                                       checksum_head == computed_checksum_head ? "OK" : "BAD",
                                                                        checksummed_header.filename
     );
     
@@ -56,12 +56,12 @@ typedef struct
             uint dec_size <format=hex, bgcolor=cDkBlue, comment="swy: size of the decompressed file">,
                 comp_size <format=hex, bgcolor=cDkBlue, comment="swy: size of the compressed buffer that follows">;
 
-            if (checksummed_header.flags & 1) /* swy: when -F, --no-checksum is *not* used */
+            if (checksummed_header.flags & 1 /* swy: has an adler32 checksum here */) /* swy: when -F, --no-checksum is *not* used */
                 uint adler_data_ck <format=hex, bgcolor=cBlue, comment="swy: this is a checksum of the *uncompressed* data">;
             else
                 local uint adler_data_ck = 0;
 
-            if (checksummed_header.flags & 0x1000) /* swy: --crc32 complicates the code for nothing; stupid */
+            if ((checksummed_header.flags & 0x1000 /* swy: use crc32 in general instead of adler32 */) && (checksummed_header.flags & 0x100 /* swy: has a crc32 here at the block level */)) /* swy: --crc32 complicates the code for nothing; stupid */
                 uint crc32_data_ck;
 
             ubyte data_buf[comp_size] <bgcolor=cDkYellow, comment="swy: the real compressed data">;
