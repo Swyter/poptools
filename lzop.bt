@@ -1,18 +1,22 @@
 //------------------------------------------------
 //--- 010 Editor v13.0.1 Binary Template
 //
-//      File: 
-//   Authors: 
-//   Version: 
+//      File: LZOP compressed file format
+//   Authors: Swyter
+//   Version: 2023.03.13
 //   Purpose: 
-//  Category: 
+//  Category: Compression
 // File Mask: *.lzo
 //  ID Bytes: 89 4C 5A 4F 00
-//   History: 
 //------------------------------------------------
 
 BigEndian();
 
-byte magic[5]; byte h[28]; byte len; char filename[len]; uint ck <format=hex>, dec_size <format=hex>, comp_size <format=hex>;
+byte magic[5] <bgcolor=cDkGreen>; byte h[28];
 
-ubyte buf[comp_size];
+byte len; char filename[len] <bgcolor=cRed>;
+
+uint ck_maybe <format=hex>, dec_size <format=hex>, comp_size <format=hex>;
+uint more;
+ubyte buf[comp_size] <bgcolor=cDkYellow>;
+uint zeros;
