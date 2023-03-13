@@ -64,14 +64,14 @@ typedef struct
 
             cumulative_dec_size += dec_size; cumulative_comp_size += comp_size; block_count++;
           
-        } block <read=Str("%#x/%x comp: %u%% -- uncomp'd adler ck: %x", dec_size, comp_size, comp_size * 100 / dec_size, adler_data_ck)>;
+        } block <read=Str("(%#x/%x) comp: %u%% -- uncomp'd adler ck: %x", dec_size, comp_size, comp_size * 100 / dec_size, adler_data_ck)>;
 
         block blk;
     } while(ReadUInt() != 0);
 
     uint zero_pad <comment="swy: this being zero means that there isn't another concatenated file afterwards">;
 
-} lzop_file <read=Str("[%s] comp: %u%%, %u block%s",checksummed_header.filename, cumulative_comp_size * 100 / cumulative_dec_size, block_count, block_count > 1 ? "s" : "")>;
+} lzop_file <read=Str("[%s] (%#x/%x) comp: %u%%, %u block%s", checksummed_header.filename, cumulative_dec_size, cumulative_comp_size, cumulative_comp_size * 100 / cumulative_dec_size, block_count, block_count > 1 ? "s" : "")>;
 
 while (!FEof())
     lzop_file file;
