@@ -16,11 +16,11 @@ byte magic[5] <bgcolor=cDkGreen>; ubyte version_maybe[4];
 
 struct 
 {
-    ubyte always_the_same[16] <bgcolor=cDkPurple>; time_t mod_time, mod_time_b;
+    ubyte always_the_same[16]; time_t mod_time, mod_time_b;
     byte len; char filename[len] <bgcolor=cRed>;
-} checksummed_header <open=true>;
+} checksummed_header <open=true, bgcolor=cDkPurple>;
 
-uint adler_ck_head <format=hex>;
+uint adler_ck_head <format=hex, bgcolor=cBlue>;
 
 local uint64 computed_adler_head_ck = Checksum(CHECKSUM_ADLER32, startof(checksummed_header), sizeof(checksummed_header));
 
@@ -29,8 +29,9 @@ Printf(
                                                                   adler_ck_head == computed_adler_head_ck ? "OK" : "BAD"
 );
 
-uint dec_size <format=hex>, comp_size <format=hex>;
-uint adler_data_ck <format=hex>;
+uint dec_size <format=hex, bgcolor=cDkBlue>, comp_size <format=hex, bgcolor=cDkBlue>;
+
+uint adler_data_ck <format=hex, bgcolor=cBlue>; /* swy: this is a checksum of the uncompressed data */
 ubyte data_buf[comp_size] <bgcolor=cDkYellow>;
 
 local uint64 computed_adler_data_ck = Checksum(CHECKSUM_ADLER32, startof(data_buf), comp_size);
