@@ -30,7 +30,7 @@ FSeek(FileSize() - 32);
 uint weird_constants[32 / 4] <format=hex>;
 
 
-local uint m_WeirdConstant[8];
+local int m_WeirdConstant[8];
 
 m_WeirdConstant[0] = 0x011;
 m_WeirdConstant[1] = 0x05e;
@@ -54,15 +54,18 @@ local uint aligned_uint_count = (buf_end + (3 - buf)) >> 2;
         idx_a = (count + 3) * 4 & 0x1c;
         revoINO_gst_SavManager.m_WeirdConstant[count] = revoINO_gst_SavManager.m_WeirdConstant[count] + pBuf[0];
         count = (count + 3 & 7) + 3;
+
         idx_b = count * 4 & 0x1c;
         count = (count & 7) + 3;
-        revoINO_gst_SavManager.m_WeirdConstant[idx_a] = *(int *)((int)revoINO_gst_SavManager.m_WeirdConstant[idx_a] + pBuf[1];
+        revoINO_gst_SavManager.m_WeirdConstant[idx_a] = revoINO_gst_SavManager.m_WeirdConstant[idx_a] + pBuf[1];
+
         idx_a = count * 4 & 0x1c;
         count = (count & 7) + 3 & 7;
-        revoINO_gst_SavManager.m_WeirdConstant[idx_b] = *(int *)((int)revoINO_gst_SavManager.m_WeirdConstant[idx_b] + pBuf[2];
-        pBuf = pBuf + 4;
-        revoINO_gst_SavManager.m_WeirdConstant[idx_a] = *(int *)((int)revoINO_gst_SavManager.m_WeirdConstant[idx_a] + pBuf[3];
-        loop_countdown -= 1;
+        revoINO_gst_SavManager.m_WeirdConstant[idx_b] = revoINO_gst_SavManager.m_WeirdConstant[idx_b] + pBuf[2];
+
+        revoINO_gst_SavManager.m_WeirdConstant[idx_a] = revoINO_gst_SavManager.m_WeirdConstant[idx_a] + pBuf[3];
+
+        pBuf = pBuf + 4; loop_countdown -= 1;
       } while (loop_countdown != 0);
       aligned_uint_count &= 3;
 
