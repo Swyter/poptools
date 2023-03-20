@@ -19,12 +19,28 @@ struct
     uint version;
 
 
-    ubyte unk[24];
+    int unk[24 / 4];
     ubyte data[size_maybe];
 
 } head <open=true>;
 
 
-/* swy: outer checksum; see revoINO_ReadFile() at offset 0x80556130 */
+/* swy: actual file ends here -- there's a trailing outer checksum; see revoINO_ReadFile() at offset 0x80556130 */
 FSeek(FileSize() - 32);
-uint weird_constants[32/4] <format=hex>;
+uint weird_constants[32 / 4] <format=hex>;
+
+
+local uint m_WeirdConstant[8];
+
+m_WeirdConstant[0] = 0x011;
+m_WeirdConstant[1] = 0x05e;
+m_WeirdConstant[2] = 0x115;
+m_WeirdConstant[3] = 0x236;
+m_WeirdConstant[4] = 0x3c1;
+m_WeirdConstant[5] = 0x5b6;
+m_WeirdConstant[6] = 0x815;
+m_WeirdConstant[7] = 0xade;
+
+local uint buf_end = FileSize() - 32, buf = 0;
+local uint aligned_uint_count = (buf_end + (3 - buf)) >> 2;
+
