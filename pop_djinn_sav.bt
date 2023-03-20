@@ -23,3 +23,8 @@ struct
     ubyte data[size_maybe];
 
 } head <open=true>;
+
+
+/* swy: outer checksum; see revoINO_ReadFile() at offset 0x80556130 */
+FSeek(FileSize() - 32);
+uint weird_constants[32/4] <format=hex>;
