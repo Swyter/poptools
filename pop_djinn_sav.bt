@@ -30,7 +30,9 @@ FSeek(FileSize() - 32);
 uint weird_constants[32 / 4] <format=hex>;
 
 
-local int m_WeirdConstant[8];
+/* -- */
+
+local int m_WeirdConstant[8] <format=hex>;
 
 m_WeirdConstant[0] = 0x011;
 m_WeirdConstant[1] = 0x05e;
@@ -41,9 +43,8 @@ m_WeirdConstant[5] = 0x5b6;
 m_WeirdConstant[6] = 0x815;
 m_WeirdConstant[7] = 0xade;
 
-local uint buf_end = FileSize() - 32, buf = 0, count = 5;
-local uint aligned_uint_count = (buf_end + (3 - buf)) >> 2;
-
+local uint buf_end = FileSize() - 32, buf = 0, count = 5, read_size = buf_end;
+local uint aligned_uint_count = (buf_end + (3 - buf)) >> 2; /* swy: byte size / 4 */
 
   if (buf < buf_end) {
     local uint loop_countdown = (uint)(buf_end + (3 - (int)buf)) >> 4;
@@ -82,52 +83,14 @@ local uint aligned_uint_count = (buf_end + (3 - buf)) >> 2;
         } while (aligned_uint_count != 0);
     }
   }
-/*
-check_checksum:
-  if (m_WeirdConstant[0] == *(dword *)(buf + read_size)) {
-    if (m_WeirdConstant[1] == *(dword *)(buf + read_size + 4)) {
-      if (m_WeirdConstant[2] == *(dword *)(buf + read_size + 8)) {
-        if (m_WeirdConstant[3] == *(dword *)(buf + read_size + 0xc)) {
-          if (m_WeirdConstant[4] == *(dword *)(buf + read_size + 0x10)) {
-            if (m_WeirdConstant[5] == *(dword *)(buf + read_size + 0x14)) {
-              if (m_WeirdConstant[6] == *(dword *)(buf + read_size + 0x18)) {
-                if (m_WeirdConstant[7] == *(dword *)(buf + read_size + 0x1c))
-                {
-                  ret_good = true;
-                }
-                else {
-                  ret_good = false;
-                }
-              }
-              else {
-                ret_good = false;
-              }
-            }
-            else {
-              ret_good = false;
-            }
-          }
-          else {
-            ret_good = false;
-          }
-        }
-        else {
-          ret_good = false;
-        }
-      }
-      else {
-        ret_good = false;
-      }
-    }
-    else {
-      ret_good = false;
-    }
-  }
-  else {
-    ret_good = false;
-  }
-  if (ret_good) {
-    return 0;
-  }
-  return 0xfffffeff;
-*/
+
+/* swy: check_checksum */
+  if (m_WeirdConstant[0] == ReadInt(buf + read_size + 0))
+    if (m_WeirdConstant[1] == ReadInt(buf + read_size + 4))
+      if (m_WeirdConstant[2] == ReadInt(buf + read_size + 8))
+        if (m_WeirdConstant[3] == ReadInt(buf + read_size + 0xc))
+          if (m_WeirdConstant[4] == ReadInt(buf + read_size + 0x10))
+            if (m_WeirdConstant[5] == ReadInt(buf + read_size + 0x14))
+              if (m_WeirdConstant[6] == ReadInt(buf + read_size + 0x18))
+                if (m_WeirdConstant[7] == ReadInt(buf + read_size + 0x1c))
+                    Printf("[i] checksum matches\n");
