@@ -29,7 +29,7 @@ typedef struct
         ubyte me_a, me_b; uint flags <format=hex>, mode_permissions <format=octal>;
     
         time_t mod_time, mod_time_b <comment="swy: modification time, one of them should be the creation time, I think?">;
-        byte len; char filename[len] <bgcolor=cRed, comment="swy: original file name of the packed file">;
+        ubyte len; char filename[len] <bgcolor=cRed, comment="swy: original file name of the packed file">;
 
     } checksummed_header <open=true, bgcolor=cDkPurple>;
     
