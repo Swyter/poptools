@@ -49,6 +49,7 @@ local uint aligned_uint_count = (buf_end + (3 - buf)) >> 2;
     local uint loop_countdown = (uint)(buf_end + (3 - (int)buf)) >> 4;
     local uint pBuf = buf, idx_a, idx_b;
     if (loop_countdown != 0) {
+      /* swy: unrolled loop */
       do
       {
         idx_a = ((count + 3) * 4) & 0x1c;
@@ -70,19 +71,17 @@ local uint aligned_uint_count = (buf_end + (3 - buf)) >> 2;
 
       aligned_uint_count &= 3;
 
-      //if (aligned_uint_count == 0)
-      //  goto check_checksum;
+      /* swy: for the remaining unaligned bytes; process them individually one by one */
+      if (aligned_uint_count != 0)
+        do
+        {
+          m_WeirdConstant[count / 4] = m_WeirdConstant[count / 4] + ReadInt(pBuf + 0);
+          aligned_uint_count -= 1;
+          count = (count + 3) & 7;
+          pBuf = pBuf + 1;
+        } while (aligned_uint_count != 0);
     }
-
-    do
-    {
-      m_WeirdConstant[count / 4] = m_WeirdConstant[count / 4] + ReadInt(pBuf + 0);
-      aligned_uint_count -= 1;
-      count = count + 3 & 7;
-      pBuf = pBuf + 1;
-    } while (aligned_uint_count != 0);
   }
-
 /*
 check_checksum:
   if (m_WeirdConstant[0] == *(dword *)(buf + read_size)) {
