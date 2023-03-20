@@ -1,0 +1,23 @@
+//------------------------------------------------
+//--- 010 Editor v13.0.1 Binary Template
+//
+//      File: 
+//   Authors: Swyter
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: djinn*
+//  ID Bytes: 
+//   History: [+4] 4E 49 4A 44
+//------------------------------------------------
+
+BigEndian();
+
+uint size_maybe;
+
+struct
+{
+    char magic[4];
+    uint version;
+
+} head <open=true>;
