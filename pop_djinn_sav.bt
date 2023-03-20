@@ -44,43 +44,42 @@ m_WeirdConstant[7] = 0xade;
 local uint buf_end = FileSize() - 32, buf = 0;
 local uint aligned_uint_count = (buf_end + (3 - buf)) >> 2;
 
-/*
+
   if (buf < buf_end) {
-    loop_countdown = (uint)(buf_end + (3 - (int)buf)) >> 4;
+    local uint loop_countdown = (uint)(buf_end + (3 - (int)buf)) >> 4;
     pBuf = (int *)buf;
     if (loop_countdown != 0) {
-      do {
+      do
+      {
         idx_a = (count + 3) * 4 & 0x1c;
-        revoINO_gst_SavManager.m_WeirdConstant[count] =
-             revoINO_gst_SavManager.m_WeirdConstant[count] + *pBuf;
+        revoINO_gst_SavManager.m_WeirdConstant[count] = revoINO_gst_SavManager.m_WeirdConstant[count] + *pBuf;
         count = (count + 3 & 7) + 3;
         idx_b = count * 4 & 0x1c;
         count = (count & 7) + 3;
-        *(int *)((int)revoINO_gst_SavManager.m_WeirdConstant + idx_a) =
-             *(int *)((int)revoINO_gst_SavManager.m_WeirdConstant + idx_a) + pBuf[1];
+        *(int *)((int)revoINO_gst_SavManager.m_WeirdConstant + idx_a) = *(int *)((int)revoINO_gst_SavManager.m_WeirdConstant + idx_a) + pBuf[1];
         idx_a = count * 4 & 0x1c;
         count = (count & 7) + 3 & 7;
-        *(int *)((int)revoINO_gst_SavManager.m_WeirdConstant + idx_b) =
-             *(int *)((int)revoINO_gst_SavManager.m_WeirdConstant + idx_b) + pBuf[2];
+        *(int *)((int)revoINO_gst_SavManager.m_WeirdConstant + idx_b) = *(int *)((int)revoINO_gst_SavManager.m_WeirdConstant + idx_b) + pBuf[2];
         pBuf_plus_three = pBuf + 3;
         pBuf = pBuf + 4;
-        *(int *)((int)revoINO_gst_SavManager.m_WeirdConstant + idx_a) =
-             *(int *)((int)revoINO_gst_SavManager.m_WeirdConstant + idx_a) + *pBuf_plus_three;
+        *(int *)((int)revoINO_gst_SavManager.m_WeirdConstant + idx_a) = *(int *)((int)revoINO_gst_SavManager.m_WeirdConstant + idx_a) + *pBuf_plus_three;
         loop_countdown -= 1;
       } while (loop_countdown != 0);
       aligned_uint_count &= 3;
-      if (aligned_uint_count == 0) goto check_checksum;
+
+      if (aligned_uint_count == 0)
+        goto check_checksum;
     }
-    do {
-      revoINO_gst_SavManager.m_WeirdConstant[count] =
-           revoINO_gst_SavManager.m_WeirdConstant[count] + *pBuf;
+    do
+    {
+      revoINO_gst_SavManager.m_WeirdConstant[count] = revoINO_gst_SavManager.m_WeirdConstant[count] + *pBuf;
       aligned_uint_count -= 1;
       count = count + 3 & 7;
       pBuf = pBuf + 1;
     } while (aligned_uint_count != 0);
   }
 
-
+/*
 check_checksum:
   if (revoINO_gst_SavManager.m_WeirdConstant[0] == *(dword *)(buf + read_size)) {
     if (revoINO_gst_SavManager.m_WeirdConstant[1] == *(dword *)(buf + read_size + 4)) {
