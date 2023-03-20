@@ -50,45 +50,53 @@ void djinn_compute_checksum()
     local uint count = 5;
     local uint aligned_uint_count = (buf_end + (3 - buf)) >> 2; /* swy: byte size / 4 */
     
-    if (buf < buf_end) {
-        local uint loop_countdown = (uint)(buf_end + (3 - (int)buf)) >> 4;
-        local uint pBuf = buf, idx_a, idx_b;
-        if (loop_countdown != 0)
-        {
-            /* swy: unrolled loop */
-            do
-            {
-                idx_a = ((count + 3) * 4) & 0x1c;
-                m_WeirdConstant[count / 4] = m_WeirdConstant[count / 4] + ReadInt(pBuf + 0);
-                count = ((count + 3) & 7) + 3;
-                
-                idx_b = (count * 4) & 0x1c;
-                count = (count & 7) + 3;
-                m_WeirdConstant[idx_a / 4] = m_WeirdConstant[idx_a / 4] + ReadInt(pBuf + 1);
-                
-                idx_a = (count * 4) & 0x1c;
-                count = ((count & 7) + 3) & 7;
-                m_WeirdConstant[idx_b / 4] = m_WeirdConstant[idx_b / 4] + ReadInt(pBuf + 2);
-                
-                m_WeirdConstant[idx_a / 4] = m_WeirdConstant[idx_a / 4] + ReadInt(pBuf + 3);
-            
-                pBuf = pBuf + 4; loop_countdown -= 1;
-            } while (loop_countdown != 0);
-            
-            aligned_uint_count &= 3;
-            
-            /* swy: for the remaining unaligned bytes; process them individually one by one */
-            if (aligned_uint_count != 0)
-                do
-                {
-                    m_WeirdConstant[count / 4] = m_WeirdConstant[count / 4] + ReadInt(pBuf + 0);
-                    aligned_uint_count -= 1;
-                    count = (count + 3) & 7;
-                    pBuf = pBuf + 1;
-                } while (aligned_uint_count != 0);
-        }
+    if (!(buf < buf_end))
+    {
+        Error("swy: no space for a checksum right after the end of the game data.");
+        return;
     }
+
+    local uint loop_countdown = (uint)(buf_end + (3 - (int)buf)) >> 4;
+    local uint pBuf = buf, idx_a, idx_b;
+    if (loop_countdown != 0)
+    {
+        /* swy: unrolled loop */
+        do
+        {
+            idx_a = ((count + 3) * 4) & 0x1c;
+            m_WeirdConstant[count / 4] = m_WeirdConstant[count / 4] + ReadInt(pBuf + 0);
+            count = ((count + 3) & 7) + 3;
+            
+            idx_b = (count * 4) & 0x1c;
+            count = (count & 7) + 3;
+            m_WeirdConstant[idx_a / 4] = m_WeirdConstant[idx_a / 4] + ReadInt(pBuf + 1);
+            
+            idx_a = (count * 4) & 0x1c;
+            count = ((count & 7) + 3) & 7;
+            m_WeirdConstant[idx_b / 4] = m_WeirdConstant[idx_b / 4] + ReadInt(pBuf + 2);
+            
+            m_WeirdConstant[idx_a / 4] = m_WeirdConstant[idx_a / 4] + ReadInt(pBuf + 3);
+        
+            pBuf = pBuf + 4; loop_countdown -= 1;
+        } while (loop_countdown != 0);
+    }
+
+    aligned_uint_count &= 3;
+
+    if (aligned_uint_count == 0);
+        return;
+    
+    /* swy: for the remaining unaligned bytes; process them individually one by one */
+    do
+    {
+        m_WeirdConstant[count / 4] = m_WeirdConstant[count / 4] + ReadInt(pBuf + 0);
+        aligned_uint_count -= 1;
+        count = (count + 3) & 7;
+        pBuf = pBuf + 1;
+    } while (aligned_uint_count != 0);
 }
+
+djinn_compute_checksum();
 
 /* swy: check_checksum */
   if (m_WeirdConstant[0] == ReadInt(buf + read_size + 0))
