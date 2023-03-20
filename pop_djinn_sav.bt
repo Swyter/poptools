@@ -51,19 +51,19 @@ local uint aligned_uint_count = (buf_end + (3 - buf)) >> 2;
     if (loop_countdown != 0) {
       do
       {
-        idx_a = (count + 3) * 4 & 0x1c;
-        m_WeirdConstant[count] = m_WeirdConstant[count] + ReadInt(pBuf + 0);
-        count = (count + 3 & 7) + 3;
+        idx_a = ((count + 3) * 4) & 0x1c;
+        m_WeirdConstant[count / 4] = m_WeirdConstant[count / 4] + ReadInt(pBuf + 0);
+        count = ((count + 3) & 7) + 3;
 
-        idx_b = count * 4 & 0x1c;
+        idx_b = (count * 4) & 0x1c;
         count = (count & 7) + 3;
-        m_WeirdConstant[idx_a] = m_WeirdConstant[idx_a] + ReadInt(pBuf + 1);
+        m_WeirdConstant[idx_a / 4] = m_WeirdConstant[idx_a / 4] + ReadInt(pBuf + 1);
 
-        idx_a = count * 4 & 0x1c;
-        count = (count & 7) + 3 & 7;
-        m_WeirdConstant[idx_b] = m_WeirdConstant[idx_b] + ReadInt(pBuf + 2);
+        idx_a = (count * 4) & 0x1c;
+        count = ((count & 7) + 3) & 7;
+        m_WeirdConstant[idx_b / 4] = m_WeirdConstant[idx_b / 4] + ReadInt(pBuf + 2);
 
-        m_WeirdConstant[idx_a] = m_WeirdConstant[idx_a] + ReadInt(pBuf + 3);
+        m_WeirdConstant[idx_a / 4] = m_WeirdConstant[idx_a / 4] + ReadInt(pBuf + 3);
 
         pBuf = pBuf + 4; loop_countdown -= 1;
       } while (loop_countdown != 0);
@@ -73,9 +73,10 @@ local uint aligned_uint_count = (buf_end + (3 - buf)) >> 2;
       //if (aligned_uint_count == 0)
       //  goto check_checksum;
     }
+
     do
     {
-      m_WeirdConstant[count] = m_WeirdConstant[count] + ReadInt(pBuf + 0);
+      m_WeirdConstant[count / 4] = m_WeirdConstant[count / 4] + ReadInt(pBuf + 0);
       aligned_uint_count -= 1;
       count = count + 3 & 7;
       pBuf = pBuf + 1;
