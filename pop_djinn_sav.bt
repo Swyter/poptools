@@ -116,8 +116,8 @@ void djinn_compute_checksum()
     local uint pBuf = buf;
 
     /* swy: process the integers individually; one by one */
-    for (count = 5; uint_size != 0; pBuf += sizeof(int), uint_size -= 1, count = (count + 3) & 7 /* swy: make sure we're aligned */)
-        m_WeirdConstant[count] += ReadInt(pBuf);
+    for (count = 5; uint_size != 0; pBuf += sizeof(int), uint_size -= 1, count %= 8 /* swy: wrap the index around */)
+        m_WeirdConstant[count] += ReadInt(pBuf), count += 3; /* swy: make sure we're aligned */
 }
 
 
