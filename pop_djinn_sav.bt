@@ -67,18 +67,21 @@ void djinn_compute_checksum_original()
         {
             m_WeirdConstant[count              ] += ReadInt(pBuf + (0 * sizeof(int)));
 
-            idx_a = (count + 3) * sizeof(int) & 0x1c;
-            count = (count + 3 & 7) + 3;
+            count += 3;
+
+            idx_a = (count * 4) & 0x1c;
+            count = (count & 7) + 3; /* swy: (count & 7) is the same as the (count % 8) modulo operation */
 
             m_WeirdConstant[idx_a / sizeof(int)] += ReadInt(pBuf + (1 * sizeof(int)));
             
-            idx_b = (count * sizeof(int)) & 0x1c;
+            idx_b = (count * 4) & 0x1c;
             count = (count & 7) + 3;
 
             m_WeirdConstant[idx_b / sizeof(int)] += ReadInt(pBuf + (2 * sizeof(int)));
 
-            idx_a = (count * sizeof(int)) & 0x1c;
-            count = (count & 7) + 3 & 7;
+            idx_a = (count * 4) & 0x1c;
+            count = (count & 7) + 3;
+            count &= 7;
 
             m_WeirdConstant[idx_a / sizeof(int)] += ReadInt(pBuf + (3 * sizeof(int)));
         
@@ -121,7 +124,7 @@ void djinn_compute_checksum()
 }
 
 
-djinn_compute_checksum();
+djinn_compute_checksum_original();
 
 Printf(
     " %8x %8x %8x %8x %8x %8x %8x %8x - computed\n" +
