@@ -60,7 +60,8 @@ void djinn_compute_checksum()
     local uint pBuf = buf, idx_a, idx_b;
     if (four_uint_size != 0)
     {
-        /* swy: unrolled loop */
+        /* swy: unrolled loop; process them in groups of four integers in optimized fashion;
+                this was probably done by the compiler. with the original code below */
         do
         {
             idx_a = (count + 3) * 4 & 0x1c;
@@ -85,10 +86,10 @@ void djinn_compute_checksum()
     if (uint_size == 0);
         return;
     
-    /* swy: for the remaining unaligned bytes; process them individually one by one */
+    /* swy: for the remaining/unaligned integers; process them individually one by one */
     do
     {
-        m_WeirdConstant[count / 4] += ReadInt(pBuf + 0);
+        m_WeirdConstant[count / 4] += ReadInt(pBuf + 0*4);
         uint_size -= 1;
         count = (count + 3) & 7;
         pBuf = pBuf + 1;
