@@ -48,7 +48,7 @@ void djinn_compute_checksum()
     m_WeirdConstant[7] = 0xade;
     
     local uint count = 5;
-    local uint aligned_uint_count = (buf_end + (3 - buf)) >> 2; /* swy: byte size / 4 */
+    local uint aligned_uint_count = (buf_end + (3 - buf)) >> 2; /* swy: byte size / 4; so 0x20000 / 4 = 0x8000 */
     
     if (!(buf < buf_end))
     {
@@ -56,7 +56,7 @@ void djinn_compute_checksum()
         return;
     }
 
-    local uint loop_countdown = (uint)(buf_end + (3 - buf)) >> 4;
+    local uint loop_countdown = (uint)(buf_end + (3 - buf)) >> 4; /* swy: 0x20000 / 4 / 4 = 0x2000 */
     local uint pBuf = buf, idx_a, idx_b;
     if (loop_countdown != 0)
     {
@@ -101,7 +101,7 @@ djinn_compute_checksum();
 Printf(
     " %8x %8x %8x %8x %8x %8x %8x %8x - computed\n" +
     " %8x %8x %8x %8x %8x %8x %8x %8x - orig\n", m_WeirdConstant[0], m_WeirdConstant[1], m_WeirdConstant[2], m_WeirdConstant[3], m_WeirdConstant[4], m_WeirdConstant[5], m_WeirdConstant[6], m_WeirdConstant[7],
-                                                 weird_constants[0], weird_constants[1], weird_constants[2], m_WeirdConstant[3], weird_constants[4], weird_constants[5], weird_constants[6], weird_constants[7]
+                                                 weird_constants[0], weird_constants[1], weird_constants[2], weird_constants[3], weird_constants[4], weird_constants[5], weird_constants[6], weird_constants[7]
 );
 
 /* swy: check_checksum */
