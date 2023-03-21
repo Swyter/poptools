@@ -27,7 +27,7 @@ struct
 
 /* swy: actual file ends here -- there's a trailing outer checksum; see revoINO_ReadFile() at offset 0x80556130 */
 FSeek(FileSize() - 32);
-uint weird_constants[32 / 4] <format=hex>;
+int weird_constants[32 / 4] <format=hex>;
 
 
 /* -- */
@@ -48,7 +48,7 @@ void djinn_compute_checksum()
     m_WeirdConstant[7] = 0xade;
     
     local uint count = 5;
-    local uint aligned_uint_count = (buf_end + (3 - buf)) >> 2; /* swy: byte size / 4; so 0x20000 / 4 = 0x8000 */
+    local uint uint_size = (buf_end + (3 - buf)) >> 2; /* swy: byte size / 4; so 0x20000 / 4 = 0x8000 */
     
     if (!(buf < buf_end))
     {
@@ -56,17 +56,16 @@ void djinn_compute_checksum()
         return;
     }
 
-    local uint loop_countdown = (uint)(buf_end + (3 - buf)) >> 4; /* swy: 0x20000 / 4 / 4 = 0x2000 */
+    local uint four_uint_size = (uint)(buf_end + (3 - buf)) >> 4; /* swy: 0x20000 / 4 / 4 = 0x2000 */
     local uint pBuf = buf, idx_a, idx_b;
-    if (loop_countdown != 0)
+    if (four_uint_size != 0)
     {
         /* swy: unrolled loop */
         do
         {
-            idx_a = ((count + 3) * 4) & 0x1c;
-            m_WeirdConstant[count / 4] = m_WeirdConstant[count / 4] + ReadInt(pBuf + 0);
-            count = ((count + 3) & 7) + 3;
-            
+            idx_a = (count + 3) * 4 & 0x1c;
+            m_WeirdConstant[count / 4] = m_WeirdConstant[count    ] + ReadInt(pBuf + 0);
+            count = (count + 3 & 7) + 3;
             idx_b = (count * 4) & 0x1c;
             count = (count & 7) + 3;
             m_WeirdConstant[idx_a / 4] = m_WeirdConstant[idx_a / 4] + ReadInt(pBuf + 1);
@@ -77,23 +76,23 @@ void djinn_compute_checksum()
             
             m_WeirdConstant[idx_a / 4] = m_WeirdConstant[idx_a / 4] + ReadInt(pBuf + 3);
         
-            pBuf = pBuf + 4; loop_countdown -= 1;
-        } while (loop_countdown != 0);
+            pBuf = pBuf + 4; four_uint_size -= 1;
+        } while (four_uint_size != 0);
     }
 
-    aligned_uint_count &= 3;
+    uint_size &= 3;
 
-    if (aligned_uint_count == 0);
+    if (uint_size == 0);
         return;
     
     /* swy: for the remaining unaligned bytes; process them individually one by one */
     do
     {
-        m_WeirdConstant[count / 4] = m_WeirdConstant[count / 4] + ReadInt(pBuf + 0);
-        aligned_uint_count -= 1;
+        m_WeirdConstant[count / 4] = m_WeirdConstant[count] + ReadInt(pBuf + 0);
+        uint_size -= 1;
         count = (count + 3) & 7;
         pBuf = pBuf + 1;
-    } while (aligned_uint_count != 0);
+    } while (uint_size != 0);
 }
 
 djinn_compute_checksum();
