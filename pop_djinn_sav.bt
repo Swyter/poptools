@@ -25,7 +25,8 @@ struct
 } head <open=true>;
 
 
-/* swy: actual file ends here -- there's a trailing outer checksum; see revoINO_ReadFile() at offset 0x80556130 */
+/* swy: actual file ends here -- there's a trailing outer checksum; see revoINO_ReadFile() at offset 0x80556130
+                                 and revoINO_SavUpdate() at offset 0x805570d0 for the write version */
 FSeek(FileSize() - 32);
 int weird_constants[32 / 4] <format=hex>;
 
@@ -34,9 +35,9 @@ int weird_constants[32 / 4] <format=hex>;
 
 local int m_WeirdConstant[8] <format=hex>;
 
-local uint buf = 0, buf_end = FileSize() - 32, read_size = buf_end;
+local uint buf = 0, buf_end = FileSize() - 32, buf_byte_size = buf_end;
 
-void djinn_compute_checksum()
+void djinn_compute_checksum_original()
 {
     m_WeirdConstant[0] = 0x011;
     m_WeirdConstant[1] = 0x05e;
@@ -48,7 +49,7 @@ void djinn_compute_checksum()
     m_WeirdConstant[7] = 0xade;
     
     local uint count = 5;
-    local uint uint_size = (buf_end + (3 - buf)) >> 2; /* swy: byte_size / 4; e.g. 0x20000 / 4 = 0x8000 */
+    local uint uint_size = (buf_byte_size + (3 - buf)) >> 2; /* swy: byte_size / 4; e.g. 0x20000 / 4 = 0x8000 */
     
     if (!(buf < buf_end))
     {
@@ -56,7 +57,7 @@ void djinn_compute_checksum()
         return;
     }
 
-    local uint four_uint_size = (uint)(buf_end + (3 - buf)) >> 4; /* swy: uint_size / 4; e.g. 0x20000 / 4 / 4 = 0x2000 */
+    local uint four_uint_size = (uint)(buf_byte_size + (3 - buf)) >> 4; /* swy: uint_size / 4; e.g. 0x20000 / 4 / 4 = 0x2000 */
     local uint pBuf = buf, idx_a, idx_b;
     if (four_uint_size != 0)
     {
@@ -93,12 +94,32 @@ void djinn_compute_checksum()
     /* swy: for the remaining/unaligned integers; process them individually one by one */
     do
     {
-        m_WeirdConstant[count] += ReadInt(pBuf + (0 * sizeof(int)));
+        m_WeirdConstant[count] += ReadInt(pBuf);
         
         count = (count + 3) & 7;
-        pBuf = pBuf + 1; uint_size -= 1; 
+        pBuf = sizeof(int); uint_size -= 1; 
     } while (uint_size != 0);
 }
+
+void djinn_compute_checksum()
+{
+    m_WeirdConstant[0] = 0x011;
+    m_WeirdConstant[1] = 0x05e;
+    m_WeirdConstant[2] = 0x115;
+    m_WeirdConstant[3] = 0x236;
+    m_WeirdConstant[4] = 0x3c1;
+    m_WeirdConstant[5] = 0x5b6;
+    m_WeirdConstant[6] = 0x815;
+    m_WeirdConstant[7] = 0xade;
+    
+    local uint count, uint_size = buf_byte_size / sizeof(int); /* swy: byte_size / 4; e.g. 0x20000 / 4 = 0x8000 */
+    local uint pBuf = buf;
+
+    /* swy: process the integers individually; one by one */
+    for (count = 5; uint_size != 0; pBuf += sizeof(int), uint_size -= 1, count = (count + 3) & 7 /* swy: make sure we're aligned */)
+        m_WeirdConstant[count] += ReadInt(pBuf);
+}
+
 
 djinn_compute_checksum();
 
@@ -109,12 +130,12 @@ Printf(
 );
 
 /* swy: check_checksum */
-  if (m_WeirdConstant[0] == ReadInt(buf + read_size + 0))
-    if (m_WeirdConstant[1] == ReadInt(buf + read_size + 4))
-      if (m_WeirdConstant[2] == ReadInt(buf + read_size + 8))
-        if (m_WeirdConstant[3] == ReadInt(buf + read_size + 0xc))
-          if (m_WeirdConstant[4] == ReadInt(buf + read_size + 0x10))
-            if (m_WeirdConstant[5] == ReadInt(buf + read_size + 0x14))
-              if (m_WeirdConstant[6] == ReadInt(buf + read_size + 0x18))
-                if (m_WeirdConstant[7] == ReadInt(buf + read_size + 0x1c))
+  if (m_WeirdConstant[0] == ReadInt(buf + buf_byte_size + 0))
+    if (m_WeirdConstant[1] == ReadInt(buf + buf_byte_size + 4))
+      if (m_WeirdConstant[2] == ReadInt(buf + buf_byte_size + 8))
+        if (m_WeirdConstant[3] == ReadInt(buf + buf_byte_size + 0xc))
+          if (m_WeirdConstant[4] == ReadInt(buf + buf_byte_size + 0x10))
+            if (m_WeirdConstant[5] == ReadInt(buf + buf_byte_size + 0x14))
+              if (m_WeirdConstant[6] == ReadInt(buf + buf_byte_size + 0x18))
+                if (m_WeirdConstant[7] == ReadInt(buf + buf_byte_size + 0x1c))
                     Printf("[i] checksum matches\n");
