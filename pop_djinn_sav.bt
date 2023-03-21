@@ -64,19 +64,19 @@ void djinn_compute_checksum()
         do
         {
             idx_a = (count + 3) * 4 & 0x1c;
-            m_WeirdConstant[count / 4] = m_WeirdConstant[count    ] + ReadInt(pBuf + 0);
+            m_WeirdConstant[count    ] += ReadInt(pBuf + 0*4);
             count = (count + 3 & 7) + 3;
             idx_b = (count * 4) & 0x1c;
             count = (count & 7) + 3;
-            m_WeirdConstant[idx_a / 4] = m_WeirdConstant[idx_a / 4] + ReadInt(pBuf + 1);
+            m_WeirdConstant[idx_a / 4] += ReadInt(pBuf + 1*4);
             
             idx_a = (count * 4) & 0x1c;
             count = ((count & 7) + 3) & 7;
-            m_WeirdConstant[idx_b / 4] = m_WeirdConstant[idx_b / 4] + ReadInt(pBuf + 2);
+            m_WeirdConstant[idx_b / 4] += ReadInt(pBuf + 2*4);
             
-            m_WeirdConstant[idx_a / 4] = m_WeirdConstant[idx_a / 4] + ReadInt(pBuf + 3);
+            m_WeirdConstant[idx_a / 4] += ReadInt(pBuf + 3*4);
         
-            pBuf = pBuf + 4; four_uint_size -= 1;
+            pBuf = pBuf + 4*4; four_uint_size -= 1;
         } while (four_uint_size != 0);
     }
 
@@ -88,7 +88,7 @@ void djinn_compute_checksum()
     /* swy: for the remaining unaligned bytes; process them individually one by one */
     do
     {
-        m_WeirdConstant[count / 4] = m_WeirdConstant[count] + ReadInt(pBuf + 0);
+        m_WeirdConstant[count / 4] += ReadInt(pBuf + 0);
         uint_size -= 1;
         count = (count + 3) & 7;
         pBuf = pBuf + 1;
