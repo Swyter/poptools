@@ -65,25 +65,24 @@ void djinn_compute_checksum_original()
                 this was probably done by the compiler. with the original code below */
         do
         {
-            m_WeirdConstant[count              ] += ReadInt(pBuf + (0 * sizeof(int)));
+            m_WeirdConstant[count    ] += ReadInt(pBuf + (0 * sizeof(int)));
 
             count += 3;
-
             idx_a = (count * 4) & 0x1c;
             count = (count & 7) + 3; /* swy: (count & 7) is the same as the (count % 8) modulo operation */
 
-            m_WeirdConstant[idx_a / sizeof(int)] += ReadInt(pBuf + (1 * sizeof(int)));
+            m_WeirdConstant[idx_a / 4] += ReadInt(pBuf + (1 * sizeof(int)));
             
             idx_b = (count * 4) & 0x1c;
             count = (count & 7) + 3;
 
-            m_WeirdConstant[idx_b / sizeof(int)] += ReadInt(pBuf + (2 * sizeof(int)));
+            m_WeirdConstant[idx_b / 4] += ReadInt(pBuf + (2 * sizeof(int)));
 
             idx_a = (count * 4) & 0x1c;
             count = (count & 7) + 3;
             count &= 7;
 
-            m_WeirdConstant[idx_a / sizeof(int)] += ReadInt(pBuf + (3 * sizeof(int)));
+            m_WeirdConstant[idx_a / 4] += ReadInt(pBuf + (3 * sizeof(int)));
         
             pBuf = pBuf + (4 * /* swy: one int is 4 bytes */ sizeof(int)); four_uint_size -= 1;
         } while (four_uint_size != 0);
