@@ -48,7 +48,7 @@ void djinn_compute_checksum()
     m_WeirdConstant[7] = 0xade;
     
     local uint count = 5;
-    local uint uint_size = (buf_end + (3 - buf)) >> 2; /* swy: byte size / 4; so 0x20000 / 4 = 0x8000 */
+    local uint uint_size = (buf_end + (3 - buf)) >> 2; /* swy: byte_size / 4; e.g. 0x20000 / 4 = 0x8000 */
     
     if (!(buf < buf_end))
     {
@@ -56,7 +56,7 @@ void djinn_compute_checksum()
         return;
     }
 
-    local uint four_uint_size = (uint)(buf_end + (3 - buf)) >> 4; /* swy: 0x20000 / 4 / 4 = 0x2000 */
+    local uint four_uint_size = (uint)(buf_end + (3 - buf)) >> 4; /* swy: uint_size / 4; e.g. 0x20000 / 4 / 4 = 0x2000 */
     local uint pBuf = buf, idx_a, idx_b;
     if (four_uint_size != 0)
     {
@@ -66,18 +66,18 @@ void djinn_compute_checksum()
         {
             m_WeirdConstant[count              ] += ReadInt(pBuf + (0 * sizeof(int)));
 
-            idx_a = (count + 3) * 4 & 0x1c;
+            idx_a = (count + 3) * sizeof(int) & 0x1c;
             count = (count + 3 & 7) + 3;
 
             m_WeirdConstant[idx_a / sizeof(int)] += ReadInt(pBuf + (1 * sizeof(int)));
             
-            idx_b = (count * 4) & 0x1c;
+            idx_b = (count * sizeof(int)) & 0x1c;
             count = (count & 7) + 3;
 
             m_WeirdConstant[idx_b / sizeof(int)] += ReadInt(pBuf + (2 * sizeof(int)));
 
-            idx_a = (count * 4) & 0x1c;
-            count = ((count & 7) + 3) & 7;
+            idx_a = (count * sizeof(int)) & 0x1c;
+            count = (count & 7) + 3 & 7;
 
             m_WeirdConstant[idx_a / sizeof(int)] += ReadInt(pBuf + (3 * sizeof(int)));
         
@@ -96,7 +96,7 @@ void djinn_compute_checksum()
         m_WeirdConstant[count] += ReadInt(pBuf + (0 * sizeof(int)));
         
         count = (count + 3) & 7;
-        uint_size -= 1; pBuf = pBuf + 1;
+        pBuf = pBuf + 1; uint_size -= 1; 
     } while (uint_size != 0);
 }
 
