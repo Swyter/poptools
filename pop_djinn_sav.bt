@@ -19,10 +19,10 @@ struct
     uint version;
 
 
-    int unk[40 / 4];
+    int unk[9]; uint slot_id_maybe;
 
-
-    struct { ushort pad; int unk[((994 - 6*4) / 4) + 1]; float a; uint zero; float b; uint two; float c; } thing_a, thing_b, thing_c;
+    // unk4 active slot related, unk5 tutorials, unk8 subtitles, unk5 camera assistant
+    struct { ushort pad; uint begin, size; int unk[((994 - 6*4) / 4) - 1]; float a; uint zero; float b; uint combat_highlight; float music; } thing_a, thing_b, thing_c;
     //ubyte data[size_maybe];
 
 } head <open=true>;
