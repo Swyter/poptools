@@ -1,0 +1,136 @@
+//------------------------------------------------
+//--- 010 Editor v13.0.1 Script File
+//
+//      File: Prince of Persia: The Forgotten Sands (Wii) - djinn (CRC-recomputer script)
+//   Authors: Swyter
+//   Version: 2023.01.11
+//   Purpose: Recalculate the checksums after tampering with save files.
+//  Category: Game
+//------------------------------------------------
+
+/* swy: run the original template to fill out the data structures in
+        the template results; we depend on this to work */
+RunTemplate("pop_djinn_sav.bt");
+
+
+local int m_WeirdConstant[8] <format=hex>;
+
+local uint buf = 0, buf_end = FileSize() - 32, buf_byte_size = buf_end;
+
+void djinn_compute_checksum_original()
+{
+    m_WeirdConstant[0] = 0x011;
+    m_WeirdConstant[1] = 0x05e;
+    m_WeirdConstant[2] = 0x115;
+    m_WeirdConstant[3] = 0x236;
+    m_WeirdConstant[4] = 0x3c1;
+    m_WeirdConstant[5] = 0x5b6;
+    m_WeirdConstant[6] = 0x815;
+    m_WeirdConstant[7] = 0xade;
+    
+    local uint count = 5;
+    local uint uint_size = (buf_byte_size + (3 - buf)) >> 2; /* swy: byte_size / 4; e.g. 0x20000 / 4 = 0x8000 */
+    
+    if (!(buf < buf_end))
+    {
+        Error("swy: no space for a checksum right after the end of the game data.");
+        return;
+    }
+
+    local uint four_uint_size = (uint)(buf_byte_size + (3 - buf)) >> 4; /* swy: uint_size / 4; e.g. 0x20000 / 4 / 4 = 0x2000 */
+    local uint pBuf = buf, idx_a, idx_b;
+    if (four_uint_size != 0)
+    {
+        /* swy: unrolled loop; process them in groups of four integers in optimized fashion;
+                this was probably done by the compiler. with the original code below */
+        do
+        {
+            m_WeirdConstant[count    ] += ReadInt(pBuf + (0 * sizeof(int)));
+
+            count += 3;
+            idx_a = (count * 4) & 0x1c;
+            count = (count & 7) + 3; /* swy: (count & 7) is the same as the (count % 8) modulo operation */
+
+            m_WeirdConstant[idx_a / 4] += ReadInt(pBuf + (1 * sizeof(int)));
+            
+            idx_b = (count * 4) & 0x1c;
+            count = (count & 7) + 3;
+
+            m_WeirdConstant[idx_b / 4] += ReadInt(pBuf + (2 * sizeof(int)));
+
+            idx_a = (count * 4) & 0x1c;
+            count = (count & 7) + 3;
+            count &= 7;
+
+            m_WeirdConstant[idx_a / 4] += ReadInt(pBuf + (3 * sizeof(int)));
+        
+            pBuf = pBuf + (4 * /* swy: one int is 4 bytes */ sizeof(int)); four_uint_size -= 1;
+        } while (four_uint_size != 0);
+    }
+
+    uint_size &= 3;
+
+    if (uint_size == 0);
+        return;
+    
+    /* swy: for the remaining/unaligned integers, process them individually; one by one */
+    do
+    {
+        m_WeirdConstant[count] += ReadInt(pBuf);
+        
+        count = (count + 3) & 7;
+        pBuf = sizeof(int); uint_size -= 1; 
+    } while (uint_size != 0);
+}
+
+void djinn_compute_checksum()
+{
+    m_WeirdConstant[0] = 0x011;
+    m_WeirdConstant[1] = 0x05e;
+    m_WeirdConstant[2] = 0x115;
+    m_WeirdConstant[3] = 0x236;
+    m_WeirdConstant[4] = 0x3c1;
+    m_WeirdConstant[5] = 0x5b6;
+    m_WeirdConstant[6] = 0x815;
+    m_WeirdConstant[7] = 0xade;
+    
+    local uint count, uint_size = buf_byte_size / sizeof(int); /* swy: byte_size / 4; e.g. 0x20000 / 4 = 0x8000 */
+    local uint pBuf = buf;
+
+    /* swy: process the integers individually; one by one */
+    for (count = 5; uint_size != 0; pBuf += sizeof(int), uint_size -= 1, count %= 8 /* swy: wrap the index around */)
+        m_WeirdConstant[count] += ReadInt(pBuf), count += 3; /* swy: make sure we're aligned */
+}
+
+
+djinn_compute_checksum_original();
+
+Printf(
+    " %8x %8x %8x %8x %8x %8x %8x %8x - computed\n" +
+    " %8x %8x %8x %8x %8x %8x %8x %8x - orig\n", m_WeirdConstant[0], m_WeirdConstant[1], m_WeirdConstant[2], m_WeirdConstant[3], m_WeirdConstant[4], m_WeirdConstant[5], m_WeirdConstant[6], m_WeirdConstant[7],
+                                                 weird_constants[0], weird_constants[1], weird_constants[2], weird_constants[3], weird_constants[4], weird_constants[5], weird_constants[6], weird_constants[7]
+);
+
+/* swy: check_checksum */
+  if (m_WeirdConstant[0] == ReadInt(buf + buf_byte_size + 0))
+    if (m_WeirdConstant[1] == ReadInt(buf + buf_byte_size + 4))
+      if (m_WeirdConstant[2] == ReadInt(buf + buf_byte_size + 8))
+        if (m_WeirdConstant[3] == ReadInt(buf + buf_byte_size + 0xc))
+          if (m_WeirdConstant[4] == ReadInt(buf + buf_byte_size + 0x10))
+            if (m_WeirdConstant[5] == ReadInt(buf + buf_byte_size + 0x14))
+              if (m_WeirdConstant[6] == ReadInt(buf + buf_byte_size + 0x18))
+                if (m_WeirdConstant[7] == ReadInt(buf + buf_byte_size + 0x1c))
+                    Printf("[i] checksum matches, nothing to do\n");
+
+{
+    WriteInt(buf + buf_byte_size + 0,    m_WeirdConstant[0]);
+    WriteInt(buf + buf_byte_size + 4,    m_WeirdConstant[1]);
+    WriteInt(buf + buf_byte_size + 8,    m_WeirdConstant[2]);
+    WriteInt(buf + buf_byte_size + 0xc,  m_WeirdConstant[3]);
+    WriteInt(buf + buf_byte_size + 0x10, m_WeirdConstant[4]);
+    WriteInt(buf + buf_byte_size + 0x14, m_WeirdConstant[5]);
+    WriteInt(buf + buf_byte_size + 0x18, m_WeirdConstant[6]);
+    WriteInt(buf + buf_byte_size + 0x1c, m_WeirdConstant[7]);
+    
+    Printf("\n\n[+] Done.\n");
+}
