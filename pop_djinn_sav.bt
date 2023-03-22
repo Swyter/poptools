@@ -19,7 +19,10 @@ struct
     uint version;
 
 
-    int unk[40 / 4]; ubyte thing_a[994], thing_b[994], thing_c[994];
+    int unk[40 / 4];
+
+
+    struct { ushort pad, b; ubyte unk[994 - 6*4]; float a; uint zero; float b; uint two; float c; } thing_a, thing_b, thing_c;
     //ubyte data[size_maybe];
 
 } head <open=true>;
