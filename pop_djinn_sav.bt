@@ -22,7 +22,7 @@ struct
     int unk[40 / 4];
 
 
-    struct { ushort pad, b; ubyte unk[994 - 6*4]; float a; uint zero; float b; uint two; float c; } thing_a, thing_b, thing_c;
+    struct { ushort pad; int unk[((994 - 6*4) / 4) + 1]; float a; uint zero; float b; uint two; float c; } thing_a, thing_b, thing_c;
     //ubyte data[size_maybe];
 
 } head <open=true>;
