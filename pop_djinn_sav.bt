@@ -19,8 +19,8 @@ struct
     uint version;
 
 
-    int unk[24 / 4];
-    ubyte data[size_maybe];
+    int unk[40 / 4]; ubyte thing_a[994], thing_b[994], thing_c[994];
+    //ubyte data[size_maybe];
 
 } head <open=true>;
 
@@ -93,7 +93,7 @@ void djinn_compute_checksum_original()
     if (uint_size == 0);
         return;
     
-    /* swy: for the remaining/unaligned integers; process them individually one by one */
+    /* swy: for the remaining/unaligned integers, process them individually; one by one */
     do
     {
         m_WeirdConstant[count] += ReadInt(pBuf);
