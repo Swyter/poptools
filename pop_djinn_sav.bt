@@ -19,7 +19,7 @@ struct
     uint version;
 
 
-    int unk[9]; uint slot_id_maybe;
+    int unk[9]; uint slot_id_maybe; // swy: usually 0 set to 2 when all three are on (??)
 
     //ubyte data[size_maybe];
 
@@ -28,7 +28,7 @@ struct
 // unk4 active slot related, unk5 tutorials, unk8 subtitles, unk5 camera assistance, 0x67c sound effects, 0x43c voices, 0x7ec ambiance, 0x7e4 cinematics, 0x680 cur prince weapon second nibble, outfit index first nibble
 struct
 {
-    ushort pad, begin, begin_b; uint size; int a,b,c,d,e,game_options_tutorials, game_options_camera_assistance;
+    ushort pad, begin, begin_b; uint size; int a,b,c,d, slot_active_maybe, game_options_tutorials, game_options_camera_assistance;
     float audio_voices; int game_options_subtitles,i,j,k; int big_unk[139-1], dont_know; float audio_sound_effects;
     int pad : 24, cur_prince_weapon : 4, cur_prince_outfit : 4, unko[90-2];
     float audio_cinematics; uint zero; float audio_ambiance;
