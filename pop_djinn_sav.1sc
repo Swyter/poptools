@@ -13,6 +13,8 @@
 RunTemplate("pop_djinn_sav.bt");
 
 
+/* swy: actual file ends here -- there's a trailing outer checksum; see revoINO_ReadFile() at offset 0x80556130
+                                 and revoINO_SavUpdate() at offset 0x805570d0 for the write version */
 local int m_WeirdConstant[8] <format=hex>;
 
 local uint buf = 0, buf_end = FileSize() - 32, buf_byte_size = buf_end;
