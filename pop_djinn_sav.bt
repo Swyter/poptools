@@ -28,8 +28,8 @@ struct
 // unk4 active slot related, unk5 tutorials, unk8 subtitles, unk5 camera assistant, 0x67c sound effects, 0x43c voices, 0x7ec ambiance, 0x7e4 cinematics, 0x680 cur prince weapon second nibble, outfit index first nibble
 struct
 {
-    ushort pad; uint begin, size; int a,b,c,d,e,tutorials,f,voices,subtitles,i,j,k; int unk[139-1], sound_effects, dont_know, pad : 24, cur_prince_weapon : 4, cur_prince_outfit : 4, unko[90-2];
-    float cinematics; uint zero; float ambiance; uint combat_highlight; float music;
+    ushort pad; uint begin, size; int a,b,c,d,e,tutorials,f; float audio_voices; int subtitles,i,j,k; int unk[139-1], dont_know; float audio_sound_effects; int pad : 24, cur_prince_weapon : 4, cur_prince_outfit : 4, unko[90-2];
+    float audio_cinematics; uint zero; float audio_ambiance; enum<uint> { ch_never = 1, ch_sometimes = 2, ch_always = 3} combat_highlight; float audio_music;
 } thing_a, thing_b, thing_c;
 
 
