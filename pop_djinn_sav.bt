@@ -26,7 +26,7 @@ struct
 } head <open=true>;
 
 // unk4 active slot related, unk5 tutorials, unk8 subtitles, unk5 camera assistance, 0x67c sound effects, 0x43c voices, 0x7ec ambiance, 0x7e4 cinematics, 0x680 cur prince weapon second nibble, outfit index first nibble
-struct
+typedef struct
 {
     ushort pad, begin, variable_number /* swy: first: 3959h, second: +1, third: +1 */; uint size;
     int slot_level_string_idx, b,c,d, slot_active_maybe, game_options_tutorials, game_options_camera_assistance;
@@ -35,7 +35,7 @@ struct
     float audio_cinematics; uint zero; float audio_ambiance;
     enum<uint> { ch_never = 1, ch_sometimes = 2, ch_always = 3} game_options_combat_highlight;
     float audio_music;
-} thing_a, thing_b, thing_c;
+} djinn_slot <read=Str("%u -- %02u:%02u", slot_level_string_idx, total_time_counter / 36000, (total_time_counter % 36000) / 600)>; djinn_slot thing_a, thing_b, thing_c;
 
 
 /* swy: actual file ends here -- there's a trailing outer checksum; see revoINO_ReadFile() at offset 0x80556130
