@@ -56,8 +56,8 @@ enum<int> chapter_names
 typedef struct
 {
     ushort pad, begin, variable_number /* swy: first: 3959h, second: +1, third: +1 */; uint size;
-    chapter_names slot_level_string_idx, b,c,d, slot_active_maybe, game_options_tutorials, game_options_camera_assistance;
-    float audio_voices; int game_options_subtitles,i,j,k; int big_unk[139-1], dont_know; float audio_sound_effects;
+    chapter_names slot_level_string_idx; uint respawn_id, spawn_map, d, slot_active_maybe, game_options_tutorials, game_options_camera_assistance;
+    float audio_voices; int game_options_subtitles,i,j,k; int heroic_skills[138], dont_know; float audio_sound_effects;
     int pad : 24, cur_prince_weapon : 4, cur_prince_outfit : 4, unke, total_time_counter, unko[90-2-2]; // swy: 3600 = 60*60 => 0:06, 5751 => 0:09, 79479 => 2:12, 216000 = 60*60*60 => 6:00, 12960000 = 60*60*60*60 => 360:00, 48132000 = 1337 * 36000 => 1337:00
     float audio_cinematics; uint zero; float audio_ambiance;
     enum<uint> { ch_never = 1, ch_sometimes = 2, ch_always = 3} game_options_combat_highlight;
