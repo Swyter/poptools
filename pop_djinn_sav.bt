@@ -25,17 +25,44 @@ struct
 
 } head <open=true>;
 
+/* swy: https://docs.google.com/spreadsheets/d/1-HiKYq6U_5wbB12o9z4WatecptlSeT5n-B_GJ_U24Ho/edit */
+enum<int> chapter_names
+{
+    The_Antique_Road_of_the_Merchants  = 0x110b,
+    The_Kingdom_of_Izdihar             = 0x110d,
+    The_Alley_of_the_Nobles            = 0x110c,
+    The_Gate_of_the_Chosen_Ones        = 0x110e,
+    The_Menagerie_of_the_Myths         = 0x110f,
+    The_Gardens_of_Endless_Blossoming  = 0x1110,
+    The_Path_of_the_Pilgrim            = 0x1111,
+    The_Palaces_Gates                  = 0x1112,
+    The_Water_Bearer                   = 0x1113,
+    The_Hearth_of_the_Sacred_Fire      = 0x1114,
+    The_Fallen_King                    = 0x1115,
+    The_Forge_of_the_Gods              = 0x1116,
+    The_Challenge_of_Faith             = 0x1117,
+    The_Challenge_of_Wisdom            = 0x1118,
+    The_Challenge_of_Virtue            = 0x1119,
+    The_Challenge_of_Humility          = 0x111a,
+    The_Stranded_Castle                = 0x111b,
+    The_Realm_of_the_Eternal_Fire      = 0x111c,
+    The_Souk_of_Izdihar                = 0x111d,
+    The_Elixirs_of_Immortal_Souls      = 0x111e,
+    The_Gift_of_the_Divine_Spirits     = 0x111f,
+    You_Have_Freed_Me                  = 0x1120
+};
+
 // unk4 active slot related, unk5 tutorials, unk8 subtitles, unk5 camera assistance, 0x67c sound effects, 0x43c voices, 0x7ec ambiance, 0x7e4 cinematics, 0x680 cur prince weapon second nibble, outfit index first nibble
 typedef struct
 {
     ushort pad, begin, variable_number /* swy: first: 3959h, second: +1, third: +1 */; uint size;
-    int slot_level_string_idx, b,c,d, slot_active_maybe, game_options_tutorials, game_options_camera_assistance;
+    chapter_names slot_level_string_idx, b,c,d, slot_active_maybe, game_options_tutorials, game_options_camera_assistance;
     float audio_voices; int game_options_subtitles,i,j,k; int big_unk[139-1], dont_know; float audio_sound_effects;
     int pad : 24, cur_prince_weapon : 4, cur_prince_outfit : 4, unke, total_time_counter, unko[90-2-2]; // swy: 3600 = 60*60 => 0:06, 5751 => 0:09, 79479 => 2:12, 216000 = 60*60*60 => 6:00, 12960000 = 60*60*60*60 => 360:00, 48132000 = 1337 * 36000 => 1337:00
     float audio_cinematics; uint zero; float audio_ambiance;
     enum<uint> { ch_never = 1, ch_sometimes = 2, ch_always = 3} game_options_combat_highlight;
     float audio_music;
-} djinn_slot <read=Str("%u -- %02u:%02u", slot_level_string_idx, total_time_counter / 36000, (total_time_counter % 36000) / 600)>; djinn_slot thing_a, thing_b, thing_c;
+} djinn_slot <read=Str("%s -- %02u:%02u", EnumToString(slot_level_string_idx), total_time_counter / 36000, (total_time_counter % 36000) / 600)>; djinn_slot thing_a, thing_b, thing_c;
 
 
 /* swy: actual file ends here -- there's a trailing outer checksum; see revoINO_ReadFile() at offset 0x80556130
