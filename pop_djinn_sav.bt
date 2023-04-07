@@ -27,6 +27,8 @@ struct
 local ushort begin <format=hex>, variable_number <format=hex>; local uint size;
 local int i = 0;
 
+union float_int { int i; float f; };
+
 typedef struct _category
 {
     int category_id <format=hex, bgcolor=cGreen>;
@@ -99,6 +101,7 @@ typedef struct _category
         else /* swy: generic block */
         {
                  if (size == 38) { float data[(size - 2) / 4]; ushort pad; }
+            else if (size == 10) { float_int one, two; ushort pad; ext_data += Str(" >> %i/%.02ff, %i/%.02ff, %u", one.i, one.f, two.i, two.f, pad); }
             else if (size ==  6) { int data; ushort pad; ext_data += Str(" >> %i, %u", data, pad); }
             else if (size ==  2) { ushort pad; ext_data += Str(" >>  %u", pad); }
             else                 { uint data[(size - 2) / 4]; ushort pad; }
