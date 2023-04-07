@@ -23,11 +23,7 @@ struct
 
     int na_a, na_b, na_c;
 
-
-
     //int last_active_slot_id; // swy: usually 0 set to 2 when all three are on (??)
-
-    //
     //ushort zero_pad;
 
 } head <open=true>;
@@ -40,11 +36,6 @@ typedef struct
     ubyte data[size];
 } block <optimize=false, read=Str("[%02x] %x %u", begin, variable_number, size)>;
 
-
-while (startof(size_global) + size_global > FTell())
-    block blk;
-
-Exit(0);
 
 /* swy: https://docs.google.com/spreadsheets/d/1-HiKYq6U_5wbB12o9z4WatecptlSeT5n-B_GJ_U24Ho/edit */
 enum<int> chapter_names
@@ -76,7 +67,7 @@ enum<int> chapter_names
 // unk4 active slot related, unk5 tutorials, unk8 subtitles, unk5 camera assistance, 0x67c sound effects, 0x43c voices, 0x7ec ambiance, 0x7e4 cinematics, 0x680 cur prince weapon second nibble, outfit index first nibble
 typedef struct
 {
-    ushort begin <format=hex>, variable_number <format=hex> /* swy: first: 3959h, second: +1, third: +1 */; uint size;
+    ushort begin <format=hex, bgcolor=cRed>, variable_number <format=hex, bgcolor=cGreen>; /* swy: first: 3959h, second: +1, third: +1 */; uint size;
     chapter_names slot_level_string_idx; int respawn_id <format=hex>, spawn_map <format=hex>, d;
     uint slot_active_maybe, game_options_tutorials, game_options_camera_assistance;
     float audio_voices; int game_options_subtitles,i,j,k; int heroic_skills_maybe[138], dont_know; float audio_sound_effects;
@@ -91,7 +82,20 @@ typedef struct
     ushort zero_pad;
 } djinn_slot <read=Str("%s -- %02u:%02u %s", EnumToString(slot_level_string_idx), total_time_counter / (60 * 60 * 10), (total_time_counter % (60 * 60 * 10)) / (60 * 10), slot_active_maybe ? "" : " [inactive]")>;
 
-djinn_slot thing_a, thing_b, thing_c;
+local ushort begin <format=hex>, variable_number <format=hex>; local uint size;
+
+while (startof(size_global) + size_global > FTell())
+{
+    begin = ReadUShort(); variable_number = ReadUShort(FTell() + 2); size = ReadUInt(FTell() + 4);
+    Printf("%x %x %x\n", begin, variable_number, size);
+
+    if (size == 986)
+        djinn_slot thing_a;
+    else
+        block blk;
+}
+
+
 
 /* swy: actual file ends here -- there's a trailing outer checksum; see revoINO_ReadFile() at offset 0x80556130
                                  and revoINO_SavUpdate() at offset 0x805570d0 for the write version */
