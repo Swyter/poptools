@@ -21,105 +21,105 @@ struct
     int unk_no_a, unk_no_b, unk_no_c;
     uint unk_always_constant <format=hex>; /* swy: 442C2912h */
 
-    int cat_count_maybe;
+    int category_count;
 } head <open=true>;
-
-/* swy: https://docs.google.com/spreadsheets/d/1-HiKYq6U_5wbB12o9z4WatecptlSeT5n-B_GJ_U24Ho/edit */
-enum<int> chapter_names
-{
-    The_Antique_Road_of_the_Merchants  = 0x110b,
-    The_Kingdom_of_Izdihar             = 0x110d,
-    The_Alley_of_the_Nobles            = 0x110c,
-    The_Gate_of_the_Chosen_Ones        = 0x110e,
-    The_Menagerie_of_the_Myths         = 0x110f,
-    The_Gardens_of_Endless_Blossoming  = 0x1110,
-    The_Path_of_the_Pilgrim            = 0x1111,
-    The_Palaces_Gates                  = 0x1112,
-    The_Water_Bearer                   = 0x1113,
-    The_Hearth_of_the_Sacred_Fire      = 0x1114,
-    The_Fallen_King                    = 0x1115,
-    The_Forge_of_the_Gods              = 0x1116,
-    The_Challenge_of_Faith             = 0x1117,
-    The_Challenge_of_Wisdom            = 0x1118,
-    The_Challenge_of_Virtue            = 0x1119,
-    The_Challenge_of_Humility          = 0x111a,
-    The_Stranded_Castle                = 0x111b,
-    The_Realm_of_the_Eternal_Fire      = 0x111c,
-    The_Souk_of_Izdihar                = 0x111d,
-    The_Elixirs_of_Immortal_Souls      = 0x111e,
-    The_Gift_of_the_Divine_Spirits     = 0x111f,
-    You_Have_Freed_Me                  = 0x1120
-};
-
-// unk4 active slot related, unk5 tutorials, unk8 subtitles, unk5 camera assistance, 0x67c sound effects, 0x43c voices, 0x7ec ambiance, 0x7e4 cinematics, 0x680 cur prince weapon second nibble, outfit index first nibble
-typedef struct
-{
-    int block_id <format=hex, bgcolor=cRed>; /* swy: first: 3959h, second: +1, third: +1 */; uint size;
-    chapter_names slot_level_string_idx; int respawn_id <format=hex>, spawn_map <format=hex>, d;
-    uint slot_active_maybe, game_options_tutorials, game_options_camera_assistance;
-    float audio_voices; int game_options_subtitles,i,j,k; int heroic_skills_maybe[138], dont_know; float audio_sound_effects;
-    int pad : 24, cur_prince_weapon : 4, cur_prince_outfit : 4, unke;
-
-    uint total_time_counter; // swy: 3600 = 60*60 => 0:06, 5751 => 0:09, 79479 => 2:12, 216000 = 60*60*60 => 6:00, 12960000 = 60*60*60*60 => 360:00, 48132000 = 1337 * 36000 => 1337:00
-
-    int unlockable_extras_maybe[86];
-    float audio_cinematics; uint zero; float audio_ambiance;
-    enum<uint> { ch_never = 1, ch_sometimes = 2, ch_always = 3} game_options_combat_highlight;
-    float audio_music;
-    ushort zero_pad;
-} djinn_slot <read=Str(" block [%02x] %u | %s -- %02u:%02u %s", block_id, size, EnumToString(slot_level_string_idx), total_time_counter / (60 * 60 * 10), (total_time_counter % (60 * 60 * 10)) / (60 * 10), slot_active_maybe ? "" : " [inactive]")>;
-
 
 local ushort begin <format=hex>, variable_number <format=hex>; local uint size;
 local int i = 0;
 
-typedef struct
+typedef struct _category
 {
-    int block_id <format=hex, bgcolor=cRed>; uint size;
-
-    if (size == 38)
-        float data[(size - 2) / 4];
-    else
-        uint data[(size - 2) / 4];
-
-    ushort pad;
-} block <optimize=false, read=Str(" block [%02x] %u", block_id, size)>;
-
-
-
-typedef struct
-{
-    int block_id <format=hex, bgcolor=cRed>; uint size;
-    int last_active_slot_id; // swy: usually 0 set to 2 when all three are on (??)
-    ushort zero_pad;
-} djinn_last_used_slot <read=Str(" block [%02x] %u | last active slot: %u", block_id, size, last_active_slot_id)>;
-
-
-typedef struct
-{
-    int category_id;
+    int category_id <format=hex, bgcolor=cGreen>;
     uint block_count;
+
+    typedef struct _block
+    {
+        int block_id <format=hex, bgcolor=cRed>; uint size <bgcolor=cDkRed>;
+        local string ext_data = "";
+
+        if (begin == 0x9700 && variable_number == 0x246E) /* djinn_last_used_slot */
+        {
+            int last_active_slot_id; // swy: usually 0 set to 2 when all three are on (??)
+            ushort zero_pad;
+
+            ext_data = Str(" | last active slot: %u", last_active_slot_id);
+        }
+        else if (size == 986) /* djinn_slot */
+        {
+            // unk4 active slot related, unk5 tutorials, unk8 subtitles, unk5 camera assistance, 0x67c sound effects, 0x43c voices, 0x7ec ambiance, 0x7e4 cinematics, 0x680 cur prince weapon second nibble, outfit index first nibble
+            // int block_id <format=hex, bgcolor=cRed>; /* swy: first: 3959h, second: +1, third: +1 */; uint size;
+
+            /* swy: https://docs.google.com/spreadsheets/d/1-HiKYq6U_5wbB12o9z4WatecptlSeT5n-B_GJ_U24Ho/edit */
+            enum<int> chapter_names
+            {
+                The_Antique_Road_of_the_Merchants  = 0x110b,
+                The_Kingdom_of_Izdihar             = 0x110d,
+                The_Alley_of_the_Nobles            = 0x110c,
+                The_Gate_of_the_Chosen_Ones        = 0x110e,
+                The_Menagerie_of_the_Myths         = 0x110f,
+                The_Gardens_of_Endless_Blossoming  = 0x1110,
+                The_Path_of_the_Pilgrim            = 0x1111,
+                The_Palaces_Gates                  = 0x1112,
+                The_Water_Bearer                   = 0x1113,
+                The_Hearth_of_the_Sacred_Fire      = 0x1114,
+                The_Fallen_King                    = 0x1115,
+                The_Forge_of_the_Gods              = 0x1116,
+                The_Challenge_of_Faith             = 0x1117,
+                The_Challenge_of_Wisdom            = 0x1118,
+                The_Challenge_of_Virtue            = 0x1119,
+                The_Challenge_of_Humility          = 0x111a,
+                The_Stranded_Castle                = 0x111b,
+                The_Realm_of_the_Eternal_Fire      = 0x111c,
+                The_Souk_of_Izdihar                = 0x111d,
+                The_Elixirs_of_Immortal_Souls      = 0x111e,
+                The_Gift_of_the_Divine_Spirits     = 0x111f,
+                You_Have_Freed_Me                  = 0x1120
+            };
+        
+            chapter_names slot_level_string_idx; int respawn_id <format=hex>, spawn_map <format=hex>, d;
+            uint slot_active_maybe, game_options_tutorials, game_options_camera_assistance;
+            float audio_voices; int game_options_subtitles,i,j,k; int heroic_skills_maybe[138], dont_know; float audio_sound_effects;
+            int pad : 24, cur_prince_weapon : 4, cur_prince_outfit : 4, unke;
+        
+            uint total_time_counter; // swy: 3600 = 60*60 => 0:06, 5751 => 0:09, 79479 => 2:12, 216000 = 60*60*60 => 6:00, 12960000 = 60*60*60*60 => 360:00, 48132000 = 1337 * 36000 => 1337:00
+        
+            int unlockable_extras_maybe[86];
+            float audio_cinematics; uint zero; float audio_ambiance;
+            enum<uint> { ch_never = 1, ch_sometimes = 2, ch_always = 3} game_options_combat_highlight;
+            float audio_music;
+            ushort zero_pad;
+        
+            ext_data = Str(" | %s -- %02u:%02u %s", EnumToString(slot_level_string_idx), total_time_counter / (60 * 60 * 10), (total_time_counter % (60 * 60 * 10)) / (60 * 10), slot_active_maybe ? "" : " [inactive]");
+        }
+        else /* swy: generic block */
+        {
+            if (size == 38)
+                float data[(size - 2) / 4];
+            else
+                uint data[(size - 2) / 4];
+        
+            ushort pad;
+        }
+    } block <optimize=false, read=Str(" block [%02x] %u %s", block_id, size, ext_data), bgcolor=cDkBlue>;
+
 
     for (i = 0; i < block_count; i++)
     {
         begin = ReadUShort(); variable_number = ReadUShort(FTell() + 2); size = ReadUInt(FTell() + 4);
         Printf("%x %x %x\n", begin, variable_number, size);
-    
-        if (begin == 0x9700 && variable_number == 0x246E)
-            djinn_last_used_slot last;
-        else if (size == 986)
-            djinn_slot thing_a;
-        else
-            block blk;
+
+        block blk;
     }
 
-} category <optimize=false, read=Str("[/] cat [%i] blocks: %u", category_id, block_count), bgcolor=cBlue>;
+} category <optimize=false, read=Str("[/] cat [%i] block_count: %u", category_id, block_count), bgcolor=cDkGreen>;
 
 
+local uint processed_categories = 0;
 
-while (startof(size_global) + size_global > FTell())
+/* swy: loop through all the possible categories that fit and still meet the total count; for safety */
+while (startof(size_global) + size_global > FTell() && processed_categories < head.category_count)
 {
-    category cat;
+    category cat; processed_categories++;
 }
 
 /* swy: actual file ends here -- there's a trailing outer checksum; see revoINO_ReadFile() at offset 0x80556130
