@@ -22,15 +22,29 @@ struct
     uint always_constant <format=hex>; /* swy: 442C2912h */
 
     int na_a, na_b, na_c;
-    ushort begin <format=hex>, variable_number <format=hex>;
 
-    int size;
-    int last_active_slot_id; // swy: usually 0 set to 2 when all three are on (??)
 
-    //ubyte data[size_maybe];
-    ushort zero_pad;
+
+    //int last_active_slot_id; // swy: usually 0 set to 2 when all three are on (??)
+
+    //
+    //ushort zero_pad;
 
 } head <open=true>;
+
+
+typedef struct
+{
+    ushort begin <format=hex, bgcolor=cRed>, variable_number <format=hex, bgcolor=cGreen>;
+    int size;
+    ubyte data[size];
+} block <optimize=false, read=Str("[%02x] %x %u", begin, variable_number, size)>;
+
+
+while (startof(size_global) + size_global > FTell())
+    block blk;
+
+Exit(0);
 
 /* swy: https://docs.google.com/spreadsheets/d/1-HiKYq6U_5wbB12o9z4WatecptlSeT5n-B_GJ_U24Ho/edit */
 enum<int> chapter_names
