@@ -31,6 +31,12 @@ struct
 
 typedef struct
 {
+    uint category_id;
+    uint block_count;
+} category <optimize=false>;
+
+typedef struct
+{
     ushort begin <format=hex, bgcolor=cRed>, variable_number <format=hex, bgcolor=cGreen>;
     int size;
     ubyte data[size];
