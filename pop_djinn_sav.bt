@@ -89,7 +89,27 @@ typedef struct _category
             chapter_names slot_level_string_idx; int respawn_id <format=hex>, spawn_map <format=hex>, unk_d;
             uint slot_active_maybe, game_options_tutorials, game_options_camera_assistance;
             float audio_voices; int game_options_subtitles,i,j,k; int heroic_skills_maybe[138], dont_know; float audio_sound_effects;
-            int pad : 24, cur_prince_weapon : 4, cur_prince_outfit : 4, unk_e;
+
+
+            enum<int> prince_weapons
+            {
+                wea_def  = 0,
+                wea_b  = 1,
+                wea_c  = 2,
+                wea_d  = 3,
+                wea_e  = 4,
+            };
+
+            enum<int> prince_outfits
+            {
+                ouf_def  = 0,
+                ouf_b  = 1,
+                ouf_c  = 2,
+                ouf_d  = 3,
+                ouf_e  = 4,
+            };
+
+            int pad : 24; prince_weapons cur_prince_weapon : 4; prince_outfits cur_prince_outfit : 4; int unk_e;
         
             uint total_time_counter; // swy: 3600 = 60*60 => 0:06, 5751 => 0:09, 79479 => 2:12, 216000 = 60*60*60 => 6:00, 12960000 = 60*60*60*60 => 360:00, 48132000 = 1337 * 36000 => 1337:00
         
