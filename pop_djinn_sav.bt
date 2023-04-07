@@ -11,7 +11,7 @@
 
 BigEndian();
 
-uint size_maybe;
+uint size_global <comment="Size of everything that comes after this field.">;
 
 struct
 {
@@ -24,7 +24,7 @@ struct
     int na_a, na_b, na_c;
     ushort begin <format=hex>, variable_number <format=hex>;
 
-    int six;
+    int size;
     int last_active_slot_id; // swy: usually 0 set to 2 when all three are on (??)
 
     //ubyte data[size_maybe];
