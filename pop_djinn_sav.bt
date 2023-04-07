@@ -19,15 +19,16 @@ struct
     uint version;
 
     int no_a, no_b, no_c;
-    uint always_constant <format=hex>;
+    uint always_constant <format=hex>; /* swy: 442C2912h */
 
     int na_a, na_b, na_c;
-    uint always_constant <format=hex>;
+    ushort begin <format=hex>, variable_number <format=hex>;
 
     int six;
     int last_active_slot_id; // swy: usually 0 set to 2 when all three are on (??)
 
     //ubyte data[size_maybe];
+    ushort zero_pad;
 
 } head <open=true>;
 
@@ -61,7 +62,7 @@ enum<int> chapter_names
 // unk4 active slot related, unk5 tutorials, unk8 subtitles, unk5 camera assistance, 0x67c sound effects, 0x43c voices, 0x7ec ambiance, 0x7e4 cinematics, 0x680 cur prince weapon second nibble, outfit index first nibble
 typedef struct
 {
-    ushort zero_pad, begin, variable_number /* swy: first: 3959h, second: +1, third: +1 */; uint size;
+    ushort begin <format=hex>, variable_number <format=hex> /* swy: first: 3959h, second: +1, third: +1 */; uint size;
     chapter_names slot_level_string_idx; int respawn_id <format=hex>, spawn_map <format=hex>, d;
     uint slot_active_maybe, game_options_tutorials, game_options_camera_assistance;
     float audio_voices; int game_options_subtitles,i,j,k; int heroic_skills_maybe[138], dont_know; float audio_sound_effects;
@@ -73,6 +74,7 @@ typedef struct
     float audio_cinematics; uint zero; float audio_ambiance;
     enum<uint> { ch_never = 1, ch_sometimes = 2, ch_always = 3} game_options_combat_highlight;
     float audio_music;
+    ushort zero_pad;
 } djinn_slot <read=Str("%s -- %02u:%02u %s", EnumToString(slot_level_string_idx), total_time_counter / (60 * 60 * 10), (total_time_counter % (60 * 60 * 10)) / (60 * 10), slot_active_maybe ? "" : " [inactive]")>;
 
 djinn_slot thing_a, thing_b, thing_c;
