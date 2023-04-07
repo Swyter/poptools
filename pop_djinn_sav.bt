@@ -93,20 +93,18 @@ typedef struct _category
 
             enum<int> prince_weapons
             {
-                wea_def  = 0,
-                wea_b  = 1,
-                wea_c  = 2,
-                wea_d  = 3,
-                wea_e  = 4,
+                wea_forgotten_sands_sword = 0,
+                wea_prince_sword          = 1,
+                wea_king_sword            = 2,
+                wea_sand_dagger_sot       = 3,
+                wea_wall_breaker_ww       = 4,
             };
 
             enum<int> prince_outfits
             {
-                ouf_def  = 0,
-                ouf_b  = 1,
-                ouf_c  = 2,
-                ouf_d  = 3,
-                ouf_e  = 4,
+                ouf_forgotten_sands_prince = 0,
+                ouf_sands_of_time_prince   = 1,
+                ouf_dark_prince_tt         = 2,
             };
 
             int pad : 24; prince_weapons cur_prince_weapon : 4; prince_outfits cur_prince_outfit : 4; int unk_e;
