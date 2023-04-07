@@ -21,7 +21,7 @@ struct
     int no_a, no_b, no_c;
     uint always_constant <format=hex>; /* swy: 442C2912h */
 
-    int na_a, na_b, na_c;
+    int na_a; //, na_b, na_c;
 
     //int last_active_slot_id; // swy: usually 0 set to 2 when all three are on (??)
     //ushort zero_pad;
@@ -90,15 +90,22 @@ typedef struct
 
 local ushort begin <format=hex>, variable_number <format=hex>; local uint size;
 
+local int i = 0;
 while (startof(size_global) + size_global > FTell())
 {
-    begin = ReadUShort(); variable_number = ReadUShort(FTell() + 2); size = ReadUInt(FTell() + 4);
-    Printf("%x %x %x\n", begin, variable_number, size);
 
-    if (size == 986)
-        djinn_slot thing_a;
-    else
-        block blk;
+    category cat;
+
+    for (i = 0; i < cat.block_count; i++)
+    {
+        begin = ReadUShort(); variable_number = ReadUShort(FTell() + 2); size = ReadUInt(FTell() + 4);
+        Printf("%x %x %x\n", begin, variable_number, size);
+    
+        if (size == 986)
+            djinn_slot thing_a;
+        else
+            block blk;
+    }
 }
 
 
