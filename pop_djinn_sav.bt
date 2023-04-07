@@ -21,7 +21,7 @@ struct
     int no_a, no_b, no_c;
     uint always_constant <format=hex>; /* swy: 442C2912h */
 
-    int na_a; //, na_b, na_c;
+    int cat_count_maybe;
 
     //int last_active_slot_id; // swy: usually 0 set to 2 when all three are on (??)
     //ushort zero_pad;
@@ -33,14 +33,14 @@ typedef struct
 {
     uint category_id;
     uint block_count;
-} category <optimize=false>;
+} category <optimize=false, read=Str("[/] [cat] [%02x] %u", category_id, block_count), bgcolor=cBlue>;
 
 typedef struct
 {
     ushort begin <format=hex, bgcolor=cRed>, variable_number <format=hex, bgcolor=cGreen>;
     int size;
     ubyte data[size];
-} block <optimize=false, read=Str("[%02x] %x %u", begin, variable_number, size)>;
+} block <optimize=false, read=Str(" [%02x] %x %u", begin, variable_number, size)>;
 
 
 /* swy: https://docs.google.com/spreadsheets/d/1-HiKYq6U_5wbB12o9z4WatecptlSeT5n-B_GJ_U24Ho/edit */
@@ -86,7 +86,7 @@ typedef struct
     enum<uint> { ch_never = 1, ch_sometimes = 2, ch_always = 3} game_options_combat_highlight;
     float audio_music;
     ushort zero_pad;
-} djinn_slot <read=Str("%s -- %02u:%02u %s", EnumToString(slot_level_string_idx), total_time_counter / (60 * 60 * 10), (total_time_counter % (60 * 60 * 10)) / (60 * 10), slot_active_maybe ? "" : " [inactive]")>;
+} djinn_slot <read=Str(" [%02x] %x %u | %s -- %02u:%02u %s", begin, variable_number, size, EnumToString(slot_level_string_idx), total_time_counter / (60 * 60 * 10), (total_time_counter % (60 * 60 * 10)) / (60 * 10), slot_active_maybe ? "" : " [inactive]")>;
 
 local ushort begin <format=hex>, variable_number <format=hex>; local uint size;
 
