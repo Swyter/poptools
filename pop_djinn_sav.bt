@@ -18,8 +18,8 @@ struct
     char magic[4];
     uint version;
 
-    int no_a, no_b, no_c;
-    uint always_constant <format=hex>; /* swy: 442C2912h */
+    int unk_no_a, unk_no_b, unk_no_c;
+    uint unk_always_constant <format=hex>; /* swy: 442C2912h */
 
     int cat_count_maybe;
 } head <open=true>;
@@ -54,7 +54,7 @@ enum<int> chapter_names
 // unk4 active slot related, unk5 tutorials, unk8 subtitles, unk5 camera assistance, 0x67c sound effects, 0x43c voices, 0x7ec ambiance, 0x7e4 cinematics, 0x680 cur prince weapon second nibble, outfit index first nibble
 typedef struct
 {
-    ushort begin <format=hex, bgcolor=cRed>, variable_number <format=hex, bgcolor=cGreen>; /* swy: first: 3959h, second: +1, third: +1 */; uint size;
+    int block_id <format=hex, bgcolor=cRed>; /* swy: first: 3959h, second: +1, third: +1 */; uint size;
     chapter_names slot_level_string_idx; int respawn_id <format=hex>, spawn_map <format=hex>, d;
     uint slot_active_maybe, game_options_tutorials, game_options_camera_assistance;
     float audio_voices; int game_options_subtitles,i,j,k; int heroic_skills_maybe[138], dont_know; float audio_sound_effects;
@@ -67,7 +67,7 @@ typedef struct
     enum<uint> { ch_never = 1, ch_sometimes = 2, ch_always = 3} game_options_combat_highlight;
     float audio_music;
     ushort zero_pad;
-} djinn_slot <read=Str(" [%02x] %x %u | %s -- %02u:%02u %s", begin, variable_number, size, EnumToString(slot_level_string_idx), total_time_counter / (60 * 60 * 10), (total_time_counter % (60 * 60 * 10)) / (60 * 10), slot_active_maybe ? "" : " [inactive]")>;
+} djinn_slot <read=Str(" block [%02x] %u | %s -- %02u:%02u %s", block_id, size, EnumToString(slot_level_string_idx), total_time_counter / (60 * 60 * 10), (total_time_counter % (60 * 60 * 10)) / (60 * 10), slot_active_maybe ? "" : " [inactive]")>;
 
 
 local ushort begin <format=hex>, variable_number <format=hex>; local uint size;
@@ -75,19 +75,24 @@ local int i = 0;
 
 typedef struct
 {
-    ushort begin <format=hex, bgcolor=cRed>, variable_number <format=hex, bgcolor=cGreen>;
-    int size;
-    uint data[(size - 2) / 4]; ushort pad;
-} block <optimize=false, read=Str(" [%02x] %x %u", begin, variable_number, size)>;
+    int block_id <format=hex, bgcolor=cRed>; uint size;
+
+    if (size == 38)
+        float data[(size - 2) / 4];
+    else
+        uint data[(size - 2) / 4];
+
+    ushort pad;
+} block <optimize=false, read=Str(" block [%02x] %u", block_id, size)>;
 
 
 
 typedef struct
 {
-    ushort begin <format=hex, bgcolor=cRed>, variable_number <format=hex, bgcolor=cGreen>; uint size;
+    int block_id <format=hex, bgcolor=cRed>; uint size;
     int last_active_slot_id; // swy: usually 0 set to 2 when all three are on (??)
     ushort zero_pad;
-} djinn_last_used_slot <read=Str(" [%02x] %x %u | last active slot: %u", begin, variable_number, size, last_active_slot_id)>;
+} djinn_last_used_slot <read=Str(" block [%02x] %u | last active slot: %u", block_id, size, last_active_slot_id)>;
 
 
 typedef struct
@@ -108,7 +113,7 @@ typedef struct
             block blk;
     }
 
-} category <optimize=false, read=Str("[/] [cat %i] blocks: %u", category_id, block_count), bgcolor=cBlue>;
+} category <optimize=false, read=Str("[/] cat [%i] blocks: %u", category_id, block_count), bgcolor=cBlue>;
 
 
 
