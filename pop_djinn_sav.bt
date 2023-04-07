@@ -77,14 +77,14 @@ typedef struct
 {
     ushort begin <format=hex, bgcolor=cRed>, variable_number <format=hex, bgcolor=cGreen>;
     int size;
-    ubyte data[size];
+    uint data[(size - 2) / 4]; ushort pad;
 } block <optimize=false, read=Str(" [%02x] %x %u", begin, variable_number, size)>;
 
 
 
 typedef struct
 {
-    ushort begin <format=hex, bgcolor=cRed>, variable_number <format=hex, bgcolor=cGreen>; /* swy: first: 3959h, second: +1, third: +1 */; uint size;
+    ushort begin <format=hex, bgcolor=cRed>, variable_number <format=hex, bgcolor=cGreen>; uint size;
     int last_active_slot_id; // swy: usually 0 set to 2 when all three are on (??)
     ushort zero_pad;
 } djinn_last_used_slot <read=Str(" [%02x] %x %u | last active slot: %u", begin, variable_number, size, last_active_slot_id)>;
@@ -92,7 +92,7 @@ typedef struct
 
 typedef struct
 {
-    uint category_id;
+    int category_id;
     uint block_count;
 
     for (i = 0; i < block_count; i++)
@@ -108,7 +108,7 @@ typedef struct
             block blk;
     }
 
-} category <optimize=false, read=Str("[/] [cat] [%02x] %u", category_id, block_count), bgcolor=cBlue>;
+} category <optimize=false, read=Str("[/] [cat %i] blocks: %u", category_id, block_count), bgcolor=cBlue>;
 
 
 
