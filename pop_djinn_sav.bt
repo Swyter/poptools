@@ -37,12 +37,12 @@ typedef struct _category
         int block_id <format=hex, bgcolor=cRed>; uint size <bgcolor=cDkRed>;
         local string ext_data = "";
 
-        if (begin == 0x9700 && variable_number == 0x246E) /* djinn_last_used_slot */
+        if (block_id == 0x9700246E) /* djinn_last_used_slot */
         {
             int last_active_slot_id; // swy: usually 0 set to 2 when all three are on (??)
             ushort zero_pad;
 
-            ext_data = Str(" | last active slot: %u", last_active_slot_id);
+            ext_data += Str(" | last active slot: %u", last_active_slot_id);
         }
         else if (size == 986) /* djinn_slot */
         {
@@ -89,19 +89,21 @@ typedef struct _category
             float audio_music;
             ushort zero_pad;
         
-            ext_data = Str(" | %s -- %02u:%02u %s", EnumToString(slot_level_string_idx), total_time_counter / (60 * 60 * 10), (total_time_counter % (60 * 60 * 10)) / (60 * 10), slot_active_maybe ? "" : " [inactive]");
+            ext_data += Str(
+                " | %s -- %02u:%02u %s", EnumToString(slot_level_string_idx),
+                (total_time_counter                 ) / (60 * 60 * 10),
+                (total_time_counter % (60 * 60 * 10)) / (60      * 10),
+                slot_active_maybe ? "" : " [inactive]"
+            );
         }
         else /* swy: generic block */
         {
-            if (size == 38)
-                float data[(size - 2) / 4];
-            else
-                uint data[(size - 2) / 4];
-        
-            ushort pad;
+                 if (size == 38) { float data[(size - 2) / 4]; ushort pad; }
+            else if (size ==  6) { int data; ushort pad; ext_data += Str(" >> %i, %u", data, pad); }
+            else if (size ==  2) { ushort pad; ext_data += Str(" >>  %u", pad); }
+            else                 { uint data[(size - 2) / 4]; ushort pad; }
         }
     } block <optimize=false, read=Str(" block [%02x] %u %s", block_id, size, ext_data), bgcolor=cDkBlue>;
-
 
     for (i = 0; i < block_count; i++)
     {
