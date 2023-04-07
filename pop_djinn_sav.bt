@@ -52,7 +52,7 @@ typedef struct _category
             int last_active_slot_id; // swy: usually 0 set to 2 when all three are on (??)
             ushort zero_pad;
 
-            ext_data += Str(" | last active slot: %u", last_active_slot_id);
+            ext_data += Str(" -> last active slot: %u", last_active_slot_id);
         }
         else if (size == 986) /* djinn_slot */
         {
@@ -86,10 +86,10 @@ typedef struct _category
                 You_Have_Freed_Me                  = 0x1120
             };
         
-            chapter_names slot_level_string_idx; int respawn_id <format=hex>, spawn_map <format=hex>, d;
+            chapter_names slot_level_string_idx; int respawn_id <format=hex>, spawn_map <format=hex>, unk_d;
             uint slot_active_maybe, game_options_tutorials, game_options_camera_assistance;
             float audio_voices; int game_options_subtitles,i,j,k; int heroic_skills_maybe[138], dont_know; float audio_sound_effects;
-            int pad : 24, cur_prince_weapon : 4, cur_prince_outfit : 4, unke;
+            int pad : 24, cur_prince_weapon : 4, cur_prince_outfit : 4, unk_e;
         
             uint total_time_counter; // swy: 3600 = 60*60 => 0:06, 5751 => 0:09, 79479 => 2:12, 216000 = 60*60*60 => 6:00, 12960000 = 60*60*60*60 => 360:00, 48132000 = 1337 * 36000 => 1337:00
         
