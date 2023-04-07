@@ -22,10 +22,6 @@ struct
     uint always_constant <format=hex>; /* swy: 442C2912h */
 
     int cat_count_maybe;
-
-    //int last_active_slot_id; // swy: usually 0 set to 2 when all three are on (??)
-    //ushort zero_pad;
-
 } head <open=true>;
 
 /* swy: https://docs.google.com/spreadsheets/d/1-HiKYq6U_5wbB12o9z4WatecptlSeT5n-B_GJ_U24Ho/edit */
@@ -88,6 +84,14 @@ typedef struct
 
 typedef struct
 {
+    ushort begin <format=hex, bgcolor=cRed>, variable_number <format=hex, bgcolor=cGreen>; /* swy: first: 3959h, second: +1, third: +1 */; uint size;
+    int last_active_slot_id; // swy: usually 0 set to 2 when all three are on (??)
+    ushort zero_pad;
+} djinn_last_used_slot <read=Str(" [%02x] %x %u | last active slot: %u", begin, variable_number, size, last_active_slot_id)>;
+
+
+typedef struct
+{
     uint category_id;
     uint block_count;
 
@@ -96,7 +100,9 @@ typedef struct
         begin = ReadUShort(); variable_number = ReadUShort(FTell() + 2); size = ReadUInt(FTell() + 4);
         Printf("%x %x %x\n", begin, variable_number, size);
     
-        if (size == 986)
+        if (begin == 0x9700 && variable_number == 0x246E)
+            djinn_last_used_slot last;
+        else if (size == 986)
             djinn_slot thing_a;
         else
             block blk;
