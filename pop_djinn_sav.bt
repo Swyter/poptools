@@ -56,14 +56,19 @@ enum<int> chapter_names
 typedef struct
 {
     ushort pad, begin, variable_number /* swy: first: 3959h, second: +1, third: +1 */; uint size;
-    chapter_names slot_level_string_idx; uint respawn_id, spawn_map, d, slot_active_maybe, game_options_tutorials, game_options_camera_assistance;
+    chapter_names slot_level_string_idx; uint respawn_id <format=hex>, spawn_map <format=hex>, d, slot_active_maybe, game_options_tutorials, game_options_camera_assistance;
     float audio_voices; int game_options_subtitles,i,j,k; int heroic_skills[138], dont_know; float audio_sound_effects;
-    int pad : 24, cur_prince_weapon : 4, cur_prince_outfit : 4, unke, total_time_counter, unko[90-2-2]; // swy: 3600 = 60*60 => 0:06, 5751 => 0:09, 79479 => 2:12, 216000 = 60*60*60 => 6:00, 12960000 = 60*60*60*60 => 360:00, 48132000 = 1337 * 36000 => 1337:00
+    int pad : 24, cur_prince_weapon : 4, cur_prince_outfit : 4, unke;
+
+    uint total_time_counter; // swy: 3600 = 60*60 => 0:06, 5751 => 0:09, 79479 => 2:12, 216000 = 60*60*60 => 6:00, 12960000 = 60*60*60*60 => 360:00, 48132000 = 1337 * 36000 => 1337:00
+
+    int unko[90-2-2];
     float audio_cinematics; uint zero; float audio_ambiance;
     enum<uint> { ch_never = 1, ch_sometimes = 2, ch_always = 3} game_options_combat_highlight;
     float audio_music;
-} djinn_slot <read=Str("%s -- %02u:%02u", EnumToString(slot_level_string_idx), total_time_counter / 36000, (total_time_counter % 36000) / 600)>; djinn_slot thing_a, thing_b, thing_c;
+} djinn_slot <read=Str("%s -- %02u:%02u", EnumToString(slot_level_string_idx), total_time_counter / (60 * 60 * 10), (total_time_counter % (60 * 60 * 10)) / (60 * 10))>;
 
+djinn_slot thing_a, thing_b, thing_c;
 
 /* swy: actual file ends here -- there's a trailing outer checksum; see revoINO_ReadFile() at offset 0x80556130
                                  and revoINO_SavUpdate() at offset 0x805570d0 for the write version */
