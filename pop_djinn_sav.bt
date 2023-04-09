@@ -88,7 +88,7 @@ typedef struct _category
         
             chapter_names slot_level_string_idx; int respawn_id <format=hex>, spawn_map <format=hex>, unk_counter;
             uint slot_active_maybe, game_options_tutorials, game_options_camera_assistance;
-            float audio_voices; int game_options_subtitles,i,j,k; int heroic_skills_maybe[138], dont_know; float audio_sound_effects;
+            float audio_voices; int game_options_subtitles, heroic_counter, heroic[heroic_counter], another_counter, heroic_skills_maybe[another_counter], cou, cout[cou], fff, e, ee[e]; float audio_sound_effects;
 
 
             enum<int> prince_weapons
