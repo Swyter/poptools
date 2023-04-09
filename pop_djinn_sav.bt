@@ -111,7 +111,7 @@ typedef struct _category
         
             uint total_time_counter; // swy: 3600 = 60*60 => 0:06, 5751 => 0:09, 79479 => 2:12, 216000 = 60*60*60 => 6:00, 12960000 = 60*60*60*60 => 360:00, 48132000 = 1337 * 36000 => 1337:00
         
-            int unlockable_extras_maybe[86];
+            int unlockable_extras_maybe[85]; uint is_replay; /* swy: Shows 'Retell story' instead, has already been completed, adds a golden 1 in the profile selector */
             float audio_cinematics; uint zero; float audio_ambiance;
             enum<uint> { ch_never = 1, ch_sometimes = 2, ch_always = 3} game_options_combat_highlight;
             float audio_music;
