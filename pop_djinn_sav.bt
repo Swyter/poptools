@@ -15,8 +15,8 @@ uint size_global <comment="Size of everything that comes after this field.">;
 
 struct
 {
-    char magic[4];
-    uint version;
+    char magic[4]; /* swy: NIJD */
+    uint version;  /* swy: 4 */
 
     int unk_no_a, unk_no_b, unk_no_c;
     uint unk_always_constant <format=hex>; /* swy: 442C2912h */
@@ -86,7 +86,7 @@ typedef struct _category
                 You_Have_Freed_Me                  = 0x1120
             };
         
-            chapter_names slot_level_string_idx; int respawn_id <format=hex>, spawn_map <format=hex>, unk_d;
+            chapter_names slot_level_string_idx; int respawn_id <format=hex>, spawn_map <format=hex>, unk_counter;
             uint slot_active_maybe, game_options_tutorials, game_options_camera_assistance;
             float audio_voices; int game_options_subtitles,i,j,k; int heroic_skills_maybe[138], dont_know; float audio_sound_effects;
 
@@ -111,9 +111,9 @@ typedef struct _category
         
             uint total_time_counter; // swy: 3600 = 60*60 => 0:06, 5751 => 0:09, 79479 => 2:12, 216000 = 60*60*60 => 6:00, 12960000 = 60*60*60*60 => 360:00, 48132000 = 1337 * 36000 => 1337:00
         
-            int unlockable_extras_maybe[85]; uint is_replay; /* swy: Shows 'Retell story' instead, has already been completed, adds a golden 1 in the profile selector */
-            float audio_cinematics; uint zero; float audio_ambiance;
-            enum<uint> { ch_never = 1, ch_sometimes = 2, ch_always = 3} game_options_combat_highlight;
+            int unlockable_extras_count, unlockable_extras[unlockable_extras_count /* swy: 84 */]; uint game_has_been_completed_before; /* swy: Shows 'Retell story' instead, has already been completed, adds a golden 1 in the profile selector */
+            float audio_cinematics; uint unk_counter_starts_at_zero; float audio_ambiance;
+            enum<uint> { ch_never = 1, ch_sometimes = 2, ch_always = 3 } game_options_combat_highlight;
             float audio_music;
             ushort zero_pad;
         
